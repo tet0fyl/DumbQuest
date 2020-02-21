@@ -3,8 +3,7 @@ package views;
 import controllers.ControllerGame;
 import controllers.ControllerKeyBoard;
 import javafx.scene.Group;
-import models.Player;
-import views.graphicalElements.PlayerView;
+import models.worldMap.WorldMap;
 
 public class ViewGame {
     private Group root;
@@ -24,7 +23,7 @@ public class ViewGame {
 
     }
 
-    public void AddPlayer(PlayerView playerView){
-        root.getChildren().add(playerView);
+    public void addWorldMap(WorldMap worldMap){
+        root.getChildren().add(worldMap);
     }
 }

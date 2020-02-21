@@ -1,7 +1,6 @@
 package timeline;
 
 import controllers.ControllerGame;
-import controllers.ControllerKeyBoard;
 import javafx.animation.AnimationTimer;
 
 public class GameTL extends AnimationTimer {
@@ -13,6 +12,7 @@ public class GameTL extends AnimationTimer {
 
     @Override
     public void handle(long l) {
-        controllerGame.updatePlayerPosition();
+        controllerGame.updateFreePlayerPosition();
+
     }
 }

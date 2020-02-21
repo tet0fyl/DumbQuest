@@ -1,6 +1,6 @@
 package exception;
 
-import models.AreaMap;
+import models.worldMap.AreaMap;
 
 public class AreaMapConstructionException extends Exception{
     private AreaMap areaMap;

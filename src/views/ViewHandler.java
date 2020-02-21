@@ -21,7 +21,7 @@ public class ViewHandler extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         root = new Group();
-        scene = new Scene(root, Config.screenWidth,Config.screenHeight);
+        scene = new Scene(root, Config.gameWindowWidth,Config.gameWindowHeight);
 
         setViewGame();
 
