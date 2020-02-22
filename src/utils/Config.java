@@ -6,5 +6,5 @@ public class Config {
     public static final double screenWidth = Screen.getPrimary().getBounds().getWidth();
     public static final double screenHeight = Screen.getPrimary().getBounds().getHeight();
     public static final double gameWindowWidth = 777;
-    public static final double gameWindowHeight = 666;
+    public static final double gameWindowHeight = 570;
 }
