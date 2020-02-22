@@ -50,7 +50,6 @@ public class ControllerKeyBoard implements EventHandler<KeyEvent> {
                 leftPressed = false;
             }
         }
-        controllerGame.verifyIfPlayerCanMove();
     }
 
     public boolean isUpPressed() {

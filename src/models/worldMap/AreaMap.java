@@ -1,10 +1,8 @@
 package models.worldMap;
 
 import javafx.scene.Group;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-
-import java.util.HashMap;
+import models.Vector2;
 
 
 public class AreaMap extends Pane {
@@ -16,7 +14,7 @@ public class AreaMap extends Pane {
         graphic = new Group();
         for (int i = 0; i < WorldMap.tileXNumber; i++) {
             for (int j = 0; j < WorldMap.tileYNumber; j++) {
-                Tile tile = new Tile(null,i,j);
+                Tile tile = new Tile(null,new Vector2(i,j));
                 tiles[i][j] = tile;
 
                 graphic.getChildren().add(tile);
@@ -24,6 +22,10 @@ public class AreaMap extends Pane {
         }
         getChildren().add(graphic);
     }
+
+    public Tile getTilePositionByCoord(int x, int y){
+        return tiles[x * WorldMap.tileWidth][y * WorldMap.tileHeight];
+    };
 
     public Tile[][] getTiles() {
         return tiles;
