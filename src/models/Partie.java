@@ -8,7 +8,7 @@ public class Partie {
 
     public Partie(){
         worldMap = new WorldMap();
-        player = new Player(new Vector2(Math.round(WorldMap.tileXNumber/2),Math.round(WorldMap.tileYNumber/2)), worldMap);
+        player = new Player(new Vector2(Math.round(WorldMap.tileXNumber/2),Math.round(WorldMap.tileYNumber/2),Vector2.RELATIVE_TO_TILE), worldMap);
     }
 
     public Player getPlayer() {

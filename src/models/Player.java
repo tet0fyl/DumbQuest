@@ -1,7 +1,5 @@
 package models;
 
-import javafx.scene.Group;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -24,6 +22,7 @@ public class Player extends Pane {
     private int skinHeight;
     private Rectangle skin;
     private WorldMap worldMap;
+    private int currentArea = 0;
 
     public Player(Vector2 position, WorldMap worldMap){
         this.worldMap = worldMap;
@@ -92,7 +91,7 @@ public class Player extends Pane {
             for (int j = - 1; j <= 1 ; j++) {
                 if(Math.abs(i) == Math.abs(j)) continue;
                 if(getCoordX()+i <= -1 || getCoordY()+j <= -1 || getCoordX()+i >= WorldMap.tileXNumber || getCoordY() + j >= WorldMap.tileYNumber ) continue;
-                Tile tile = worldMap.getAreaMap().getTiles()[getCoordX()+i][getCoordY()+j];
+                Tile tile = worldMap.getAreaMap(currentArea).getTiles()[getCoordX()+i][getCoordY()+j];
                 if(!(tile.isTraversable())){
                     if(i==-1 && j==0){
                         leftConstraint = tile.getRightConstrain();

@@ -11,16 +11,19 @@ public class Tile extends Pane {
     private boolean empty;
     private Vector2 position;
     private Rectangle graphic;
+    private TileSet tileSet;
 
     public Tile(TileSet tileSet, Vector2 position){
+        this.tileSet = tileSet;
         this.position = position;
+
         graphic = new Rectangle();
 
         graphic.setWidth(WorldMap.tileWidth);
         graphic.setHeight(WorldMap.tileHeight);
         setLayoutX(position.getX());
         setLayoutY(position.getY());
-        if(Math.random() < 0.25){
+        if(tileSet.equals(TileSet.ROCK)){
             graphic.setFill(Color.BROWN);
             traversable = false;
         } else {
