@@ -47,7 +47,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     }
 
     public void checkTileNeighborhood(){
-        if(player.hasMoveToAnOtherTile()){
+        if(worldMap.playerHasMoveToAnOtherTile()){
         for (int i = - 1; i <= 1 ; i++) {
             for (int j = - 1; j <= 1 ; j++) {
                 if(Math.abs(i) == Math.abs(j)) continue;
@@ -75,13 +75,12 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                     }
                 }
             }
-            player.updateTile();
             }
         }
     }
 
     public void worldMapWatcher(){
-        player.setCurrentTile(worldMap.getTile(player.getTileCoordX(),player.getTileCoordY()));
+        worldMap.watchPlayer(player);
     }
 
     //TODO: Transition camera fluide et seulement au changement d'area

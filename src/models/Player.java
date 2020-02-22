@@ -22,10 +22,6 @@ public class Player extends Pane {
     private Rectangle skin;
     private double x;
     private double y;
-    private Tile currentTile;
-    private Tile prevTile;
-    private AreaMap currentAreaMap;
-    private AreaMap prevAreaMap;
 
     public Player(int areaX, int areaY, int tileX, int tileY){
         this.x = areaX * WorldMap.areaWidth + tileX * WorldMap.tileWidth;
@@ -129,34 +125,6 @@ public class Player extends Pane {
 
     public double getTheCenterY(){
         return (skinHeight/2 + y);
-    }
-
-    public boolean hasMoveToAnOtherTile(){
-      return !currentTile.equals(prevTile);
-    }
-
-    public boolean hasMoveToAnOtherArea(){
-      return !currentAreaMap.equals(prevAreaMap);
-    };
-
-    public void updateTile(){
-        prevTile = currentTile;
-    }
-
-    public Tile getCurrentTile() {
-        return currentTile;
-    }
-
-    public void setCurrentTile(Tile currentTile) {
-        this.currentTile = currentTile;
-    }
-
-    public Tile getPrevTile() {
-        return prevTile;
-    }
-
-    public void setPrevTile(Tile prevTile) {
-        this.prevTile = prevTile;
     }
 
     public Rectangle getHitBox() {

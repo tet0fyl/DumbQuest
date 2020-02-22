@@ -21,8 +21,10 @@ public class WorldMap extends Pane {
     private int cameraVitesse;
     private AreaMap[][] areaMap;
     private Group gridWorldMap;
-    private AreaMap currentArea;
-    private AreaMap prevArea;
+    private AreaMap playerCurrentArea;
+    private AreaMap playerPrevArea;
+    private Tile playerCurrentTile;
+    private Tile playerPrevTile;
 
     public WorldMap() {
         cameraVitesse = 2;
@@ -33,8 +35,7 @@ public class WorldMap extends Pane {
         areaMap[1][1] = new AreaMap(tileSetsArea2(), 1,1);
         areaMap[2][1] = new AreaMap(tileSetsArea3(), 2,1);
         areaMap[2][0] = new AreaMap(tileSetsArea4(), 2,0);
-        currentArea = areaMap[0][0];
-        prevArea = currentArea;
+
         gridWorldMap.getChildren().add(areaMap[0][0]);
         gridWorldMap.getChildren().add(areaMap[1][0]);
         gridWorldMap.getChildren().add(areaMap[1][1]);
@@ -168,7 +169,28 @@ public class WorldMap extends Pane {
     }
 
     public AreaMap getCurrentArea(){
-        return currentArea;
+        return playerCurrentArea;
+    }
+
+    public void watchPlayer(Player player){
+        playerCurrentArea = getAreaMap(player.getAreaCoordX(), player.getAreaCoordY());
+        playerCurrentTile = getTile(player.getTileCoordX(),player.getTileCoordY());
+    }
+
+    public boolean playerHasMoveToAnOtherTile(){
+        if(!playerCurrentTile.equals(playerPrevTile)){
+            playerPrevTile=playerCurrentTile;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean playerHasMoveToAnOtherArea(){
+        if(!playerCurrentArea.equals(playerPrevArea)){
+            playerPrevArea=playerCurrentArea;
+            return true;
+        }
+        return false;
     }
 
     public Tile getTile(int currentTileX, int currentTileY){
