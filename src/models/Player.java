@@ -3,14 +3,13 @@ package models;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import models.worldMap.AreaMap;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 
 public class Player extends Pane {
     private byte pv;
     private byte pvMax;
-    private Vector2 prevPosition;
-    private Vector2 position;
     private CharacterState currentState;
     private int vitesse;
     private Double rightConstraint, leftConstraint, topConstraint, bottomConstraint;
@@ -21,12 +20,16 @@ public class Player extends Pane {
     private int skinWidth;
     private int skinHeight;
     private Rectangle skin;
-    private WorldMap worldMap;
+    private double x;
+    private double y;
+    private Tile currentTile;
+    private Tile prevTile;
+    private AreaMap currentAreaMap;
+    private AreaMap prevAreaMap;
 
-    public Player(Vector2 position, WorldMap worldMap){
-        this.worldMap = worldMap;
-        this.position=position;
-        prevPosition = position;
+    public Player(int areaX, int areaY, int tileX, int tileY){
+        this.x = areaX * WorldMap.areaWidth + tileX * WorldMap.tileWidth;
+        this.y = areaY * WorldMap.areaHeight + tileY * WorldMap.tileHeight;
         isRightConstraint = false;
         isLeftConstraint = false;
         isTopConstraint = false;
@@ -39,80 +42,40 @@ public class Player extends Pane {
         hitBoxHeight = 20;
         skinWidth = 30;
         skinHeight = 40;
-
         skin = new Rectangle();
         skin.setFill(Color.BLUE);
         skin.setOpacity(0.4);
         skin.setWidth(skinWidth);
         skin.setHeight(skinHeight);
         hitBox = new Rectangle();
-        setLayoutX(position.getX());
-        setLayoutY(position.getY());
+        update();
         hitBox.setFill(Color.RED);
         hitBox.setWidth(hitBoxWidth);
         hitBox.setHeight(hitBoxHeight);
         hitBox.setX((skinWidth/2 - hitBoxWidth/2));
         hitBox.setY((skinHeight/2 - hitBoxHeight/2));
-
         getChildren().addAll(skin,hitBox);
     }
 
     public void move(Direction mouvement){
-        checkTileNeighborhood();
         if(mouvement.equals(Direction.GO_UP)){
-            if(!(topConstraint != null && topConstraint >= getTopConstrain()))
-                position.add(0,-vitesse);
+                y -= vitesse;
         }
         if(mouvement.equals(Direction.GO_DOWN)){
-            if(!(bottomConstraint != null && bottomConstraint <= getBottomConstrain()))
-                position.add(0,vitesse);
+                y += vitesse;
         }
         if(mouvement.equals(Direction.GO_RIGHT)){
-            if(!(rightConstraint != null && rightConstraint <= getRightConstrain()))
-                position.add(vitesse,0);
+                x += vitesse;
         }
         if(mouvement.equals(Direction.GO_LEFT)){
-            if(!(leftConstraint != null && leftConstraint >= getLeftConstrain()))
-                position.add(-vitesse,0);
-
+                x -= vitesse;
         }
         update();
     }
 
     public void update(){
-        setLayoutX(position.getX());
-        setLayoutY(position.getY());
-    }
-
-    public void checkTileNeighborhood(){
-        for (int i = - 1; i <= 1 ; i++) {
-            for (int j = - 1; j <= 1 ; j++) {
-                if(Math.abs(i) == Math.abs(j)) continue;
-                if(getTileCoordX()+i <= -1 || getTileCoordY()+j <= -1 || getTileCoordX()+i >= WorldMap.tileXNumber || getTileCoordY() + j >= WorldMap.tileYNumber ) continue;
-                Tile tile = worldMap.getAreaMap(getAreaCoordX(),getAreaCoordY()).getTiles()[getTileCoordX()+i][getTileCoordY()+j];
-                if(!(tile.isTraversable())){
-                    if(i==-1 && j==0){
-                        leftConstraint = tile.getRightConstrain();
-                    } else if(i==0 && j==-1){
-                        topConstraint = tile.getBottomConstrain();
-                    } else if(i==1 && j==0){
-                        rightConstraint = tile.getLeftConstrain();
-                    } else if(i==0 && j==1){
-                        bottomConstraint = tile.getTopConstrain();
-                    }
-                } else {
-                    if(i==-1 && j==0){
-                        leftConstraint = null;
-                    } else if(i==0 && j==-1){
-                        topConstraint = null;
-                    } else if(i==1 && j==0){
-                        rightConstraint = null;
-                    } else if(i==0 && j==1){
-                        bottomConstraint = null;
-                    }
-                }
-            }
-        }
+        setLayoutX(x);
+        setLayoutY(y);
     }
 
     public int getTileCoordX(){
@@ -132,24 +95,68 @@ public class Player extends Pane {
     }
 
     public double getTopConstrain(){
-        return (position.getY() + (int)hitBox.getY()) % WorldMap.areaHeight ;
+        return (y + hitBox.getY()) % WorldMap.areaHeight ;
     }
     public double getBottomConstrain(){
-        return (position.getY() + skinHeight - hitBox.getY()) % WorldMap.areaHeight;
+        return (y + skinHeight - hitBox.getY()) % WorldMap.areaHeight;
     }
     public double getRightConstrain(){
-        return (position.getX() + skinWidth - (hitBox.getX())) %  WorldMap.areaWidth;
+        return (x + skinWidth - (hitBox.getX())) %  WorldMap.areaWidth;
     }
     public double getLeftConstrain(){
-        return (position.getX() + hitBox.getX()) % WorldMap.areaWidth;
+        return (x + hitBox.getX()) % WorldMap.areaWidth;
+    }
+
+    public boolean hasTopConstrain(){
+        return (!(topConstraint != null && topConstraint >= getTopConstrain()));
+    }
+
+    public boolean hasRightConstrain(){
+        return (!(rightConstraint != null && rightConstraint <= getRightConstrain()));
+    }
+
+    public boolean hasBottomConstrain(){
+        return (!(bottomConstraint != null && bottomConstraint <= getBottomConstrain()));
+    }
+
+    public boolean hasLeftConstrain(){
+        return (!(leftConstraint != null && leftConstraint >= getLeftConstrain()));
     }
 
     public double getTheCenterX(){
-        return (skinWidth/2 + position.getX());
+        return (skinWidth/2 + x);
     }
 
     public double getTheCenterY(){
-        return (skinHeight/2 + position.getY());
+        return (skinHeight/2 + y);
+    }
+
+    public boolean hasMoveToAnOtherTile(){
+      return !currentTile.equals(prevTile);
+    }
+
+    public boolean hasMoveToAnOtherArea(){
+      return !currentAreaMap.equals(prevAreaMap);
+    };
+
+    public void updateTile(){
+        prevTile = currentTile;
+    }
+
+    public Tile getCurrentTile() {
+        return currentTile;
+    }
+
+    public void setCurrentTile(Tile currentTile) {
+        this.currentTile = currentTile;
+    }
+
+    public Tile getPrevTile() {
+        return prevTile;
+    }
+
+    public void setPrevTile(Tile prevTile) {
+        this.prevTile = prevTile;
     }
 
     public Rectangle getHitBox() {
@@ -172,4 +179,35 @@ public class Player extends Pane {
         return vitesse;
     }
 
+    public Double getRightConstraint() {
+        return rightConstraint;
+    }
+
+    public void setRightConstraint(Double rightConstraint) {
+        this.rightConstraint = rightConstraint;
+    }
+
+    public Double getLeftConstraint() {
+        return leftConstraint;
+    }
+
+    public void setLeftConstraint(Double leftConstraint) {
+        this.leftConstraint = leftConstraint;
+    }
+
+    public Double getTopConstraint() {
+        return topConstraint;
+    }
+
+    public void setTopConstraint(Double topConstraint) {
+        this.topConstraint = topConstraint;
+    }
+
+    public Double getBottomConstraint() {
+        return bottomConstraint;
+    }
+
+    public void setBottomConstraint(Double bottomConstraint) {
+        this.bottomConstraint = bottomConstraint;
+    }
 }

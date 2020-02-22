@@ -12,7 +12,8 @@ public class GameTL extends AnimationTimer {
 
     @Override
     public void handle(long l) {
+        controllerGame.worldMapWatcher();
         controllerGame.handlePlayer();
-        controllerGame.getPartie().getWorldMap().updateCamera(controllerGame.getPartie().getPlayer());
+        controllerGame.updateCamera();
     }
 }

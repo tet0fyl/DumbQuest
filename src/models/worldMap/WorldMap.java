@@ -1,12 +1,9 @@
 package models.worldMap;
 
-import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.layout.Pane;
-import models.Direction;
 import models.Player;
-import models.Vector2;
 import utils.Config;
 
 public class WorldMap extends Pane {
@@ -20,22 +17,24 @@ public class WorldMap extends Pane {
     public static final double areaWidth = Config.gameWindowWidth;
     public static final double areaHeight = Config.gameWindowHeight;
 
-    private int currentArea;
-    private Player player;
     private PerspectiveCamera camera;
     private int cameraVitesse;
     private AreaMap[][] areaMap;
     private Group gridWorldMap;
+    private AreaMap currentArea;
+    private AreaMap prevArea;
 
     public WorldMap() {
         cameraVitesse = 2;
         gridWorldMap = new Group();
         areaMap = new AreaMap[areaXNumber][areaYNumber];
-        areaMap[0][0] = new AreaMap(tileSetsArea0(), new Vector2(0,0, Vector2.RELATIVE_TO_AREA));
-        areaMap[1][0] = new AreaMap(tileSetsArea1(), new Vector2(1,0, Vector2.RELATIVE_TO_AREA));
-        areaMap[1][1] = new AreaMap(tileSetsArea2(), new Vector2(1,1, Vector2.RELATIVE_TO_AREA));
-        areaMap[2][1] = new AreaMap(tileSetsArea3(), new Vector2(2,1, Vector2.RELATIVE_TO_AREA));
-        areaMap[2][0] = new AreaMap(tileSetsArea4(), new Vector2(2,0, Vector2.RELATIVE_TO_AREA));
+        areaMap[0][0] = new AreaMap(tileSetsArea0(), 0,0);
+        areaMap[1][0] = new AreaMap(tileSetsArea1(), 1,0);
+        areaMap[1][1] = new AreaMap(tileSetsArea2(), 1,1);
+        areaMap[2][1] = new AreaMap(tileSetsArea3(), 2,1);
+        areaMap[2][0] = new AreaMap(tileSetsArea4(), 2,0);
+        currentArea = areaMap[0][0];
+        prevArea = currentArea;
         gridWorldMap.getChildren().add(areaMap[0][0]);
         gridWorldMap.getChildren().add(areaMap[1][0]);
         gridWorldMap.getChildren().add(areaMap[1][1]);
@@ -47,14 +46,17 @@ public class WorldMap extends Pane {
 
     public void initCamera(PerspectiveCamera camera){
         this.camera = camera;
-        camera.setTranslateZ(-1600);
-
     }
 
     public void addPlayer(Player player){
-        this.player = player;
         getChildren().add(player);
     }
+
+    public void switchArea(){
+
+
+    }
+
     public TileSet[][] tileSetsArea0(){
         return new TileSet[][]{
                 {TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK},
@@ -161,15 +163,19 @@ public class WorldMap extends Pane {
         };
     }
 
-    //TODO: Transition camera avec regulation PID
-    public void updateCamera(Player player){
-                camera.setTranslateX(camera.translateXProperty().doubleValue() + (player.getAreaCoordX()*areaWidth - camera.getTranslateX()));
-                camera.setTranslateY(camera.translateYProperty().doubleValue() + (player.getAreaCoordY()*areaHeight - camera.getTranslateY()));
-    }
-
-
     public AreaMap getAreaMap(int currentAreaX, int currentAreaY) {
             return areaMap[currentAreaX][currentAreaY];
     }
 
+    public AreaMap getCurrentArea(){
+        return currentArea;
+    }
+
+    public Tile getTile(int currentTileX, int currentTileY){
+        return getCurrentArea().getTiles()[currentTileX][currentTileY];
+    }
+
+    public PerspectiveCamera getCamera() {
+        return camera;
+    }
 }
