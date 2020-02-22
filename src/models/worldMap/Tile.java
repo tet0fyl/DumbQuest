@@ -34,16 +34,16 @@ public class Tile extends Pane {
         getChildren().add(graphic);
     }
 
-    public int getBottomConstrain(){
+    public double getBottomConstrain(){
         return position.getY() + WorldMap.tileHeight;
     }
-    public int getTopConstrain(){
+    public double getTopConstrain(){
         return position.getY();
     }
-    public int getRightConstrain(){
+    public double getRightConstrain(){
         return position.getX() + WorldMap.tileWidth;
     }
-    public int getLeftConstrain(){
+    public double getLeftConstrain(){
         return position.getX();
     }
 

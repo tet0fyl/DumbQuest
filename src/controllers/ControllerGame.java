@@ -1,10 +1,8 @@
 package controllers;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import models.KeyInput;
+import models.Direction;
 import models.Partie;
 import models.Player;
 import timeline.GameTL;
@@ -22,6 +20,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         this.controllerKeyBoard = new ControllerKeyBoard(this);
         this.gameTL = new GameTL(this);
         partie = new Partie();
+        partie.getWorldMap().initCamera(viewHandler.getCamera());
         player = partie.getPlayer();
 
 
@@ -36,13 +35,13 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     }
 
     public void handlePlayer() {
-        if( controllerKeyBoard.isUpPressed() ) partie.getPlayer().move(KeyInput.GO_UP);
-        if( controllerKeyBoard.isDownPressed() ) partie.getPlayer().move(KeyInput.GO_DOWN);
-        if( controllerKeyBoard.isRightPressed() ) partie.getPlayer().move(KeyInput.GO_RIGHT);
-        if( controllerKeyBoard.isLeftPressed()) partie.getPlayer().move(KeyInput.GO_LEFT);
+        if( controllerKeyBoard.isUpPressed() ) partie.getPlayer().move(Direction.GO_UP);
+        if( controllerKeyBoard.isDownPressed() ) partie.getPlayer().move(Direction.GO_DOWN);
+        if( controllerKeyBoard.isRightPressed() ) partie.getPlayer().move(Direction.GO_RIGHT);
+        if( controllerKeyBoard.isLeftPressed()) partie.getPlayer().move(Direction.GO_LEFT);
     }
 
-    public void updateTilePlayerPosition(){
+    public void handleCamera(){
 
     }
 

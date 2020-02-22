@@ -30,7 +30,7 @@ public class AreaMap extends Pane {
     }
 
     public Tile getTilePositionByCoord(int x, int y){
-        return tiles[x * WorldMap.tileWidth][y * WorldMap.tileHeight];
+        return tiles[x * (int)WorldMap.tileWidth][y * (int)WorldMap.tileHeight];
     };
 
     public Tile[][] getTiles() {

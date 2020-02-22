@@ -6,8 +6,8 @@ public class Vector2 {
     public static final int RELATIVE_TO_TILE = 0;
     public static final int RELATIVE_TO_AREA = 1;
     public static final int ABSOLUTE_PIXEL = 2;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
     public Vector2(int x, int y, int relativeTo) {
         if(relativeTo == RELATIVE_TO_TILE){
@@ -27,7 +27,7 @@ public class Vector2 {
         this.y += y;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
@@ -35,7 +35,7 @@ public class Vector2 {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 

@@ -1,5 +1,5 @@
 package models;
 
-public enum KeyInput {
+public enum Direction {
     GO_RIGHT, GO_LEFT, GO_UP, GO_DOWN, ATTACK
 }

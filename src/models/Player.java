@@ -13,7 +13,7 @@ public class Player extends Pane {
     private Vector2 position;
     private CharacterState currentState;
     private int vitesse;
-    private Integer rightConstraint, leftConstraint, topConstraint, bottomConstraint;
+    private Double rightConstraint, leftConstraint, topConstraint, bottomConstraint;
     private boolean isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint;
     private Rectangle hitBox;
     private int hitBoxWidth;
@@ -22,7 +22,6 @@ public class Player extends Pane {
     private int skinHeight;
     private Rectangle skin;
     private WorldMap worldMap;
-    private int currentArea = 0;
 
     public Player(Vector2 position, WorldMap worldMap){
         this.worldMap = worldMap;
@@ -56,24 +55,23 @@ public class Player extends Pane {
         hitBox.setY((skinHeight/2 - hitBoxHeight/2));
 
         getChildren().addAll(skin,hitBox);
-        worldMap.getChildren().add(this);
     }
 
-    public void move(KeyInput mouvement){
+    public void move(Direction mouvement){
         checkTileNeighborhood();
-        if(mouvement.equals(KeyInput.GO_UP)){
+        if(mouvement.equals(Direction.GO_UP)){
             if(!(topConstraint != null && topConstraint >= getTopConstrain()))
                 position.add(0,-vitesse);
         }
-        if(mouvement.equals(KeyInput.GO_DOWN)){
+        if(mouvement.equals(Direction.GO_DOWN)){
             if(!(bottomConstraint != null && bottomConstraint <= getBottomConstrain()))
                 position.add(0,vitesse);
         }
-        if(mouvement.equals(KeyInput.GO_RIGHT)){
+        if(mouvement.equals(Direction.GO_RIGHT)){
             if(!(rightConstraint != null && rightConstraint <= getRightConstrain()))
                 position.add(vitesse,0);
         }
-        if(mouvement.equals(KeyInput.GO_LEFT)){
+        if(mouvement.equals(Direction.GO_LEFT)){
             if(!(leftConstraint != null && leftConstraint >= getLeftConstrain()))
                 position.add(-vitesse,0);
 
@@ -90,8 +88,8 @@ public class Player extends Pane {
         for (int i = - 1; i <= 1 ; i++) {
             for (int j = - 1; j <= 1 ; j++) {
                 if(Math.abs(i) == Math.abs(j)) continue;
-                if(getCoordX()+i <= -1 || getCoordY()+j <= -1 || getCoordX()+i >= WorldMap.tileXNumber || getCoordY() + j >= WorldMap.tileYNumber ) continue;
-                Tile tile = worldMap.getAreaMap(currentArea).getTiles()[getCoordX()+i][getCoordY()+j];
+                if(getTileCoordX()+i <= -1 || getTileCoordY()+j <= -1 || getTileCoordX()+i >= WorldMap.tileXNumber || getTileCoordY() + j >= WorldMap.tileYNumber ) continue;
+                Tile tile = worldMap.getAreaMap(getAreaCoordX(),getAreaCoordY()).getTiles()[getTileCoordX()+i][getTileCoordY()+j];
                 if(!(tile.isTraversable())){
                     if(i==-1 && j==0){
                         leftConstraint = tile.getRightConstrain();
@@ -117,32 +115,40 @@ public class Player extends Pane {
         }
     }
 
-    public int getCoordX(){
-        return (int)Math.floor(getTheCenterX()/WorldMap.tileWidth);
+    public int getTileCoordX(){
+        return (int)Math.floor((getTheCenterX())/WorldMap.tileWidth) % WorldMap.tileXNumber;
     }
 
-    public int getCoordY(){
-        return (int)Math.floor(getTheCenterY()/WorldMap.tileHeight);
+    public int getTileCoordY(){
+        return (int)Math.floor((getTheCenterY())/WorldMap.tileHeight) % WorldMap.tileYNumber;
     }
 
-    public int getTopConstrain(){
-        return position.getY() + (int)hitBox.getY() ;
-    }
-    public int getBottomConstrain(){
-        return (position.getY() +  skinHeight) - ((int)hitBox.getY());
-    }
-    public int getRightConstrain(){
-        return position.getX() + skinWidth - ((int)hitBox.getX()) ;
-    }
-    public int getLeftConstrain(){
-        return position.getX() + (int)hitBox.getX();
+    public int getAreaCoordX(){
+        return (int)Math.floor((getTheCenterX())/WorldMap.areaWidth) % WorldMap.areaXNumber;
     }
 
-    public int getTheCenterX(){
+    public int getAreaCoordY(){
+        return (int)Math.floor((getTheCenterY())/WorldMap.areaHeight) % WorldMap.areaYNumber;
+    }
+
+    public double getTopConstrain(){
+        return (position.getY() + (int)hitBox.getY()) % WorldMap.areaHeight ;
+    }
+    public double getBottomConstrain(){
+        return (position.getY() + skinHeight - hitBox.getY()) % WorldMap.areaHeight;
+    }
+    public double getRightConstrain(){
+        return (position.getX() + skinWidth - (hitBox.getX())) %  WorldMap.areaWidth;
+    }
+    public double getLeftConstrain(){
+        return (position.getX() + hitBox.getX()) % WorldMap.areaWidth;
+    }
+
+    public double getTheCenterX(){
         return (skinWidth/2 + position.getX());
     }
 
-    public int getTheCenterY(){
+    public double getTheCenterY(){
         return (skinHeight/2 + position.getY());
     }
 
