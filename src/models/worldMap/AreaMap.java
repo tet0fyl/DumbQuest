@@ -12,7 +12,7 @@ public class AreaMap extends Pane {
     private Tile[][] tiles;
     private double x;
     private double y;
-    private ArrayList<Ennemi> ennemiArrayList;
+    private Ennemi[] ennemiArrayList;
 
     public AreaMap(TileSet[][] tileSets, int areaX, int areaY){
         this.x = areaX * WorldMap.areaWidth;
@@ -42,7 +42,13 @@ public class AreaMap extends Pane {
         return tiles;
     }
 
-    public ArrayList<Ennemi> getEnnemiArrayList() {
+    public Ennemi[] getEnnemiArrayList() {
         return ennemiArrayList;
+    }
+
+    public void setEnnemiArrayList(Ennemi[] ennemiArrayList) {
+        this.ennemiArrayList = ennemiArrayList;
+        for(Ennemi ennemi: ennemiArrayList)
+            getChildren().add(ennemi);
     }
 }

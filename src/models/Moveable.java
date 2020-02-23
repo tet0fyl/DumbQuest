@@ -3,6 +3,7 @@ package models;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import models.ennemis.Ennemi;
 import models.worldMap.WorldMap;
 
 public class Moveable extends Pane {
@@ -10,7 +11,7 @@ public class Moveable extends Pane {
     protected byte pvMax;
     protected int vitesse;
     protected Double rightConstraint, leftConstraint, topConstraint, bottomConstraint;
-    protected boolean isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint, isAttacking, isStandingBy, isAttacked;
+    protected boolean isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint, isAttacking, isStandingBy, isAttacked, isAlive;
     protected Rectangle hitBox;
     protected int hitBoxWidth;
     protected int hitBoxHeight;
@@ -23,6 +24,7 @@ public class Moveable extends Pane {
     protected double x;
     protected double y;
     protected int animationAttackFrame = 4;
+    protected int animationDamageFrame = 4;
 
     public Moveable(int areaX, int areaY, int tileX, int tileY){
         this.x = areaX * WorldMap.areaWidth + tileX * WorldMap.tileWidth;
@@ -40,7 +42,7 @@ public class Moveable extends Pane {
         vitesse=5;
     }
 
-    protected void initView(){
+    protected void initView(Color color){
         skinWidth = (int)WorldMap.tileWidth * 3 / 4;
         skinHeight = (int)WorldMap.tileHeight * 3 / 4;
         hitBoxWidth = skinWidth - 10;
@@ -56,8 +58,7 @@ public class Moveable extends Pane {
         attackBox.setHeight(attackHeight);
 
         skin = new Rectangle();
-        skin.setFill(Color.BLUE);
-        skin.setOpacity(0.4);
+        skin.setFill(color);
         skin.setWidth(skinWidth);
         skin.setHeight(skinHeight);
 
@@ -95,8 +96,8 @@ public class Moveable extends Pane {
         }
     }
 
-    public void attack(Moveable moveable){
-
+    public void attack(Ennemi ennemie){
+        ennemie.setAttacked(true);
     }
 
     public void update(){
@@ -109,7 +110,7 @@ public class Moveable extends Pane {
             attackAnimation();
         }
         if(isAttacked){
-            dommageAnimation();
+            damageAnimation();
         }
     }
 
@@ -122,28 +123,62 @@ public class Moveable extends Pane {
         }
     }
 
-    public void dommageAnimation(){
-        if(skin.getOpacity() == 0){
-            skin.setOpacity(1);
-        } else {
-            skin.setOpacity(0);
+    public void damageAnimation(){
+        if(animationDamageFrame != 0){
+            animationDamageFrame--;
+            if(skin.getOpacity() == 0){
+                skin.setOpacity(1);
+            } else {
+                skin.setOpacity(0);
+            }
+        } else{
+            isAttacked = false;
+            animationDamageFrame = 4;
         }
     }
 
+    public boolean collision(Moveable other){
+        if ( Math.abs(getTheCenterHitBoxX() - other.getTheCenterHitBoxX()) > getTheHalfSizeHitBoxX() + other.getTheHalfSizeHitBoxX() ) return false;
+        if ( Math.abs(getTheCenterHitBoxY() - other.getTheCenterHitBoxY()) > getTheHalfSizeHitBoxY() + other.getTheHalfSizeHitBoxY() ) return false;
+        return true;
+    }
+
+    public boolean attackTouch(Moveable other){
+        if ( Math.abs(getTheCenterAttackX() - other.getTheCenterHitBoxX()) > getTheHalfSizeAttackX() + other.getTheHalfSizeHitBoxX() ) return false;
+        if ( Math.abs(getTheCenterAttackY() - other.getTheCenterHitBoxY()) > getTheHalfSizeAttackY() + other.getTheHalfSizeHitBoxY() ) return false;
+        return true;
+    }
+
+    public double getTheHalfSizeAttackX(){
+        return hitBoxWidth/2;
+    }
+
+    public double getTheHalfSizeAttackY(){
+        return hitBoxHeight/2;
+    }
+
+    public double getTheHalfSizeHitBoxX(){
+        return attackWidth/2;
+    }
+
+    public double getTheHalfSizeHitBoxY(){
+        return attackHeight/2;
+    }
+
     public int getTileCoordX(){
-        return (int)Math.floor((getTheCenterX())/WorldMap.tileWidth) % WorldMap.tileXNumber;
+        return (int)Math.floor((getTheCenterHitBoxX())/WorldMap.tileWidth) % WorldMap.tileXNumber;
     }
 
     public int getTileCoordY(){
-        return (int)Math.floor((getTheCenterY())/WorldMap.tileHeight) % WorldMap.tileYNumber;
+        return (int)Math.floor((getTheCenterHitBoxY())/WorldMap.tileHeight) % WorldMap.tileYNumber;
     }
 
     public int getAreaCoordX(){
-        return (int)Math.floor((getTheCenterX())/WorldMap.areaWidth) % WorldMap.areaXNumber;
+        return (int)Math.floor((getTheCenterHitBoxX())/WorldMap.areaWidth) % WorldMap.areaXNumber;
     }
 
     public int getAreaCoordY(){
-        return (int)Math.floor((getTheCenterY())/WorldMap.areaHeight) % WorldMap.areaYNumber;
+        return (int)Math.floor((getTheCenterHitBoxY())/WorldMap.areaHeight) % WorldMap.areaYNumber;
     }
 
     public double getTopConstrain(){
@@ -175,12 +210,20 @@ public class Moveable extends Pane {
         return (!(leftConstraint != null && leftConstraint >= getLeftConstrain()));
     }
 
-    public double getTheCenterX(){
+    public double getTheCenterHitBoxX(){
         return (skinWidth/2 + x);
     }
 
-    public double getTheCenterY(){
+    public double getTheCenterHitBoxY(){
         return (skinHeight/2 + y);
+    }
+
+    public double getTheCenterAttackX(){
+        return (attackWidth/2 + attackBox.getX() + x);
+    }
+
+    public double getTheCenterAttackY(){
+        return (attackHeight/2 + attackBox.getY() + y);
     }
 
     public Rectangle getHitBox() {
@@ -389,5 +432,13 @@ public class Moveable extends Pane {
 
     public void setAnimationAttackFrame(int animationAttackFrame) {
         this.animationAttackFrame = animationAttackFrame;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
     }
 }

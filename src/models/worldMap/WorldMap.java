@@ -4,7 +4,12 @@ import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.layout.Pane;
 import models.Player;
+import models.ennemis.Ennemi;
+import models.ennemis.Soldier;
 import utils.Config;
+
+import java.util.ArrayList;
+
 
 public class WorldMap extends Pane {
 
@@ -31,6 +36,8 @@ public class WorldMap extends Pane {
         gridWorldMap = new Group();
         areaMap = new AreaMap[areaXNumber][areaYNumber];
         areaMap[0][0] = new AreaMap(tileSetsArea0(), 0,0);
+        //areaMap[0][0] = new AreaMap(tileSetsArea2(), 0,0);
+        areaMap[0][0].setEnnemiArrayList(ennemisArea2());
         areaMap[1][0] = new AreaMap(tileSetsArea1(), 1,0);
         areaMap[1][1] = new AreaMap(tileSetsArea2(), 1,1);
         areaMap[2][1] = new AreaMap(tileSetsArea3(), 2,1);
@@ -41,7 +48,6 @@ public class WorldMap extends Pane {
         gridWorldMap.getChildren().add(areaMap[1][1]);
         gridWorldMap.getChildren().add(areaMap[2][1]);
         gridWorldMap.getChildren().add(areaMap[2][0]);
-
         getChildren().add(gridWorldMap);
     }
 
@@ -51,6 +57,12 @@ public class WorldMap extends Pane {
 
     public void addPlayer(Player player){
         getChildren().add(player);
+    }
+
+    public Ennemi[] ennemisArea2(){
+        return new Ennemi[]{
+                new Soldier(0, 0, 10, 10)
+        };
     }
 
     public TileSet[][] tileSetsArea0(){
@@ -190,6 +202,10 @@ public class WorldMap extends Pane {
 
     public Tile getTile(int currentTileX, int currentTileY){
         return getCurrentArea().getTiles()[currentTileX][currentTileY];
+    }
+
+    public Ennemi[] getEnnemisOfTheCurrentArea(){
+        return getCurrentArea().getEnnemiArrayList();
     }
 
     public PerspectiveCamera getCamera() {

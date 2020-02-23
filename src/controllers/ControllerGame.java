@@ -5,10 +5,13 @@ import javafx.scene.input.MouseEvent;
 import models.Direction;
 import models.Partie;
 import models.Player;
+import models.ennemis.Ennemi;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 import timeline.GameTL;
 import views.ViewHandler;
+
+import javax.xml.stream.events.EndElement;
 
 public class ControllerGame implements EventHandler<MouseEvent> {
     private ViewHandler viewHandler;
@@ -63,11 +66,19 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public void handerPlayerAttack(){
         player.setAttacking(true);
-        player.attack(null);
+        for(Ennemi ennemi: worldMap.getEnnemisOfTheCurrentArea()){
+            if(player.attackTouch(ennemi)){
+                System.out.println("TOUCHER");
+                player.attack(ennemi);
+            }
+        }
     }
 
     public void majAnimation(){
         player.animate();
+        for(Ennemi ennemi: worldMap.getEnnemisOfTheCurrentArea()){
+            ennemi.animate();
+        }
     }
 
     public void checkTilePlayerNeighborhood(){
