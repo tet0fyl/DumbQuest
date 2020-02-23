@@ -11,6 +11,7 @@ public class ControllerKeyBoard implements EventHandler<KeyEvent> {
     private boolean rightPressed = false;
     private boolean downPressed = false;
     private boolean leftPressed = false;
+    private boolean spaceBarrePressed = false;
     private ControllerGame controllerGame;
 
     public ControllerKeyBoard(ControllerGame controllerGame){
@@ -32,6 +33,9 @@ public class ControllerKeyBoard implements EventHandler<KeyEvent> {
             if( keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.KP_LEFT || keyEvent.getCode() == KeyCode.Q ) {
                 leftPressed = true;
             }
+            if( keyEvent.getCode() == KeyCode.SPACE ) {
+                spaceBarrePressed=true;
+            }
             if( keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.P ) {
                 //TODO: Menu Pause
                 //controllerGame.handlePauseKeyPressed();
@@ -48,6 +52,9 @@ public class ControllerKeyBoard implements EventHandler<KeyEvent> {
             }
             if( keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.KP_LEFT || keyEvent.getCode() == KeyCode.Q ) {
                 leftPressed = false;
+            }
+            if( keyEvent.getCode() == KeyCode.SPACE ) {
+                spaceBarrePressed=false;
             }
         }
     }
@@ -66,5 +73,9 @@ public class ControllerKeyBoard implements EventHandler<KeyEvent> {
 
     public boolean isLeftPressed() {
         return leftPressed;
+    }
+
+    public boolean isSpaceBarrePressed() {
+        return spaceBarrePressed;
     }
 }

@@ -17,11 +17,13 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     private Player player;
     private Partie partie;
     private WorldMap worldMap;
+    private boolean memoControllerKeyBoardSpacePressed;
 
     public ControllerGame(ViewHandler viewHandler){
         this.viewHandler = viewHandler;
         this.controllerKeyBoard = new ControllerKeyBoard(this);
         this.gameTL = new GameTL(this);
+        memoControllerKeyBoardSpacePressed = false;
         partie = new Partie();
         partie.getWorldMap().initCamera(viewHandler.getCamera());
         player = partie.getPlayer();
@@ -38,15 +40,37 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     }
 
     public void handlePlayer() {
-
-        checkTileNeighborhood();
-        if( controllerKeyBoard.isUpPressed() && player.hasTopConstrain()) partie.getPlayer().move(Direction.GO_UP);
-        if( controllerKeyBoard.isDownPressed() && player.hasBottomConstrain()) partie.getPlayer().move(Direction.GO_DOWN);
-        if( controllerKeyBoard.isRightPressed() && player.hasRightConstrain()) partie.getPlayer().move(Direction.GO_RIGHT);
-        if( controllerKeyBoard.isLeftPressed() && player.hasLeftConstrain()) partie.getPlayer().move(Direction.GO_LEFT);
+        checkTilePlayerNeighborhood();
+        if( controllerKeyBoard.isUpPressed() && player.hasTopConstrain()) player.move(Direction.GO_UP);
+        if( controllerKeyBoard.isDownPressed() && player.hasBottomConstrain()) player.move(Direction.GO_DOWN);
+        if( controllerKeyBoard.isRightPressed() && player.hasRightConstrain()) player.move(Direction.GO_RIGHT);
+        if( controllerKeyBoard.isLeftPressed() && player.hasLeftConstrain()) player.move(Direction.GO_LEFT);
+        if( spaceBarrePlayerAttackImpulse() ) handerPlayerAttack();
+        player.update();
     }
 
-    public void checkTileNeighborhood(){
+    public boolean spaceBarrePlayerAttackImpulse(){
+        boolean frontMontantAttack = false;
+        if( (controllerKeyBoard.isSpaceBarrePressed()) && (!memoControllerKeyBoardSpacePressed) ) {
+            memoControllerKeyBoardSpacePressed = !memoControllerKeyBoardSpacePressed;
+            frontMontantAttack = true;
+        } else if (!controllerKeyBoard.isSpaceBarrePressed() && memoControllerKeyBoardSpacePressed){
+            memoControllerKeyBoardSpacePressed = !memoControllerKeyBoardSpacePressed;
+            frontMontantAttack = false;
+        }
+        return frontMontantAttack;
+    }
+
+    public void handerPlayerAttack(){
+        player.setAttacking(true);
+        player.attack(null);
+    }
+
+    public void majAnimation(){
+        player.animate();
+    }
+
+    public void checkTilePlayerNeighborhood(){
         if(worldMap.playerHasMoveToAnOtherTile()){
         for (int i = - 1; i <= 1 ; i++) {
             for (int j = - 1; j <= 1 ; j++) {
@@ -83,14 +107,20 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         worldMap.watchPlayer(player);
     }
 
-    //TODO: Transition camera fluide et seulement au changement d'area
+    //TODO: Transition camera fluide
     public void updateCamera(){
-        worldMap.getCamera().setTranslateX(worldMap.getCamera().translateXProperty().doubleValue() + (player.getAreaCoordX()*WorldMap.areaWidth - worldMap.getCamera().getTranslateX()));
-        worldMap.getCamera().setTranslateY(worldMap.getCamera().translateYProperty().doubleValue() + (player.getAreaCoordY()*WorldMap.areaHeight - worldMap.getCamera().getTranslateY()));
+        if(worldMap.playerHasMoveToAnOtherArea()){
+            worldMap.getCamera().setTranslateX(worldMap.getCamera().translateXProperty().doubleValue() + (player.getAreaCoordX()*WorldMap.areaWidth - worldMap.getCamera().getTranslateX()));
+            worldMap.getCamera().setTranslateY(worldMap.getCamera().translateYProperty().doubleValue() + (player.getAreaCoordY()*WorldMap.areaHeight - worldMap.getCamera().getTranslateY()));
+        }
     }
 
 
     public Partie getPartie() {
         return partie;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

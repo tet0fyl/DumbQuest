@@ -2,6 +2,9 @@ package models.worldMap;
 
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
+import models.ennemis.Ennemi;
+
+import java.util.ArrayList;
 
 
 public class AreaMap extends Pane {
@@ -9,6 +12,7 @@ public class AreaMap extends Pane {
     private Tile[][] tiles;
     private double x;
     private double y;
+    private ArrayList<Ennemi> ennemiArrayList;
 
     public AreaMap(TileSet[][] tileSets, int areaX, int areaY){
         this.x = areaX * WorldMap.areaWidth;
@@ -36,5 +40,9 @@ public class AreaMap extends Pane {
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public ArrayList<Ennemi> getEnnemiArrayList() {
+        return ennemiArrayList;
     }
 }

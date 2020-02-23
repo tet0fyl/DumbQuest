@@ -53,11 +53,6 @@ public class WorldMap extends Pane {
         getChildren().add(player);
     }
 
-    public void switchArea(){
-
-
-    }
-
     public TileSet[][] tileSetsArea0(){
         return new TileSet[][]{
                 {TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK, TileSet.ROCK},
