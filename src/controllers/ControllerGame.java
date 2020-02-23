@@ -68,7 +68,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         player.setAttacking(true);
         for(Ennemi ennemi: worldMap.getEnnemisOfTheCurrentArea()){
             if(player.attackTouch(ennemi)){
-                System.out.println("TOUCHER");
                 player.attack(ennemi);
             }
         }

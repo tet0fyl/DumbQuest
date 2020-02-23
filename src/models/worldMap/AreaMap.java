@@ -17,6 +17,7 @@ public class AreaMap extends Pane {
     public AreaMap(TileSet[][] tileSets, int areaX, int areaY){
         this.x = areaX * WorldMap.areaWidth;
         this.y = areaY * WorldMap.areaHeight;
+        ennemiArrayList = new Ennemi[0];
         tiles = new Tile[WorldMap.tileXNumber][WorldMap.tileYNumber];
         setLayoutX(x);
         setLayoutY(y);
