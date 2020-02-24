@@ -23,6 +23,8 @@ public class Moveable extends Pane {
     protected Rectangle skin;
     protected double x;
     protected double y;
+    protected double prevX;
+    protected double prevY;
     protected int animationAttackFrame = 4;
     protected int animationDamageFrame = 4;
 
@@ -73,7 +75,9 @@ public class Moveable extends Pane {
         getChildren().addAll(skin, hitBox, attackBox);
     }
 
-    public void move(Direction mouvement){
+    public void move(Direction mouvement, boolean watchIfPlayerCanMove){
+        prevX = x;
+        prevY = y;
         if(mouvement.equals(Direction.GO_UP)){
             y -= vitesse;
             attackBox.setX(0);
@@ -93,6 +97,10 @@ public class Moveable extends Pane {
             x -= vitesse;
             attackBox.setX(-skinWidth);
             attackBox.setY(0);
+        }
+        if(!watchIfPlayerCanMove){
+            x = prevX;
+            y = prevY;
         }
     }
 
@@ -136,6 +144,23 @@ public class Moveable extends Pane {
             animationDamageFrame = 4;
         }
     }
+
+    public int getTopLeftCoordX(){
+        return (int)((x + hitBox.getX()) / WorldMap.tileWidth);
+    }
+
+    public int getTopLeftCoordY(){
+        return (int)((y + hitBox.getY()) / WorldMap.tileHeight);
+    }
+
+    public int getBottomRightCoordX(){
+        return (int)((x + skinWidth - hitBox.getX()) / WorldMap.tileWidth);
+    }
+
+    public int getBottomRightCoordY(){
+        return (int)((y + skinHeight - hitBox.getY()) / WorldMap.tileHeight);
+    }
+
 
     public boolean collision(Moveable other){
         if ( Math.abs(getTheCenterHitBoxX() - other.getTheCenterHitBoxX()) > getTheHalfSizeHitBoxX() + other.getTheHalfSizeHitBoxX() ) return false;

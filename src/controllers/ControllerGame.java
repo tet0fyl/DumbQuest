@@ -11,8 +11,6 @@ import models.worldMap.WorldMap;
 import timeline.GameTL;
 import views.ViewHandler;
 
-import javax.xml.stream.events.EndElement;
-
 public class ControllerGame implements EventHandler<MouseEvent> {
     private ViewHandler viewHandler;
     private ControllerKeyBoard controllerKeyBoard;
@@ -22,7 +20,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     private WorldMap worldMap;
     private boolean memoControllerKeyBoardSpacePressed;
 
-    public ControllerGame(ViewHandler viewHandler){
+    public ControllerGame(ViewHandler viewHandler) {
         this.viewHandler = viewHandler;
         this.controllerKeyBoard = new ControllerKeyBoard(this);
         this.gameTL = new GameTL(this);
@@ -33,7 +31,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         worldMap = partie.getWorldMap();
 
         this.viewHandler.getViewGame().addWorldMap(partie.getWorldMap());
-        this.viewHandler.getViewGame().setEvent(this,controllerKeyBoard);
+        this.viewHandler.getViewGame().setEvent(this, controllerKeyBoard);
         this.gameTL.start();
     }
 
@@ -43,74 +41,55 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     }
 
     public void handlePlayer() {
-        checkTilePlayerNeighborhood();
-        if( controllerKeyBoard.isUpPressed() && player.hasTopConstrain()) player.move(Direction.GO_UP);
-        if( controllerKeyBoard.isDownPressed() && player.hasBottomConstrain()) player.move(Direction.GO_DOWN);
-        if( controllerKeyBoard.isRightPressed() && player.hasRightConstrain()) player.move(Direction.GO_RIGHT);
-        if( controllerKeyBoard.isLeftPressed() && player.hasLeftConstrain()) player.move(Direction.GO_LEFT);
-        if( spaceBarrePlayerAttackImpulse() ) handerPlayerAttack();
+        if (controllerKeyBoard.isUpPressed()) player.move(Direction.GO_UP, handlePlayerMovement());
+        if (controllerKeyBoard.isDownPressed()) player.move(Direction.GO_DOWN, handlePlayerMovement());
+        if (controllerKeyBoard.isRightPressed()) player.move(Direction.GO_RIGHT, handlePlayerMovement());
+        if (controllerKeyBoard.isLeftPressed()) player.move(Direction.GO_LEFT, handlePlayerMovement());
+        if (spaceBarrePlayerAttackImpulse()) handerPlayerAttack();
         player.update();
     }
 
-    public boolean spaceBarrePlayerAttackImpulse(){
+    public boolean spaceBarrePlayerAttackImpulse() {
         boolean frontMontantAttack = false;
-        if( (controllerKeyBoard.isSpaceBarrePressed()) && (!memoControllerKeyBoardSpacePressed) ) {
+        if ((controllerKeyBoard.isSpaceBarrePressed()) && (!memoControllerKeyBoardSpacePressed)) {
             memoControllerKeyBoardSpacePressed = !memoControllerKeyBoardSpacePressed;
             frontMontantAttack = true;
-        } else if (!controllerKeyBoard.isSpaceBarrePressed() && memoControllerKeyBoardSpacePressed){
+        } else if (!controllerKeyBoard.isSpaceBarrePressed() && memoControllerKeyBoardSpacePressed) {
             memoControllerKeyBoardSpacePressed = !memoControllerKeyBoardSpacePressed;
             frontMontantAttack = false;
         }
         return frontMontantAttack;
     }
 
-    public void handerPlayerAttack(){
+    public void handerPlayerAttack() {
         player.setAttacking(true);
-        for(Ennemi ennemi: worldMap.getEnnemisOfTheCurrentArea()){
-            if(player.attackTouch(ennemi)){
+        for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
+            if (player.attackTouch(ennemi)) {
                 player.attack(ennemi);
             }
         }
     }
 
-    public void majAnimation(){
+    public void majAnimation() {
         player.animate();
-        for(Ennemi ennemi: worldMap.getEnnemisOfTheCurrentArea()){
+        for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
             ennemi.animate();
         }
     }
 
-    public void checkTilePlayerNeighborhood(){
-        if(worldMap.playerHasMoveToAnOtherTile()){
-        for (int i = - 1; i <= 1 ; i++) {
-            for (int j = - 1; j <= 1 ; j++) {
-                if(Math.abs(i) == Math.abs(j)) continue;
-                if(player.getTileCoordX()+i <= -1 || player.getTileCoordY()+j <= -1 || player.getTileCoordX()+i >= WorldMap.tileXNumber || player.getTileCoordY() + j >= WorldMap.tileYNumber ) continue;
-                Tile tile = worldMap.getAreaMap(player.getAreaCoordX(),player.getAreaCoordY()).getTiles()[player.getTileCoordX()+i][player.getTileCoordY()+j];
-                if(!(tile.isTraversable())){
-                    if(i==-1 && j==0){
-                        player.setLeftConstraint(tile.getRightConstrain());
-                    } else if(i==0 && j==-1){
-                        player.setTopConstraint(tile.getBottomConstrain());
-                    } else if(i==1 && j==0){
-                        player.setRightConstraint(tile.getLeftConstrain());
-                    } else if(i==0 && j==1){
-                        player.setBottomConstraint(tile.getTopConstrain());
-                    }
-                } else {
-                    if(i==-1 && j==0){
-                        player.setLeftConstraint(null);
-                    } else if(i==0 && j==-1){
-                        player.setTopConstraint(null);
-                    } else if(i==1 && j==0){
-                        player.setRightConstraint(null);;
-                    } else if(i==0 && j==1){
-                        player.setBottomConstraint(null);
-                    }
+    public boolean handlePlayerMovement() {
+        for (int i = player.getTopLeftCoordX(); i <= player.getBottomRightCoordX(); i++) {
+            for (int j = player.getTopLeftCoordY(); j <= player.getBottomRightCoordY(); j++) {
+                //if(Math.abs(i) == Math.abs(j)) continue;
+                //if(player.getTopLeftCoordX()+i <= -1 || player.getTopLeftCoordY()+j <= -1 || player.getBottomRightCoordX()+i >= WorldMap.tileXNumber || player.getBottomRightCoordX() + j >= WorldMap.tileYNumber ) continue;
+                Tile tile = worldMap.getCurrentArea().getTiles()[i][j];
+                if (!tile.isTraversable()) {
+                    System.out.println("tile pas raversable");
+                    return false;
                 }
             }
-            }
         }
+        return true;
     }
 
     public void worldMapWatcher(){
