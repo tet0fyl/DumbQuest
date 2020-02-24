@@ -41,10 +41,11 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     }
 
     public void handlePlayer() {
-        if (controllerKeyBoard.isUpPressed()) player.move(Direction.GO_UP, handlePlayerMovement());
-        if (controllerKeyBoard.isDownPressed()) player.move(Direction.GO_DOWN, handlePlayerMovement());
-        if (controllerKeyBoard.isRightPressed()) player.move(Direction.GO_RIGHT, handlePlayerMovement());
-        if (controllerKeyBoard.isLeftPressed()) player.move(Direction.GO_LEFT, handlePlayerMovement());
+        if (controllerKeyBoard.isUpPressed()) player.move(Direction.GO_UP);
+        if (controllerKeyBoard.isDownPressed()) player.move(Direction.GO_DOWN);
+        if (controllerKeyBoard.isRightPressed()) player.move(Direction.GO_RIGHT);
+        if (controllerKeyBoard.isLeftPressed()) player.move(Direction.GO_LEFT);
+        player.valideTheMove(playerColliderMap());
         if (spaceBarrePlayerAttackImpulse()) handerPlayerAttack();
         player.update();
     }
@@ -77,14 +78,13 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         }
     }
 
-    public boolean handlePlayerMovement() {
+    public boolean playerColliderMap() {
         for (int i = player.getTopLeftCoordX(); i <= player.getBottomRightCoordX(); i++) {
             for (int j = player.getTopLeftCoordY(); j <= player.getBottomRightCoordY(); j++) {
                 //if(Math.abs(i) == Math.abs(j)) continue;
                 //if(player.getTopLeftCoordX()+i <= -1 || player.getTopLeftCoordY()+j <= -1 || player.getBottomRightCoordX()+i >= WorldMap.tileXNumber || player.getBottomRightCoordX() + j >= WorldMap.tileYNumber ) continue;
                 Tile tile = worldMap.getCurrentArea().getTiles()[i][j];
                 if (!tile.isTraversable()) {
-                    System.out.println("tile pas raversable");
                     return false;
                 }
             }

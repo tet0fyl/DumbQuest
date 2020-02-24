@@ -75,7 +75,7 @@ public class Moveable extends Pane {
         getChildren().addAll(skin, hitBox, attackBox);
     }
 
-    public void move(Direction mouvement, boolean watchIfPlayerCanMove){
+    public void move(Direction mouvement){
         prevX = x;
         prevY = y;
         if(mouvement.equals(Direction.GO_UP)){
@@ -98,7 +98,10 @@ public class Moveable extends Pane {
             attackBox.setX(-skinWidth);
             attackBox.setY(0);
         }
-        if(!watchIfPlayerCanMove){
+    }
+
+    public void valideTheMove(boolean ifPlayerCanMove){
+        if(!ifPlayerCanMove){
             x = prevX;
             y = prevY;
         }
