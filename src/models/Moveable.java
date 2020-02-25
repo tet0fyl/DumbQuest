@@ -76,8 +76,6 @@ public class Moveable extends Pane {
     }
 
     public void move(Direction mouvement){
-        prevX = x;
-        prevY = y;
         if(mouvement.equals(Direction.GO_UP)){
             y -= vitesse;
             attackBox.setX(0);
@@ -98,6 +96,11 @@ public class Moveable extends Pane {
             attackBox.setX(-skinWidth);
             attackBox.setY(0);
         }
+    }
+
+    public void memory(){
+        prevX = x;
+        prevY = y;
     }
 
     public void valideTheMove(boolean ifPlayerCanMove){
@@ -148,20 +151,20 @@ public class Moveable extends Pane {
         }
     }
 
-    public int getTopLeftCoordX(){
-        return (int)((x + hitBox.getX()) / WorldMap.tileWidth);
+    public int getXMin(){
+        return (int)((x + hitBox.getX()));
     }
 
-    public int getTopLeftCoordY(){
-        return (int)((y + hitBox.getY()) / WorldMap.tileHeight);
+    public int getYMin(){
+        return (int)((y + hitBox.getY()) );
     }
 
-    public int getBottomRightCoordX(){
-        return (int)((x + skinWidth - hitBox.getX()) / WorldMap.tileWidth);
+    public int getXMax(){
+        return (int)((x + skinWidth - hitBox.getX()) );
     }
 
-    public int getBottomRightCoordY(){
-        return (int)((y + skinHeight - hitBox.getY()) / WorldMap.tileHeight);
+    public int getYMax(){
+        return (int)((y + skinHeight - hitBox.getY()));
     }
 
 

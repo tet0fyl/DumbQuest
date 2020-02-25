@@ -41,12 +41,13 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     }
 
     public void handlePlayer() {
+        player.memory();
         if (controllerKeyBoard.isUpPressed()) player.move(Direction.GO_UP);
         if (controllerKeyBoard.isDownPressed()) player.move(Direction.GO_DOWN);
         if (controllerKeyBoard.isRightPressed()) player.move(Direction.GO_RIGHT);
         if (controllerKeyBoard.isLeftPressed()) player.move(Direction.GO_LEFT);
-        player.valideTheMove(playerColliderMap());
         if (spaceBarrePlayerAttackImpulse()) handerPlayerAttack();
+        player.valideTheMove(playerColliderMap());
         player.update();
     }
 
@@ -79,11 +80,9 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     }
 
     public boolean playerColliderMap() {
-        for (int i = player.getTopLeftCoordX(); i <= player.getBottomRightCoordX(); i++) {
-            for (int j = player.getTopLeftCoordY(); j <= player.getBottomRightCoordY(); j++) {
-                //if(Math.abs(i) == Math.abs(j)) continue;
-                //if(player.getTopLeftCoordX()+i <= -1 || player.getTopLeftCoordY()+j <= -1 || player.getBottomRightCoordX()+i >= WorldMap.tileXNumber || player.getBottomRightCoordX() + j >= WorldMap.tileYNumber ) continue;
-                Tile tile = worldMap.getCurrentArea().getTiles()[i][j];
+        for (int i = player.getXMin(); i <= player.getXMax(); i++) {
+            for (int j = player.getYMin(); j <= player.getYMax(); j++) {
+                Tile tile = worldMap.getAreaMap(i,j).getTileByPixel(i,j);
                 if (!tile.isTraversable()) {
                     return false;
                 }
@@ -96,12 +95,10 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         worldMap.watchPlayer(player);
     }
 
-    //TODO: Transition camera fluide
+    //TODO: Transition camera fluide et lancer le calcule si le joueur a changer d area
     public void updateCamera(){
-        if(worldMap.playerHasMoveToAnOtherArea()){
             worldMap.getCamera().setTranslateX(worldMap.getCamera().translateXProperty().doubleValue() + (player.getAreaCoordX()*WorldMap.areaWidth - worldMap.getCamera().getTranslateX()));
             worldMap.getCamera().setTranslateY(worldMap.getCamera().translateYProperty().doubleValue() + (player.getAreaCoordY()*WorldMap.areaHeight - worldMap.getCamera().getTranslateY()));
-        }
     }
 
 

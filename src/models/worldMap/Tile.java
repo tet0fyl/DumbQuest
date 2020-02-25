@@ -9,11 +9,15 @@ public class Tile extends Pane {
     private boolean traversable;
     private boolean empty;
     private Rectangle graphic;
-    private TileSet tileSet;
+    private char tileSet;
     private double x;
     private double y;
+    private int indiceX;
+    private int indiceY;
 
-    public Tile(TileSet tileSet, int tileX, int tileY){
+    public Tile(char tileSet, int tileX, int tileY){
+        indiceX = tileX;
+        indiceY = tileY;
         this.tileSet = tileSet;
         this.x = tileX * WorldMap.tileWidth;
         this.y = tileY * WorldMap.tileHeight;
@@ -24,7 +28,7 @@ public class Tile extends Pane {
         graphic.setHeight(WorldMap.tileHeight);
         setLayoutX(x);
         setLayoutY(y);
-        if(tileSet.equals(TileSet.ROCK)){
+        if(tileSet == '1'){
             graphic.setFill(Color.BROWN);
             traversable = false;
         } else {
@@ -62,5 +66,13 @@ public class Tile extends Pane {
 
     public Rectangle getGraphic() {
         return graphic;
+    }
+
+    public int getIndiceX() {
+        return indiceX;
+    }
+
+    public int getIndiceY() {
+        return indiceY;
     }
 }
