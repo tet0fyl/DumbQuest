@@ -2,14 +2,14 @@ package controllers;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import models.Direction;
-import models.Partie;
-import models.Player;
+import models.*;
 import models.ennemis.Ennemi;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 import timeline.GameTL;
 import views.ViewHandler;
+
+import java.util.ArrayList;
 
 public class ControllerGame implements EventHandler<MouseEvent> {
     private ViewHandler viewHandler;
@@ -33,6 +33,11 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         this.viewHandler.getViewGame().addWorldMap(partie.getWorldMap());
         this.viewHandler.getViewGame().setEvent(this, controllerKeyBoard);
         this.gameTL.start();
+
+        System.out.println("test");
+        IA ia = new IA();
+        ia.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(2,2),worldMap.getTileByCoord(11,3));
+
     }
 
     @Override
