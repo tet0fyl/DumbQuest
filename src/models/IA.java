@@ -7,10 +7,7 @@ import java.util.ArrayList;
 
 public class IA {
 
-    public ArrayList<GraphNode> path;
-    public int currentPathNode = 0;
-
-    public void aStarPathFinding(Tile[][] maze, Tile start, Tile end){
+    public static ArrayList<GraphNode> aStarPathFinding(Tile[][] maze, Tile start, Tile end){
         GraphNode startNode = new GraphNode(start);
         GraphNode endNode = new GraphNode(end);
         ArrayList<GraphNode> openList = new ArrayList<>();
@@ -33,8 +30,7 @@ public class IA {
                     path.add(currentNode);
                     currentNode = currentNode.parent;
                 }
-                currentPathNode = path.size();
-                //path = path.size();
+                return path;
             }
 
             for (int i = -1 + currentNode.indiceX ; i <= 1 + currentNode.indiceX ; i++) {
@@ -50,19 +46,12 @@ public class IA {
                     child.f = child.g + child.h;
                     child.parent = currentNode;
                     for(GraphNode openNode : openList){
-                        if(child.graphEquals(openNode) || child.g > openNode.g)continue;
+                        if(child.graphEquals(openNode) && child.g > openNode.g)continue;
                     }
                     openList.add(child);
                 }
             }
         }
-    }
-
-    public void findAPath(Tile[][] maze, Tile start, Tile end){
-
-    }
-
-    public void goToTheNexPathtNode(){
-
+        return  null;
     }
 }

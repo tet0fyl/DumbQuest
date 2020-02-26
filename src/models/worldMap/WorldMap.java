@@ -161,14 +161,17 @@ public class WorldMap extends Pane {
             return areaMap[(int)(x / WorldMap.areaWidth)][(int)(y / WorldMap.areaHeight)];
     }
 
+    public AreaMap getAreaMapByCoord(int x, int y) {
+            return areaMap[x][y];
+    }
+
     public AreaMap getCurrentArea(){
         return playerCurrentArea;
     }
 
     public void watchPlayer(Player player){
-        //playerCurrentArea = getAreaMap(player.getAreaCoordX(), player.getAreaCoordY());
-
-        //playerCurrentTile = getTile(player.getTileCoordX(),player.getTileCoordY());
+        playerCurrentArea = getAreaMapByCoord(player.getAreaCoordX(), player.getAreaCoordY());
+        playerCurrentTile = getTileByCoord(player.getTileCoordX(),player.getTileCoordY());
     }
 
     public boolean playerHasMoveToAnOtherTile(){

@@ -33,16 +33,19 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         this.viewHandler.getViewGame().addWorldMap(partie.getWorldMap());
         this.viewHandler.getViewGame().setEvent(this, controllerKeyBoard);
         this.gameTL.start();
-
-        System.out.println("test");
-        IA ia = new IA();
-        ia.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(2,2),worldMap.getTileByCoord(11,3));
-
     }
 
     @Override
     public void handle(MouseEvent mouseEvent) {
 
+    }
+
+    public ArrayList<Tile> convertGraphNodeToTile(ArrayList<GraphNode> path){
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for (GraphNode graphNode: path){
+            tiles.add(worldMap.getCurrentArea().getTiles()[graphNode.indiceX][graphNode.indiceY]);
+        }
+        return tiles;
     }
 
     public void handlePlayer() {
@@ -77,6 +80,18 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         }
     }
 
+    public synchronized void moveEnemi(){
+        for(Ennemi enemi: worldMap.getCurrentArea().getEnnemiArrayList()){
+            if(worldMap.playerHasMoveToAnOtherTile()){
+                ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getTileByCoord(player.getTileCoordX(),player.getTileCoordY()));
+                enemi.setDestination(convertGraphNodeToTile(path));
+            }
+            if(enemi.getDestinationPath() != null){
+                enemi.moveToTarget();
+            }
+        }
+    }
+
     public void majAnimation() {
         player.animate();
         for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
@@ -102,8 +117,10 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     //TODO: Transition camera fluide et lancer le calcule si le joueur a changer d area
     public void updateCamera(){
+        if(worldMap.playerHasMoveToAnOtherArea()){
             worldMap.getCamera().setTranslateX(worldMap.getCamera().translateXProperty().doubleValue() + (player.getAreaCoordX()*WorldMap.areaWidth - worldMap.getCamera().getTranslateX()));
             worldMap.getCamera().setTranslateY(worldMap.getCamera().translateYProperty().doubleValue() + (player.getAreaCoordY()*WorldMap.areaHeight - worldMap.getCamera().getTranslateY()));
+        }
     }
 
 
