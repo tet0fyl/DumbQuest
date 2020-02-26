@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class IA {
 
     public static ArrayList<GraphNode> aStarPathFinding(Tile[][] maze, Tile start, Tile end){
+        System.out.println("start at " + start.getIndiceX() + " : " + start.getIndiceY() );
+        System.out.println("end at " + end.getIndiceX() + " : " + end.getIndiceY() );
         GraphNode startNode = new GraphNode(start);
         GraphNode endNode = new GraphNode(end);
         ArrayList<GraphNode> openList = new ArrayList<>();
@@ -30,6 +32,9 @@ public class IA {
                     path.add(currentNode);
                     currentNode = currentNode.parent;
                 }
+                System.out.println(openList.size());
+                System.out.println(closedList.size());
+                System.out.println(openList.size());
                 return path;
             }
 
@@ -37,12 +42,14 @@ public class IA {
                 for (int j = -1 + currentNode.indiceY ; j <= 1 + currentNode.indiceY ; j++) {
                     if(i == currentNode.indiceX && j == currentNode.indiceY) continue;
                     if(i < 0 || j < 0 || i >= WorldMap.tileXNumber || j >= WorldMap.tileYNumber) continue;
-                    GraphNode child = new GraphNode(maze[i][j]);
+                    Tile tile = maze[i][j];
+                    if(!tile.isTraversable()) continue;
+                    GraphNode child = new GraphNode(tile);
                     for(GraphNode closedNode: closedList){
                         if(child.graphEquals(closedNode))continue;
                     }
                     child.g = currentNode.g + 1;
-                    child.h = (Math.abs(child.indiceX - endNode.indiceX * 2)) + (Math.abs(child.indiceY - endNode.indiceY) * 2);
+                    child.h = (int)Math.pow((child.indiceX - endNode.indiceX),2) + (int)Math.pow((child.indiceY - endNode.indiceY),2);
                     child.f = child.g + child.h;
                     child.parent = currentNode;
                     for(GraphNode openNode : openList){

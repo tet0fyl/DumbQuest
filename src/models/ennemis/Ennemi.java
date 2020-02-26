@@ -16,23 +16,27 @@ public abstract class Ennemi extends Moveable {
     }
 
     public void setDestination(ArrayList<Tile> destinationPath){
-        currentNodeDestinationPath = destinationPath.size() - 1;
-        for(Tile tile: destinationPath){
-        System.out.println(tile.getIndiceX() + " : " + tile.getTheCenterY());
-        }
+        currentNodeDestinationPath = destinationPath.size() - 2;
         this.destinationPath = destinationPath;
     }
 
     public void moveToTarget(){
         if(destinationPath != null){
-            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterX() - x) != 0){
-                if (destinationPath.get(currentNodeDestinationPath).getTheCenterX() < x) move(Direction.GO_LEFT);
-                if (destinationPath.get(currentNodeDestinationPath).getTheCenterX() > x) move(Direction.GO_RIGHT);
-            } else{
+            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterX() - (x - getTheCenterHitBoxX())) > 5){
+                if (destinationPath.get(currentNodeDestinationPath).getTheCenterX() < (x - getTheCenterHitBoxX())) move(Direction.GO_LEFT);
+                if (destinationPath.get(currentNodeDestinationPath).getTheCenterX() > (x - getTheCenterHitBoxX())) move(Direction.GO_RIGHT);
+            } else
+            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterY() - (y - getTheCenterHitBoxY())) > 5){
+                if (destinationPath.get(currentNodeDestinationPath).getTheCenterY() < (y - getTheCenterHitBoxY())) move(Direction.GO_UP);
+                if (destinationPath.get(currentNodeDestinationPath).getTheCenterY() > (y - getTheCenterHitBoxY())) move(Direction.GO_DOWN);
+            }
+            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterX() - (x - getTheCenterHitBoxX())) < 10 && Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterY() - (y - getTheCenterHitBoxY())) < 10){
                 currentNodeDestinationPath--;
             }
-            if(currentNodeDestinationPath <= 0){
-                currentNodeDestinationPath = null;
+
+            if(currentNodeDestinationPath < 0){
+                System.out.println("on remet a null");
+                destinationPath = null;
             }
             update();
         }

@@ -50,7 +50,7 @@ public class WorldMap extends Pane {
 
         playerCurrentArea = areaMap[0][0];
         playerPrevArea = playerCurrentArea;
-        getChildren().add(gridWorldMap);
+        getChildren().addAll(gridWorldMap);
     }
 
     public void initCamera(PerspectiveCamera camera){
@@ -73,7 +73,7 @@ public class WorldMap extends Pane {
                         "1000000000000001",
                         "1000000000000001",
                         "1000000000000001",
-                        "1000000000000001",
+                        "1011111100000001",
                         "1000000000000001",
                         "1000000000000001",
                         "1000000000000001",
@@ -200,5 +200,65 @@ public class WorldMap extends Pane {
 
     public PerspectiveCamera getCamera() {
         return camera;
+    }
+
+    public static int getTileXNumber() {
+        return tileXNumber;
+    }
+
+    public static int getTileYNumber() {
+        return tileYNumber;
+    }
+
+    public static double getTileWidth() {
+        return tileWidth;
+    }
+
+    public static double getTileHeight() {
+        return tileHeight;
+    }
+
+    public static int getAreaXNumber() {
+        return areaXNumber;
+    }
+
+    public static int getAreaYNumber() {
+        return areaYNumber;
+    }
+
+    public static double getAreaWidth() {
+        return areaWidth;
+    }
+
+    public static double getAreaHeight() {
+        return areaHeight;
+    }
+
+    public int getCameraVitesse() {
+        return cameraVitesse;
+    }
+
+    public AreaMap[][] getAreaMap() {
+        return areaMap;
+    }
+
+    public Group getGridWorldMap() {
+        return gridWorldMap;
+    }
+
+    public AreaMap getPlayerCurrentArea() {
+        return playerCurrentArea;
+    }
+
+    public AreaMap getPlayerPrevArea() {
+        return playerPrevArea;
+    }
+
+    public Tile getPlayerCurrentTile() {
+        return playerCurrentTile;
+    }
+
+    public Tile getPlayerPrevTile() {
+        return playerPrevTile;
     }
 }

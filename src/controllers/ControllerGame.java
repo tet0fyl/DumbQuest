@@ -83,7 +83,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     public synchronized void moveEnemi(){
         for(Ennemi enemi: worldMap.getCurrentArea().getEnnemiArrayList()){
             if(worldMap.playerHasMoveToAnOtherTile()){
-                ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getTileByCoord(player.getTileCoordX(),player.getTileCoordY()));
+                ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
                 enemi.setDestination(convertGraphNodeToTile(path));
             }
             if(enemi.getDestinationPath() != null){
