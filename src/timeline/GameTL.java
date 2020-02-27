@@ -26,7 +26,8 @@ public class GameTL extends AnimationTimer {
         controllerGame.worldMapWatcher();
         controllerGame.handlePlayer();
         controllerGame.updateCamera();
-        controllerGame.moveEnemi();
+        controllerGame.moveEnnemi();
+        controllerGame.handleEnnemiAttack();
 
         if( now - lu150ms >= 150_000_000 ) {
                 controllerGame.majAnimation();

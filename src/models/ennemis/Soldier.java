@@ -9,6 +9,6 @@ public class Soldier extends Ennemi {
         super(areaX, areaY, tileX, tileY);
         initModels();
         initView(Color.BISQUE);
-        vitesse = 5;
+        vitesse = 2;
     }
 }

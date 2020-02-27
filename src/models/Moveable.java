@@ -12,7 +12,7 @@ public class Moveable extends Pane {
     protected byte pvMax;
     protected int vitesse;
     protected Double rightConstraint, leftConstraint, topConstraint, bottomConstraint;
-    protected boolean isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint, isAttacking, isStandingBy, isAttacked, isAlive;
+    protected boolean isBlockInAxisX, isBlockInAxisY, isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint, isAttacking, isStandingBy, isAttacked, isAlive;
     protected Rectangle hitBox;
     protected int hitBoxWidth;
     protected int hitBoxHeight;
@@ -82,17 +82,17 @@ public class Moveable extends Pane {
             attackBox.setX(0);
             attackBox.setY(-skinHeight);
         }
-        if(mouvement.equals(Direction.GO_DOWN)){
+        else if(mouvement.equals(Direction.GO_DOWN)){
             y += vitesse;
             attackBox.setX(0);
             attackBox.setY(skinHeight);
         }
-        if(mouvement.equals(Direction.GO_RIGHT)){
+        else if(mouvement.equals(Direction.GO_RIGHT) ){
             x += vitesse;
             attackBox.setX(skinWidth);
             attackBox.setY(0);
         }
-        if(mouvement.equals(Direction.GO_LEFT)){
+        else if(mouvement.equals(Direction.GO_LEFT) ){
             x -= vitesse;
             attackBox.setX(-skinWidth);
             attackBox.setY(0);
@@ -108,11 +108,11 @@ public class Moveable extends Pane {
         if(!ifPlayerCanMove){
             x = prevX;
             y = prevY;
-        }
+            }
     }
 
-    public void attack(Ennemi ennemie){
-        ennemie.setAttacked(true);
+    public void attack(Moveable moveable){
+        moveable.setAttacked(true);
     }
 
     public void update(){
@@ -243,11 +243,11 @@ public class Moveable extends Pane {
     }
 
     public double getTheCenterHitBoxX(){
-        return (skinWidth/2 + x);
+        return (x + skinWidth/2);
     }
 
     public double getTheCenterHitBoxY(){
-        return (skinHeight/2 + y);
+        return (y + skinHeight/2);
     }
 
     public double getTheCenterAttackX(){

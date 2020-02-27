@@ -4,6 +4,7 @@ import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class IA {
 
@@ -35,6 +36,7 @@ public class IA {
                 System.out.println(openList.size());
                 System.out.println(closedList.size());
                 System.out.println(openList.size());
+                Collections.reverse(path);
                 return path;
             }
 
@@ -46,7 +48,10 @@ public class IA {
                     if(!child.tile.isTraversable()) continue ;
                     boolean isInCloseList = false;
                     for(GraphNode closedNode: closedList){
-                        if(child.graphEquals(closedNode))isInCloseList=true;
+                        if(child.graphEquals(closedNode)){
+                            isInCloseList=true;
+                            break;
+                        }
                     }
                     if(isInCloseList)continue;
                     child.g = currentNode.g + 1;
@@ -55,7 +60,10 @@ public class IA {
                     child.parent = currentNode;
                     boolean isInOpenList = false;
                     for(GraphNode openNode : openList){
-                        if(child.graphEquals(openNode) && child.g > openNode.g)isInOpenList=true;
+                        if(child.graphEquals(openNode) && child.g > openNode.g){
+                            isInOpenList=true;
+                            break;
+                        }
                     }
                     if(isInOpenList)continue;
                     openList.add(child);

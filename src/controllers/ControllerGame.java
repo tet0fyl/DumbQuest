@@ -80,11 +80,21 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         }
     }
 
-    public synchronized void moveEnemi(){
+    public void handleEnnemiAttack(){
+        for(Ennemi ennemi: worldMap.getCurrentArea().getEnnemiArrayList()){
+            if(ennemi.attackTouch(player) && !ennemi.isAttacking()){
+                ennemi.setAttacking(true);
+                ennemi.attack(player);
+                System.out.println(":P");
+            }
+        }
+    }
+
+    public synchronized void moveEnnemi(){
         for(Ennemi enemi: worldMap.getCurrentArea().getEnnemiArrayList()){
             if(worldMap.playerHasMoveToAnOtherTile()){
-                ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
-                enemi.setDestination(convertGraphNodeToTile(path));
+                    ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
+                    enemi.setDestination(path);
             }
             if(enemi.getDestinationPath() != null){
                 enemi.moveToTarget();
