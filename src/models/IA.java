@@ -42,19 +42,22 @@ public class IA {
                 for (int j = -1 + currentNode.indiceY ; j <= 1 + currentNode.indiceY ; j++) {
                     if(i == currentNode.indiceX && j == currentNode.indiceY) continue;
                     if(i < 0 || j < 0 || i >= WorldMap.tileXNumber || j >= WorldMap.tileYNumber) continue;
-                    Tile tile = maze[i][j];
-                    if(!tile.isTraversable()) continue;
-                    GraphNode child = new GraphNode(tile);
+                    GraphNode child = new GraphNode(maze[i][j]);
+                    if(!child.tile.isTraversable()) continue ;
+                    boolean isInCloseList = false;
                     for(GraphNode closedNode: closedList){
-                        if(child.graphEquals(closedNode))continue;
+                        if(child.graphEquals(closedNode))isInCloseList=true;
                     }
+                    if(isInCloseList)continue;
                     child.g = currentNode.g + 1;
                     child.h = (int)Math.pow((child.indiceX - endNode.indiceX),2) + (int)Math.pow((child.indiceY - endNode.indiceY),2);
                     child.f = child.g + child.h;
                     child.parent = currentNode;
+                    boolean isInOpenList = false;
                     for(GraphNode openNode : openList){
-                        if(child.graphEquals(openNode) && child.g > openNode.g)continue;
+                        if(child.graphEquals(openNode) && child.g > openNode.g)isInOpenList=true;
                     }
+                    if(isInOpenList)continue;
                     openList.add(child);
                 }
             }

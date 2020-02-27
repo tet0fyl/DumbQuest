@@ -11,8 +11,10 @@ public class GraphNode {
     public int indiceX;
     public int indiceY;
     public GraphNode parent;
+    public Tile tile;
 
     public GraphNode(Tile tile){
+        this.tile = tile;
         this.indiceX = tile.getIndiceX();
         this.indiceY = tile.getIndiceY();
         f=0;

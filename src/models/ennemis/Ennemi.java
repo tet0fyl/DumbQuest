@@ -22,15 +22,15 @@ public abstract class Ennemi extends Moveable {
 
     public void moveToTarget(){
         if(destinationPath != null){
-            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterX() - (x - getTheCenterHitBoxX())) > 5){
-                if (destinationPath.get(currentNodeDestinationPath).getTheCenterX() < (x - getTheCenterHitBoxX())) move(Direction.GO_LEFT);
-                if (destinationPath.get(currentNodeDestinationPath).getTheCenterX() > (x - getTheCenterHitBoxX())) move(Direction.GO_RIGHT);
+            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterX() - (x)) > 5){
+                if (destinationPath.get(currentNodeDestinationPath).getTheCenterX() < (x)) move(Direction.GO_LEFT);
+                if (destinationPath.get(currentNodeDestinationPath).getTheCenterX() > (x)) move(Direction.GO_RIGHT);
             } else
-            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterY() - (y - getTheCenterHitBoxY())) > 5){
-                if (destinationPath.get(currentNodeDestinationPath).getTheCenterY() < (y - getTheCenterHitBoxY())) move(Direction.GO_UP);
-                if (destinationPath.get(currentNodeDestinationPath).getTheCenterY() > (y - getTheCenterHitBoxY())) move(Direction.GO_DOWN);
+            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterY() - (y)) > 5){
+                if (destinationPath.get(currentNodeDestinationPath).getTheCenterY() < (y)) move(Direction.GO_UP);
+                if (destinationPath.get(currentNodeDestinationPath).getTheCenterY() > (y )) move(Direction.GO_DOWN);
             }
-            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterX() - (x - getTheCenterHitBoxX())) < 10 && Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterY() - (y - getTheCenterHitBoxY())) < 10){
+            if(Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterX() - (x)) < 10 && Math.abs(destinationPath.get(currentNodeDestinationPath).getTheCenterY() - (y)) < 10){
                 currentNodeDestinationPath--;
             }
 
