@@ -4,9 +4,9 @@ import javafx.scene.paint.Color;
 import models.worldMap.Tile;
 
 public class Worm extends Ennemi {
-    public boolean isInTheGround,isStartingTracking, isOutSide;
+    public boolean isInTheGround, isTargeting, isTargetDone , isOutSide;
     private int inTheGroundBuffer = 10;
-    private int trackingBuffer = 5;
+    private int trackingBuffer = 3;
     private int outSideBuffer = 10;
     private int inTheGround = inTheGroundBuffer;
     private int tracking = trackingBuffer;
@@ -18,24 +18,26 @@ public class Worm extends Ennemi {
         super(areaX, areaY, tileX, tileY);
         initModels();
         initView(Color.PINK);
-        isStartingTracking = false;
+        isTargeting = false;
         isInTheGround = true;
+        isTargetDone = false;
         vitesse = 2;
     }
 
     @Override
     public void animate() {
         super.animate();
-        if(isInTheGround && !isStartingTracking){
+        if(isInTheGround && !isTargeting){
+            isTargetDone = false;
             if(inTheGround != 0){
                 inTheGround--;
                 System.out.println("Je suis sous le sol");
             } else{
-                isStartingTracking = true;
+                isTargeting = true;
                 inTheGround = inTheGroundBuffer;
             }
         }
-        if(isStartingTracking && !isOutSide){
+        if(isTargeting && !isOutSide){
             if(tracking != 0){
                 tracking--;
                 System.out.println("Je me prepare");
@@ -51,15 +53,20 @@ public class Worm extends Ennemi {
                 System.out.println("Je suis dehors");
             } else{
                 isOutSide = false;
-                isStartingTracking = false;
+                isTargeting = false;
                 isInTheGround = true;
                 outSide = outSideBuffer;
             }
         }
     }
 
-    public void selectTargetTile(Tile targetTile){
+    public void teleport(Tile targetTile){
         this.targetTile = targetTile;
+        targetTile.getGraphic().setFill(Color.RED);
+        x = targetTile.getLayoutX();
+        y = targetTile.getLayoutY();
+        update();
+        isTargetDone = true;
     }
 
     public boolean isInTheGround() {
@@ -70,12 +77,12 @@ public class Worm extends Ennemi {
         isInTheGround = inTheGround;
     }
 
-    public boolean isStartingTracking() {
-        return isStartingTracking;
+    public boolean isTargeting() {
+        return isTargeting;
     }
 
-    public void setStartingTracking(boolean startingTracking) {
-        isStartingTracking = startingTracking;
+    public void setTargeting(boolean targeting) {
+        isTargeting = targeting;
     }
 
     public boolean isOutSide() {

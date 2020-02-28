@@ -10,7 +10,6 @@ import timeline.GameTL;
 import views.ViewHandler;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class ControllerGame implements EventHandler<MouseEvent> {
     private ViewHandler viewHandler;
@@ -125,8 +124,10 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                     enemi.moveToTarget();
                 }
             }
-            if(enemi instanceof Soldier){
-
+            if(enemi instanceof Worm){
+                if(((Worm) enemi).isTargeting && !((Worm) enemi).isTargetDone){
+                    ((Worm) enemi).teleport(worldMap.getPlayerCurrentTile());
+                }
             }
         }
     }

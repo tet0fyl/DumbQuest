@@ -83,4 +83,16 @@ public class Tile extends Pane {
     public double getTheCenterY(){
         return y + WorldMap.tileHeight / 2;
     }
+
+    public char getTileSet() {
+        return tileSet;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
 }
