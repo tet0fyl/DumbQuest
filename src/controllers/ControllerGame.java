@@ -3,10 +3,7 @@ package controllers;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import models.*;
-import models.ennemis.Ennemi;
-import models.ennemis.Plant;
-import models.ennemis.Projectile;
-import models.ennemis.Soldier;
+import models.ennemis.*;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 import timeline.GameTL;
@@ -44,14 +41,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     }
 
-    public ArrayList<Tile> convertGraphNodeToTile(ArrayList<GraphNode> path){
-        ArrayList<Tile> tiles = new ArrayList<>();
-        for (GraphNode graphNode: path){
-            tiles.add(worldMap.getCurrentArea().getTiles()[graphNode.indiceX][graphNode.indiceY]);
-        }
-        return tiles;
-    }
-
     public void handlePlayer() {
         player.memory();
         if (controllerKeyBoard.isUpPressed()) player.move(Direction.GO_UP);
@@ -78,10 +67,11 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     public void handerPlayerAttack() {
         player.setAttacking(true);
         for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
-            if(ennemi instanceof Soldier){
-                if (player.attackTouch(ennemi)) {
+            if(ennemi instanceof Worm){
+                if(player.attackTouch(ennemi) && ((Worm) ennemi).isOutSide) player.attack(ennemi);
+            } else
+            if (player.attackTouch(ennemi)) {
                     player.attack(ennemi);
-                }
             }
         }
     }
@@ -90,8 +80,8 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         for(Ennemi ennemi: worldMap.getCurrentArea().getEnnemiArrayList()){
             if(ennemi instanceof Soldier){
                 if(ennemi.attackTouch(player) && !ennemi.isAttacking()){
-                ennemi.setAttacking(true);
-                ennemi.attack(player);
+                    ennemi.attack(player);
+                    System.out.println("Ouch Degat");
                 }
             } else if (ennemi instanceof Plant){
                 if(!((Plant)ennemi).isReloading()){
@@ -115,6 +105,11 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                         }
                     }
                 }
+            } else if (ennemi instanceof Worm){
+                if (ennemi.collision(player) && !ennemi.isAttacking() && ((Worm) ennemi).isOutSide ){
+                    ennemi.attack(player);
+                    System.out.println("Ouch j'ai pris des degat");
+                }
             }
         }
     }
@@ -129,6 +124,9 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                 if(enemi.getDestinationPath() != null){
                     enemi.moveToTarget();
                 }
+            }
+            if(enemi instanceof Soldier){
+
             }
         }
     }

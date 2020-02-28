@@ -4,10 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.layout.Pane;
 import models.Player;
-import models.ennemis.Ennemi;
-import models.ennemis.Plant;
-import models.ennemis.Projectile;
-import models.ennemis.Soldier;
+import models.ennemis.*;
 import utils.Config;
 
 import java.util.ArrayList;
@@ -71,13 +68,15 @@ public class WorldMap extends Pane {
 
     public ArrayList<Ennemi> ennemisArea2(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Soldier(0, 0, 10, 10));
+        ennemis.add(new Plant(0, 0, 10, 10));
+        ennemis.add(new Soldier(0, 0, 3, 10));
         return ennemis;
     }
 
     public ArrayList<Ennemi> ennemisArea1(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Plant(0, 0, 10, 10));
+        ennemis.add(new Worm(0, 0, 3, 10));
+
         return ennemis;
     }
 

@@ -33,9 +33,6 @@ public class IA {
                     path.add(currentNode);
                     currentNode = currentNode.parent;
                 }
-                System.out.println(openList.size());
-                System.out.println(closedList.size());
-                System.out.println(openList.size());
                 Collections.reverse(path);
                 return path;
             }

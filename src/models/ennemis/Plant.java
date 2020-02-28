@@ -9,7 +9,8 @@ import java.util.ArrayList;
 public class Plant extends Ennemi {
     private ArrayList<Projectile> projectiles;
     boolean isReloading;
-    private int shootRate = 15;
+    private int shootRate = 10;
+    private int shootRateBuffer = shootRate;
 
 
     public Plant(int areaX, int areaY, int tileX, int tileY) {
@@ -32,11 +33,11 @@ public class Plant extends Ennemi {
     public void animate() {
         super.animate();
         if(isReloading){
-            if(shootRate != 0){
-                shootRate--;
+            if(shootRateBuffer != 0){
+                shootRateBuffer--;
             } else{
                 isReloading = false;
-                shootRate = 15;
+                shootRateBuffer = shootRate;
             }
         }
     }

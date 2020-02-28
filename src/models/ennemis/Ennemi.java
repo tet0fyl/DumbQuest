@@ -31,9 +31,7 @@ public abstract class Ennemi extends Moveable {
             }
             if(Math.abs(tile.getTheCenterX() - (getTheCenterHitBoxX())) <= 5 && Math.abs(tile.getTheCenterY() - (getTheCenterHitBoxY())) <= 5){
                 currentNodeDestinationPath++;
-                System.out.println("-----");
             }
-
             if(destinationPath.size()-1 <= currentNodeDestinationPath){
                 destinationPath = null;
             }

@@ -28,6 +28,7 @@ public class Moveable extends Pane {
     protected double prevY;
     protected int animationAttackFrame = 4;
     protected int animationDamageFrame = 4;
+    protected boolean releaseAttack = false;
 
     public Moveable(int areaX, int areaY, int tileX, int tileY){
         this.x = areaX * WorldMap.areaWidth + tileX * WorldMap.tileWidth;
@@ -112,6 +113,7 @@ public class Moveable extends Pane {
     }
 
     public void attack(Moveable moveable){
+        isAttacking = true;
         moveable.setAttacked(true);
     }
 
