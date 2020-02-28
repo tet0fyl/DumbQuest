@@ -103,9 +103,12 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                         if(!projectile.isHasExploded()){
                             projectile.move();
                             projectile.update();
-                            if(projectile.collision(player)){
+                            if(projectile.collision(player)) {
                                 ennemi.attack(player);
-                                System.out.println("Ya colision");
+                                projectile.setHasExploded(true);
+                                worldMap.getChildren().remove(projectile);
+                            }
+                            if(projectileColliderMap(projectile)){
                                 projectile.setHasExploded(true);
                                 worldMap.getChildren().remove(projectile);
                             }
@@ -147,6 +150,14 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             }
         }
         return true;
+    }
+
+    public boolean projectileColliderMap(Projectile projectile) {
+        Tile projectilTile = worldMap.getTileByCoord(projectile.getTileCoordX(),projectile.getTileCoordY());
+        return !projectilTile.isTraversable()
+                ||  projectilTile.getIndiceX() < 0 ||  projectilTile.getIndiceX() > WorldMap.tileXNumber
+                ||  projectilTile.getIndiceY() < 0 ||  projectilTile.getIndiceY() > WorldMap.tileYNumber;
+
     }
 
     public void worldMapWatcher(){

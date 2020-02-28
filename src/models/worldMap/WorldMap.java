@@ -10,6 +10,8 @@ import models.ennemis.Projectile;
 import models.ennemis.Soldier;
 import utils.Config;
 
+import java.util.ArrayList;
+
 public class WorldMap extends Pane {
 
     public static final int tileXNumber = 16;
@@ -67,16 +69,16 @@ public class WorldMap extends Pane {
         getChildren().add(projectile);
     }
 
-    public Ennemi[] ennemisArea2(){
-        return new Ennemi[]{
-                new Soldier(0, 0, 10, 10)
-        };
+    public ArrayList<Ennemi> ennemisArea2(){
+        ArrayList<Ennemi> ennemis = new ArrayList<>();
+        ennemis.add(new Soldier(0, 0, 10, 10));
+        return ennemis;
     }
 
-    public Ennemi[] ennemisArea1(){
-        return new Ennemi[]{
-                new Plant(0, 0, 10, 10)
-        };
+    public ArrayList<Ennemi> ennemisArea1(){
+        ArrayList<Ennemi> ennemis = new ArrayList<>();
+        ennemis.add(new Plant(0, 0, 10, 10));
+        return ennemis;
     }
 
     public String[] tileSetsArea0(){
@@ -206,8 +208,12 @@ public class WorldMap extends Pane {
         return getCurrentArea().getTiles()[currentTileX][currentTileY];
     }
 
-    public Ennemi[] getEnnemisOfTheCurrentArea(){
+    public ArrayList<Ennemi> getEnnemisOfTheCurrentArea(){
         return getCurrentArea().getEnnemiArrayList();
+    }
+
+    public void setEnnemisOfTheCurrentArea(ArrayList<Ennemi> ennemis){
+         getCurrentArea().setEnnemiArrayList(ennemis);
     }
 
     public PerspectiveCamera getCamera() {

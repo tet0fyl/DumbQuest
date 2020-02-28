@@ -4,6 +4,8 @@ import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import models.ennemis.Ennemi;
 
+import java.util.ArrayList;
+
 public class AreaMap extends Pane {
     private Group graphic;
     private Tile[][] tiles;
@@ -11,14 +13,14 @@ public class AreaMap extends Pane {
     private double y;
     private int indiceX;
     private int indiceY;
-    private Ennemi[] ennemiArrayList;
+    private ArrayList<Ennemi> ennemiArrayList;
 
     public AreaMap(String[] tileSets, int areaX, int areaY){
         indiceX = areaX;
         indiceY = areaY;
         this.x = areaX * WorldMap.areaWidth;
         this.y = areaY * WorldMap.areaHeight;
-        ennemiArrayList = new Ennemi[0];
+        ennemiArrayList = new ArrayList<>();
         tiles = new Tile[WorldMap.tileXNumber][WorldMap.tileYNumber];
         setLayoutX(x);
         setLayoutY(y);
@@ -51,11 +53,11 @@ public class AreaMap extends Pane {
         return tiles[x][y];
     }
 
-    public Ennemi[] getEnnemiArrayList() {
+    public ArrayList<Ennemi> getEnnemiArrayList() {
         return ennemiArrayList;
     }
 
-    public void setEnnemiArrayList(Ennemi[] ennemiArrayList) {
+    public void setEnnemiArrayList(ArrayList<Ennemi> ennemiArrayList) {
         this.ennemiArrayList = ennemiArrayList;
         for(Ennemi ennemi: ennemiArrayList)
             getChildren().add(ennemi);

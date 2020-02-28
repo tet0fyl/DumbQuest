@@ -64,4 +64,6 @@ public class Plant extends Ennemi {
     public void setShootRate(int shootRate) {
         this.shootRate = shootRate;
     }
+
+
 }
