@@ -1,7 +1,6 @@
 package models.ennemis;
 
 import javafx.scene.paint.Color;
-import models.Moveable;
 
 public class Soldier extends Ennemi {
 

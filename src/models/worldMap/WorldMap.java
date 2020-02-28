@@ -5,6 +5,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.layout.Pane;
 import models.Player;
 import models.ennemis.Ennemi;
+import models.ennemis.Plant;
 import models.ennemis.Soldier;
 import utils.Config;
 
@@ -36,7 +37,7 @@ public class WorldMap extends Pane {
         playerPrevArea = playerCurrentArea;
         areaMap[0][0] = new AreaMap(tileSetsArea0(), 0,0);
         //areaMap[0][0] = new AreaMap(tileSetsArea2(), 0,0);
-        areaMap[0][0].setEnnemiArrayList(ennemisArea2());
+        areaMap[0][0].setEnnemiArrayList(ennemisArea1());
         areaMap[1][0] = new AreaMap(tileSetsArea1(), 1,0);
         areaMap[1][1] = new AreaMap(tileSetsArea2(), 1,1);
         areaMap[2][1] = new AreaMap(tileSetsArea3(), 2,1);
@@ -64,6 +65,12 @@ public class WorldMap extends Pane {
     public Ennemi[] ennemisArea2(){
         return new Ennemi[]{
                 new Soldier(0, 0, 10, 10)
+        };
+    }
+
+    public Ennemi[] ennemisArea1(){
+        return new Ennemi[]{
+                new Plant(0, 0, 10, 10)
         };
     }
 

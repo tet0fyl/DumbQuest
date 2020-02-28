@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import models.*;
 import models.ennemis.Ennemi;
+import models.ennemis.Soldier;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 import timeline.GameTL;
@@ -74,8 +75,10 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     public void handerPlayerAttack() {
         player.setAttacking(true);
         for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
-            if (player.attackTouch(ennemi)) {
-                player.attack(ennemi);
+            if(ennemi instanceof Soldier){
+                if (player.attackTouch(ennemi)) {
+                    player.attack(ennemi);
+                }
             }
         }
     }
@@ -92,12 +95,14 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public synchronized void moveEnnemi(){
         for(Ennemi enemi: worldMap.getCurrentArea().getEnnemiArrayList()){
-            if(worldMap.playerHasMoveToAnOtherTile()){
+            if(enemi instanceof Soldier){
+                if(worldMap.playerHasMoveToAnOtherTile()){
                     ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
                     enemi.setDestination(path);
-            }
-            if(enemi.getDestinationPath() != null){
-                enemi.moveToTarget();
+                }
+                if(enemi.getDestinationPath() != null){
+                    enemi.moveToTarget();
+                }
             }
         }
     }
