@@ -4,6 +4,8 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import models.*;
 import models.ennemis.Ennemi;
+import models.ennemis.Plant;
+import models.ennemis.Projectile;
 import models.ennemis.Soldier;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
@@ -11,6 +13,7 @@ import timeline.GameTL;
 import views.ViewHandler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ControllerGame implements EventHandler<MouseEvent> {
     private ViewHandler viewHandler;
@@ -85,10 +88,30 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public void handleEnnemiAttack(){
         for(Ennemi ennemi: worldMap.getCurrentArea().getEnnemiArrayList()){
-            if(ennemi.attackTouch(player) && !ennemi.isAttacking()){
+            if(ennemi instanceof Soldier){
+                if(ennemi.attackTouch(player) && !ennemi.isAttacking()){
                 ennemi.setAttacking(true);
                 ennemi.attack(player);
-                System.out.println(":P");
+                }
+            } else if (ennemi instanceof Plant){
+                if(!((Plant)ennemi).isReloading()){
+                    Projectile projectile = ((Plant) ennemi).shoot(worldMap.getPlayerCurrentTile());
+                    worldMap.addElement(projectile);
+                }
+                if(((Plant) ennemi).getProjectiles().size() != 0 ){
+                    for(Projectile projectile: ((Plant) ennemi).getProjectiles()){
+                        if(!projectile.isHasExploded()){
+                            projectile.move();
+                            projectile.update();
+                            if(projectile.collision(player)){
+                                ennemi.attack(player);
+                                System.out.println("Ya colision");
+                                projectile.setHasExploded(true);
+                                worldMap.getChildren().remove(projectile);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

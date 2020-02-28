@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import models.Player;
 import models.ennemis.Ennemi;
 import models.ennemis.Plant;
+import models.ennemis.Projectile;
 import models.ennemis.Soldier;
 import utils.Config;
 
@@ -60,6 +61,10 @@ public class WorldMap extends Pane {
 
     public void addPlayer(Player player){
         getChildren().add(player);
+    }
+
+    public void addElement(Projectile projectile){
+        getChildren().add(projectile);
     }
 
     public Ennemi[] ennemisArea2(){
