@@ -33,12 +33,21 @@ public class Plant extends Ennemi {
     public void animate() {
         super.animate();
         if(isReloading){
-            if(shootRateBuffer != 0){
-                shootRateBuffer--;
-            } else{
-                isReloading = false;
-                shootRateBuffer = shootRate;
-            }
+            waitingReload();
+        }
+    }
+
+    @Override
+    public void attackAnimation() {
+        super.attackAnimation();
+    }
+
+    public void waitingReload(){
+        if(shootRateBuffer != 0){
+            shootRateBuffer--;
+        } else{
+            isReloading = false;
+            shootRateBuffer = shootRate;
         }
     }
 

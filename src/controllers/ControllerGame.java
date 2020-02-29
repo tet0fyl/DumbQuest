@@ -80,7 +80,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             if(ennemi instanceof Soldier){
                 if(ennemi.attackTouch(player) && !ennemi.isAttacking()){
                     ennemi.attack(player);
-                    System.out.println("Ouch Degat");
                 }
             } else if (ennemi instanceof Plant){
                 if(!((Plant)ennemi).isReloading()){
@@ -107,7 +106,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             } else if (ennemi instanceof Worm){
                 if (ennemi.collision(player) && !ennemi.isAttacking() && ((Worm) ennemi).isOutSide ){
                     ennemi.attack(player);
-                    System.out.println("Ouch j'ai pris des degat");
                 }
             }
         }
@@ -118,10 +116,10 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             if(enemi instanceof Soldier){
                 if(worldMap.playerHasMoveToAnOtherTile()){
                     ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
-                    enemi.setDestination(path);
+                    ((Soldier) enemi).setDestination(path);
                 }
-                if(enemi.getDestinationPath() != null){
-                    enemi.moveToTarget();
+                if(((Soldier) enemi).getDestinationPath() != null){
+                    ((Soldier) enemi).moveToTarget();
                 }
             }
             if(enemi instanceof Worm){

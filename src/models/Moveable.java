@@ -3,8 +3,7 @@ package models;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import models.ennemis.Ennemi;
-import models.worldMap.Tile;
+import models.ennemis.Plant;
 import models.worldMap.WorldMap;
 
 public class Moveable extends Pane {
@@ -12,7 +11,7 @@ public class Moveable extends Pane {
     protected byte pvMax;
     protected int vitesse;
     protected Double rightConstraint, leftConstraint, topConstraint, bottomConstraint;
-    protected boolean isBlockInAxisX, isBlockInAxisY, isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint, isAttacking, isStandingBy, isAttacked, isAlive;
+    protected boolean isBlockInAxisX, isBlockInAxisY, isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint, isAttacking, isStandingBy, isAttacked, isAlive, isBlocking;
     protected Rectangle hitBox;
     protected int hitBoxWidth;
     protected int hitBoxHeight;
@@ -26,17 +25,14 @@ public class Moveable extends Pane {
     protected double y;
     protected double prevX;
     protected double prevY;
+    protected int animationFrameDamageBuffer = 4;
     protected int animationAttackFrame = 4;
-    protected int animationDamageFrame = 4;
+    protected int animationDamageFrame = animationFrameDamageBuffer;
     protected boolean releaseAttack = false;
 
     public Moveable(int areaX, int areaY, int tileX, int tileY){
         this.x = areaX * WorldMap.areaWidth + tileX * WorldMap.tileWidth;
         this.y = areaY * WorldMap.areaHeight + tileY * WorldMap.tileHeight;
-        isRightConstraint = false;
-        isLeftConstraint = false;
-        isTopConstraint = false;
-        isBottomConstraint = false;
 
     }
 
@@ -114,7 +110,14 @@ public class Moveable extends Pane {
 
     public void attack(Moveable moveable){
         isAttacking = true;
-        moveable.setAttacked(true);
+        if(moveable instanceof Player){
+            if (!((Player) moveable).isInvincible()){
+                moveable.setAttacked(true);
+                System.out.println("Le player prend des desgat");
+            }
+        } else {
+            moveable.setAttacked(true);
+        }
     }
 
     public void update(){
@@ -150,7 +153,7 @@ public class Moveable extends Pane {
             }
         } else{
             isAttacked = false;
-            animationDamageFrame = 4;
+            animationDamageFrame = animationFrameDamageBuffer;
         }
     }
 
@@ -214,36 +217,6 @@ public class Moveable extends Pane {
     public int getAreaCoordY(){
         return (int)Math.floor((getTheCenterHitBoxY())/WorldMap.areaHeight) % WorldMap.areaYNumber;
     }
-
-    public double getTopConstrain(){
-        return (y + hitBox.getY()) % WorldMap.areaHeight ;
-    }
-    public double getBottomConstrain(){
-        return (y + skinHeight - hitBox.getY()) % WorldMap.areaHeight;
-    }
-    public double getRightConstrain(){
-        return (x + skinWidth - (hitBox.getX())) %  WorldMap.areaWidth;
-    }
-    public double getLeftConstrain(){
-        return (x + hitBox.getX()) % WorldMap.areaWidth;
-    }
-
-    public boolean hasTopConstrain(){
-        return (!(topConstraint != null && topConstraint >= getTopConstrain()));
-    }
-
-    public boolean hasRightConstrain(){
-        return (!(rightConstraint != null && rightConstraint <= getRightConstrain()));
-    }
-
-    public boolean hasBottomConstrain(){
-        return (!(bottomConstraint != null && bottomConstraint <= getBottomConstrain()));
-    }
-
-    public boolean hasLeftConstrain(){
-        return (!(leftConstraint != null && leftConstraint >= getLeftConstrain()));
-    }
-
     public double getTheCenterHitBoxX(){
         return (x + skinWidth/2);
     }
@@ -258,58 +231,6 @@ public class Moveable extends Pane {
 
     public double getTheCenterAttackY(){
         return (attackHeight/2 + attackBox.getY() + y);
-    }
-
-    public Rectangle getHitBox() {
-        return hitBox;
-    }
-
-    public Rectangle getSkin() {
-        return skin;
-    }
-
-    public byte getPv() {
-        return pv;
-    }
-
-    public byte getPvMax() {
-        return pvMax;
-    }
-
-    public double getVitesse() {
-        return vitesse;
-    }
-
-    public Double getRightConstraint() {
-        return rightConstraint;
-    }
-
-    public void setRightConstraint(Double rightConstraint) {
-        this.rightConstraint = rightConstraint;
-    }
-
-    public Double getLeftConstraint() {
-        return leftConstraint;
-    }
-
-    public void setLeftConstraint(Double leftConstraint) {
-        this.leftConstraint = leftConstraint;
-    }
-
-    public Double getTopConstraint() {
-        return topConstraint;
-    }
-
-    public void setTopConstraint(Double topConstraint) {
-        this.topConstraint = topConstraint;
-    }
-
-    public Double getBottomConstraint() {
-        return bottomConstraint;
-    }
-
-    public void setBottomConstraint(Double bottomConstraint) {
-        this.bottomConstraint = bottomConstraint;
     }
 
     public boolean isAttacking() {

@@ -9,8 +9,6 @@ import java.util.Collections;
 public class IA {
 
     public static ArrayList<GraphNode> aStarPathFinding(Tile[][] maze, Tile start, Tile end){
-        System.out.println("start at " + start.getIndiceX() + " : " + start.getIndiceY() );
-        System.out.println("end at " + end.getIndiceX() + " : " + end.getIndiceY() );
         GraphNode startNode = new GraphNode(start);
         GraphNode endNode = new GraphNode(end);
         ArrayList<GraphNode> openList = new ArrayList<>();

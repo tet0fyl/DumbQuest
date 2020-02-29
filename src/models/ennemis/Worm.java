@@ -28,35 +28,57 @@ public class Worm extends Ennemi {
     public void animate() {
         super.animate();
         if(isInTheGround && !isTargeting){
-            isTargetDone = false;
-            if(inTheGround != 0){
-                inTheGround--;
-                System.out.println("Je suis sous le sol");
-            } else{
-                isTargeting = true;
-                inTheGround = inTheGroundBuffer;
-            }
+            intheGroundAnimation();
         }
         if(isTargeting && !isOutSide){
-            if(tracking != 0){
-                tracking--;
-                System.out.println("Je me prepare");
-            } else{
-                isOutSide = true;
-                tracking = trackingBuffer;
-            }
+            trackingAnimation();
         }
         if(isOutSide){
-            if(outSide != 0){
-                isAttacking = false;
-                outSide--;
-                System.out.println("Je suis dehors");
-            } else{
-                isOutSide = false;
-                isTargeting = false;
-                isInTheGround = true;
-                outSide = outSideBuffer;
-            }
+            outsideAnimation();
+        }
+    }
+
+    @Override
+    public void attackAnimation() {
+        if(animationAttackFrame != 0){
+            animationAttackFrame--;
+        } else if (isInTheGround){
+            isAttacking = false;
+            animationAttackFrame = 4;
+        }
+    }
+
+    public void intheGroundAnimation(){
+        isTargetDone = false;
+        if(inTheGround != 0){
+            inTheGround--;
+            //System.out.println("Je suis sous le sol");
+        } else{
+            isTargeting = true;
+            inTheGround = inTheGroundBuffer;
+        }
+    }
+
+    public void trackingAnimation(){
+        if(tracking != 0){
+            tracking--;
+            //System.out.println("Je me prepare");
+        } else{
+            isOutSide = true;
+            isInTheGround = false;
+            tracking = trackingBuffer;
+        }
+    }
+
+    public void outsideAnimation(){
+        if(outSide != 0){
+            outSide--;
+            //System.out.println("Je suis dehors");
+        } else{
+            isOutSide = false;
+            isTargeting = false;
+            isInTheGround = true;
+            outSide = outSideBuffer;
         }
     }
 
