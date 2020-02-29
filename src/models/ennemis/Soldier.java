@@ -11,17 +11,43 @@ public class Soldier extends Ennemi {
 
     private ArrayList<GraphNode> destinationPath;
     private Integer currentNodeDestinationPath = 0;
+    private boolean isAttackRready, isPreparingAttack;
+    private int waitingttackReadyBuffer = 5;
+    private int waitingAttackReady = waitingttackReadyBuffer;
 
     public Soldier(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY);
         initModels(3,3,2,2);
+        isAttackRready = false;
+        isPreparingAttack = false;
         initView(Color.BISQUE);
         vitesse = 2;
     }
 
     @Override
     public void attackAnimation() {
-        super.attackAnimation();
+        if(animationAttackFrame != 0){
+            isAttackRready = false;
+            isPreparingAttack = false;
+            animationAttackFrame--;
+        } else{
+            isAttacking = false;
+            animationAttackFrame = 4;
+        }
+    }
+
+    @Override
+    public void animate() {
+        super.animate();
+        if(isPreparingAttack){
+            if(waitingAttackReady != 0){
+                waitingAttackReady--;
+            } else {
+                isAttackRready = true;
+                waitingAttackReady = waitingttackReadyBuffer;
+            }
+        }
+
     }
 
     public void setDestination(ArrayList<GraphNode> destinationPath){
@@ -65,5 +91,57 @@ public class Soldier extends Ennemi {
 
     public int getCurrentNodeDestinationPath() {
         return currentNodeDestinationPath;
+    }
+
+    public void setDestinationPath(ArrayList<GraphNode> destinationPath) {
+        this.destinationPath = destinationPath;
+    }
+
+    public void setCurrentNodeDestinationPath(Integer currentNodeDestinationPath) {
+        this.currentNodeDestinationPath = currentNodeDestinationPath;
+    }
+
+    public boolean isAttackReady() {
+        return isAttackRready;
+    }
+
+    public void setAttackRready(boolean attackRready) {
+        isAttackRready = attackRready;
+    }
+
+    public int getWaitingttackReadyBuffer() {
+        return waitingttackReadyBuffer;
+    }
+
+    public void setWaitingttackReadyBuffer(int waitingttackReadyBuffer) {
+        this.waitingttackReadyBuffer = waitingttackReadyBuffer;
+    }
+
+    public int getAttackRready() {
+        return waitingAttackReady;
+    }
+
+    public void setPreparingAttack(int preparingAttack) {
+        this.waitingAttackReady = preparingAttack;
+    }
+
+    public boolean isAttackRready() {
+        return isAttackRready;
+    }
+
+    public boolean isPreparingAttack() {
+        return isPreparingAttack;
+    }
+
+    public void setPreparingAttackReady(boolean preparingAttackReady) {
+        isPreparingAttack = preparingAttackReady;
+    }
+
+    public int getWaitingAttackReady() {
+        return waitingAttackReady;
+    }
+
+    public void setWaitingAttackReady(int waitingAttackReady) {
+        this.waitingAttackReady = waitingAttackReady;
     }
 }

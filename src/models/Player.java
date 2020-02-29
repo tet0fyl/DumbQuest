@@ -2,6 +2,7 @@ package models;
 
 
 import javafx.scene.paint.Color;
+import models.worldMap.WorldMap;
 
 public class Player extends Moveable {
     private boolean isInvincible;
@@ -12,6 +13,8 @@ public class Player extends Moveable {
         animationDamageFrame = animationFrameDamageBuffer;
         initModels();
         initView(Color.AZURE);
+        System.out.println(WorldMap.tileWidth);
+        System.out.println(WorldMap.tileHeight);
     }
 
     @Override

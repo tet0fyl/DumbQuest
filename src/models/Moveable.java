@@ -134,7 +134,6 @@ public class Moveable extends Pane {
         if(moveable instanceof Player){
             if (!((Player) moveable).isInvincible()){
                 moveable.setAttacked(true);
-                System.out.println("Le player prend des desgat");
             }
         } else {
             moveable.setAttacked(true);

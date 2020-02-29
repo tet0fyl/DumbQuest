@@ -78,10 +78,17 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     public void handleEnnemiAttack(){
         for(Ennemi ennemi: worldMap.getCurrentArea().getEnnemiArrayList()){
             if(ennemi instanceof Soldier){
-                if(ennemi.attackTouch(player) && !ennemi.isAttacking()){
-                    ennemi.attack(player);
-                }
-            } else if (ennemi instanceof Plant){
+                    if(ennemi.attackTouch(player) && !ennemi.isAttacking() && ((Soldier) ennemi).isAttackReady()){
+                        ennemi.attack(player);
+                    }
+                    if(ennemi.attackTouch(player) && !((Soldier) ennemi).isPreparingAttack()) {
+                        ((Soldier) ennemi).setPreparingAttackReady(true);
+                    }
+                    if(((Soldier) ennemi).isAttackReady()){
+                        ((Soldier) ennemi).setAttackRready(false);
+                    }
+            }
+            else if (ennemi instanceof Plant){
                 if(!((Plant)ennemi).isReloading()){
                     Projectile projectile = ((Plant) ennemi).shoot(worldMap.getPlayerCurrentTile());
                     worldMap.addElement(projectile);
