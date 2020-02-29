@@ -1,41 +1,41 @@
 package models.worldMap;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import utils.RessourcePath;
 
 
 public class Tile extends Pane {
     private boolean traversable;
     private boolean empty;
-    private Rectangle graphic;
-    private char tileSet;
+    private ImageView graphic;
+    private String tileSet;
     private double x;
     private double y;
     private int indiceX;
     private int indiceY;
 
-    public Tile(char tileSet, int tileX, int tileY){
+    public Tile(String tileSet, int tileX, int tileY){
         indiceX = tileX;
         indiceY = tileY;
         this.tileSet = tileSet;
         this.x = tileX * WorldMap.tileWidth;
         this.y = tileY * WorldMap.tileHeight;
 
-        graphic = new Rectangle();
+        graphic = new ImageView(RessourcePath.urlTileSet + tileSet +  ".png");
 
-        graphic.setWidth(WorldMap.tileWidth);
-        graphic.setHeight(WorldMap.tileHeight);
+        graphic.setFitWidth(WorldMap.tileWidth);
+        graphic.setFitHeight(WorldMap.tileHeight);
         setLayoutX(x);
         setLayoutY(y);
-        if(tileSet == '1'){
-            graphic.setFill(Color.BROWN);
+        if(tileSet != "00"){
             traversable = false;
         } else {
-            graphic.setFill(Color.YELLOW);
             traversable = true;
         }
-        graphic.setStroke(Color.BLACK);
         getChildren().add(graphic);
     }
 
@@ -64,10 +64,6 @@ public class Tile extends Pane {
         return traversable;
     }
 
-    public Rectangle getGraphic() {
-        return graphic;
-    }
-
     public int getIndiceX() {
         return indiceX;
     }
@@ -84,9 +80,6 @@ public class Tile extends Pane {
         return y + WorldMap.tileHeight / 2;
     }
 
-    public char getTileSet() {
-        return tileSet;
-    }
 
     public double getX() {
         return x;
@@ -94,5 +87,42 @@ public class Tile extends Pane {
 
     public double getY() {
         return y;
+    }
+
+    public void setTraversable(boolean traversable) {
+        this.traversable = traversable;
+    }
+
+    public ImageView getGraphic() {
+        return graphic;
+    }
+
+    public void setGraphic(ImageView graphic) {
+        this.graphic = graphic;
+    }
+
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setIndiceX(int indiceX) {
+        this.indiceX = indiceX;
+    }
+
+    public void setIndiceY(int indiceY) {
+        this.indiceY = indiceY;
+    }
+
+    public String getTileSet() {
+        return tileSet;
+    }
+
+    public void setTileSet(String tileSet) {
+        this.tileSet = tileSet;
     }
 }

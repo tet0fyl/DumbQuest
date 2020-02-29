@@ -84,7 +84,7 @@ public class Worm extends Ennemi {
 
     public void teleport(Tile targetTile){
         this.targetTile = targetTile;
-        targetTile.getGraphic().setFill(Color.RED);
+        //targetTile.getGraphic().setFill(Color.RED);
         x = targetTile.getLayoutX();
         y = targetTile.getLayoutY();
         update();

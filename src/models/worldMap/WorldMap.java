@@ -38,16 +38,16 @@ public class WorldMap extends Pane {
         areaMap[0][0] = new AreaMap(tileSetsArea0(), 0,0);
         //areaMap[0][0] = new AreaMap(tileSetsArea2(), 0,0);
         areaMap[0][0].setEnnemiArrayList(ennemisArea1());
-        areaMap[1][0] = new AreaMap(tileSetsArea1(), 1,0);
-        areaMap[1][1] = new AreaMap(tileSetsArea2(), 1,1);
-        areaMap[2][1] = new AreaMap(tileSetsArea3(), 2,1);
-        areaMap[2][0] = new AreaMap(tileSetsArea4(), 2,0);
+        //areaMap[1][0] = new AreaMap(tileSetsArea1(), 1,0);
+        //areaMap[1][1] = new AreaMap(tileSetsArea2(), 1,1);
+        //areaMap[2][1] = new AreaMap(tileSetsArea3(), 2,1);
+        //areaMap[2][0] = new AreaMap(tileSetsArea4(), 2,0);
 
         gridWorldMap.getChildren().add(areaMap[0][0]);
-        gridWorldMap.getChildren().add(areaMap[1][0]);
-        gridWorldMap.getChildren().add(areaMap[1][1]);
-        gridWorldMap.getChildren().add(areaMap[2][1]);
-        gridWorldMap.getChildren().add(areaMap[2][0]);
+        //gridWorldMap.getChildren().add(areaMap[1][0]);
+        //gridWorldMap.getChildren().add(areaMap[1][1]);
+        //gridWorldMap.getChildren().add(areaMap[2][1]);
+        //gridWorldMap.getChildren().add(areaMap[2][0]);
 
         playerCurrentArea = areaMap[0][0];
         playerPrevArea = playerCurrentArea;
@@ -80,20 +80,20 @@ public class WorldMap extends Pane {
         return ennemis;
     }
 
-    public String[] tileSetsArea0(){
-        return new String[]
-                {       "1111111111111111",
-                        "1000000000000001",
-                        "1000000000000001",
-                        "1000000000000001",
-                        "1000000000000001",
-                        "1111111111100001",
-                        "1000000000000001",
-                        "1000000000000001",
-                        "1000000000000001",
-                        "1000000000000000",
-                        "1000000000000000",
-                        "1111111111111111",
+    public String[][] tileSetsArea0(){
+        return new String[][]
+                {       {"01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01"},
+                        {"01","00","02","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","00","00","00","00","00","00","00","00","00","00","00","00","00","00","01"},
+                        {"01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01"}
                 };
 
     }

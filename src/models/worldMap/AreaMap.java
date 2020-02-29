@@ -15,7 +15,7 @@ public class AreaMap extends Pane {
     private int indiceY;
     private ArrayList<Ennemi> ennemiArrayList;
 
-    public AreaMap(String[] tileSets, int areaX, int areaY){
+    public AreaMap(String[][] tileSets, int areaX, int areaY){
         indiceX = areaX;
         indiceY = areaY;
         this.x = areaX * WorldMap.areaWidth;
@@ -29,7 +29,8 @@ public class AreaMap extends Pane {
         graphic = new Group();
         for (int i = 0; i < WorldMap.tileXNumber; i++) {
             for (int j = 0; j < WorldMap.tileYNumber; j++) {
-                Tile tile = new Tile(tileSets[j].charAt(i),i,j);
+                //System.out.println(i + " : " + j + " => " + tileSets[i][j]);
+                Tile tile = new Tile(tileSets[j][i],i,j);
                 tiles[i][j] = tile;
                 graphic.getChildren().add(tile);
             }
