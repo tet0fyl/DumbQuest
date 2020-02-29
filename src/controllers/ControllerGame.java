@@ -118,7 +118,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                     ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
                     ((Soldier) enemi).setDestination(path);
                 }
-                if(((Soldier) enemi).getDestinationPath() != null){
+                if(((Soldier) enemi).getDestinationPath() != null && ((Soldier) enemi).getDestinationPath().size() > 2){
                     ((Soldier) enemi).moveToTarget();
                 }
             }

@@ -3,7 +3,6 @@ package models;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import models.ennemis.Plant;
 import models.worldMap.WorldMap;
 
 public class Moveable extends Pane {
@@ -13,13 +12,13 @@ public class Moveable extends Pane {
     protected Double rightConstraint, leftConstraint, topConstraint, bottomConstraint;
     protected boolean isBlockInAxisX, isBlockInAxisY, isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint, isAttacking, isStandingBy, isAttacked, isAlive, isBlocking;
     protected Rectangle hitBox;
-    protected int hitBoxWidth;
-    protected int hitBoxHeight;
+    protected double hitBoxWidth;
+    protected double hitBoxHeight;
     protected Rectangle attackBox;
-    protected int attackWidth;
-    protected int attackHeight;
-    protected int skinWidth;
-    protected int skinHeight;
+    protected double attackWidth;
+    protected double attackHeight;
+    protected double skinWidth;
+    protected double skinHeight;
     protected Rectangle skin;
     protected double x;
     protected double y;
@@ -36,24 +35,46 @@ public class Moveable extends Pane {
 
     }
 
+    protected void initModels(double tileX, double tileY, double attackBoxX, double attackBoxY){
+        pvMax = 3;
+        pv=pvMax;
+        vitesse=5;
+        skinWidth = WorldMap.tileWidth * tileX/4;
+        skinHeight = WorldMap.tileHeight * tileY/4;
+        attackWidth = WorldMap.tileWidth * attackBoxX/4;
+        attackHeight = WorldMap.tileHeight * attackBoxY/4;;
+        hitBoxWidth = skinWidth - 10;
+        hitBoxHeight = skinHeight -10;
+    }
+
+    protected void initModels(double tileX, double tileY){
+        pvMax = 3;
+        pv=pvMax;
+        vitesse=5;
+        skinWidth = WorldMap.tileWidth * tileX/4;
+        skinHeight = WorldMap.tileHeight * tileY/4;
+        attackWidth = skinWidth;
+        attackHeight = skinHeight;
+        hitBoxWidth = skinWidth - 10;
+        hitBoxHeight = skinHeight -10;
+    }
+
     protected void initModels(){
         pvMax = 3;
         pv=pvMax;
         vitesse=5;
+        skinWidth = WorldMap.tileWidth * 3/4;
+        skinHeight = WorldMap.tileHeight * 3/4;
+        attackWidth = skinWidth;
+        attackHeight = skinHeight;
+        hitBoxWidth = skinWidth - 10;
+        hitBoxHeight = skinHeight -10;
     }
 
     protected void initView(Color color){
-        skinWidth = (int)WorldMap.tileWidth * 3 / 4;
-        skinHeight = (int)WorldMap.tileHeight * 3 / 4;
-        hitBoxWidth = skinWidth - 10;
-        hitBoxHeight = skinHeight -10;
-
-        attackWidth = skinWidth;
-        attackHeight = skinHeight;
         attackBox = new Rectangle();
         attackBox.setFill(Color.GREY);
         attackBox.setOpacity(0.4);
-        attackBox.setX(skinWidth);
         attackBox.setWidth(attackWidth);
         attackBox.setHeight(attackHeight);
 
@@ -76,23 +97,23 @@ public class Moveable extends Pane {
     public void move(Direction mouvement){
         if(mouvement.equals(Direction.GO_UP)){
             y -= vitesse;
-            attackBox.setX(0);
-            attackBox.setY(-skinHeight);
+            attackBox.setX(skinWidth/2 - attackWidth/2);
+            attackBox.setY(-skinHeight + attackHeight/2);
         }
         else if(mouvement.equals(Direction.GO_DOWN)){
             y += vitesse;
-            attackBox.setX(0);
+            attackBox.setX(skinWidth/2 - attackWidth/2);
             attackBox.setY(skinHeight);
         }
         else if(mouvement.equals(Direction.GO_RIGHT) ){
             x += vitesse;
             attackBox.setX(skinWidth);
-            attackBox.setY(0);
+            attackBox.setY(skinHeight/2 - attackHeight/2);
         }
         else if(mouvement.equals(Direction.GO_LEFT) ){
             x -= vitesse;
-            attackBox.setX(-skinWidth);
-            attackBox.setY(0);
+            attackBox.setX(-skinWidth+attackWidth/2);
+            attackBox.setY(skinHeight/2 - attackHeight/2);
         }
     }
 
@@ -305,17 +326,11 @@ public class Moveable extends Pane {
         this.hitBox = hitBox;
     }
 
-    public int getHitBoxWidth() {
-        return hitBoxWidth;
-    }
 
     public void setHitBoxWidth(int hitBoxWidth) {
         this.hitBoxWidth = hitBoxWidth;
     }
 
-    public int getHitBoxHeight() {
-        return hitBoxHeight;
-    }
 
     public void setHitBoxHeight(int hitBoxHeight) {
         this.hitBoxHeight = hitBoxHeight;
@@ -329,33 +344,21 @@ public class Moveable extends Pane {
         this.attackBox = attackBox;
     }
 
-    public int getAttackWidth() {
-        return attackWidth;
-    }
 
     public void setAttackWidth(int attackWidth) {
         this.attackWidth = attackWidth;
     }
 
-    public int getAttackHeight() {
-        return attackHeight;
-    }
 
     public void setAttackHeight(int attackHeight) {
         this.attackHeight = attackHeight;
     }
 
-    public int getSkinWidth() {
-        return skinWidth;
-    }
 
     public void setSkinWidth(int skinWidth) {
         this.skinWidth = skinWidth;
     }
 
-    public int getSkinHeight() {
-        return skinHeight;
-    }
 
     public void setSkinHeight(int skinHeight) {
         this.skinHeight = skinHeight;
@@ -395,5 +398,169 @@ public class Moveable extends Pane {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+    }
+
+    public byte getPv() {
+        return pv;
+    }
+
+    public byte getPvMax() {
+        return pvMax;
+    }
+
+    public int getVitesse() {
+        return vitesse;
+    }
+
+    public Double getRightConstraint() {
+        return rightConstraint;
+    }
+
+    public void setRightConstraint(Double rightConstraint) {
+        this.rightConstraint = rightConstraint;
+    }
+
+    public Double getLeftConstraint() {
+        return leftConstraint;
+    }
+
+    public void setLeftConstraint(Double leftConstraint) {
+        this.leftConstraint = leftConstraint;
+    }
+
+    public Double getTopConstraint() {
+        return topConstraint;
+    }
+
+    public void setTopConstraint(Double topConstraint) {
+        this.topConstraint = topConstraint;
+    }
+
+    public Double getBottomConstraint() {
+        return bottomConstraint;
+    }
+
+    public void setBottomConstraint(Double bottomConstraint) {
+        this.bottomConstraint = bottomConstraint;
+    }
+
+    public boolean isBlockInAxisX() {
+        return isBlockInAxisX;
+    }
+
+    public void setBlockInAxisX(boolean blockInAxisX) {
+        isBlockInAxisX = blockInAxisX;
+    }
+
+    public boolean isBlockInAxisY() {
+        return isBlockInAxisY;
+    }
+
+    public void setBlockInAxisY(boolean blockInAxisY) {
+        isBlockInAxisY = blockInAxisY;
+    }
+
+    public boolean isBlocking() {
+        return isBlocking;
+    }
+
+    public void setBlocking(boolean blocking) {
+        isBlocking = blocking;
+    }
+
+    public Rectangle getHitBox() {
+        return hitBox;
+    }
+
+    public double getHitBoxWidth() {
+        return hitBoxWidth;
+    }
+
+    public void setHitBoxWidth(double hitBoxWidth) {
+        this.hitBoxWidth = hitBoxWidth;
+    }
+
+    public double getHitBoxHeight() {
+        return hitBoxHeight;
+    }
+
+    public void setHitBoxHeight(double hitBoxHeight) {
+        this.hitBoxHeight = hitBoxHeight;
+    }
+
+    public double getAttackWidth() {
+        return attackWidth;
+    }
+
+    public void setAttackWidth(double attackWidth) {
+        this.attackWidth = attackWidth;
+    }
+
+    public double getAttackHeight() {
+        return attackHeight;
+    }
+
+    public void setAttackHeight(double attackHeight) {
+        this.attackHeight = attackHeight;
+    }
+
+    public double getSkinWidth() {
+        return skinWidth;
+    }
+
+    public void setSkinWidth(double skinWidth) {
+        this.skinWidth = skinWidth;
+    }
+
+    public double getSkinHeight() {
+        return skinHeight;
+    }
+
+    public void setSkinHeight(double skinHeight) {
+        this.skinHeight = skinHeight;
+    }
+
+    public Rectangle getSkin() {
+        return skin;
+    }
+
+    public double getPrevX() {
+        return prevX;
+    }
+
+    public void setPrevX(double prevX) {
+        this.prevX = prevX;
+    }
+
+    public double getPrevY() {
+        return prevY;
+    }
+
+    public void setPrevY(double prevY) {
+        this.prevY = prevY;
+    }
+
+    public int getAnimationFrameDamageBuffer() {
+        return animationFrameDamageBuffer;
+    }
+
+    public void setAnimationFrameDamageBuffer(int animationFrameDamageBuffer) {
+        this.animationFrameDamageBuffer = animationFrameDamageBuffer;
+    }
+
+    public int getAnimationDamageFrame() {
+        return animationDamageFrame;
+    }
+
+    public void setAnimationDamageFrame(int animationDamageFrame) {
+        this.animationDamageFrame = animationDamageFrame;
+    }
+
+    public boolean isReleaseAttack() {
+        return releaseAttack;
+    }
+
+    public void setReleaseAttack(boolean releaseAttack) {
+        this.releaseAttack = releaseAttack;
     }
 }
