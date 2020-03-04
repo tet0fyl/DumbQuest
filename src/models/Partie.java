@@ -8,7 +8,7 @@ public class Partie {
 
     public Partie(){
         worldMap = new WorldMap();
-        player = new Player(0,0,2,2);
+        player = new Player(0,0,2,4);
         worldMap.addPlayer(player);
     }
 

@@ -1,10 +1,7 @@
 package models.worldMap;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import utils.RessourcePath;
 
 
@@ -24,14 +21,14 @@ public class Tile extends Pane {
         this.tileSet = tileSet;
         this.x = tileX * WorldMap.tileWidth;
         this.y = tileY * WorldMap.tileHeight;
-
         graphic = new ImageView(RessourcePath.urlTileSet + tileSet +  ".png");
 
         graphic.setFitWidth(WorldMap.tileWidth);
         graphic.setFitHeight(WorldMap.tileHeight);
         setLayoutX(x);
         setLayoutY(y);
-        if(tileSet != "00"){
+        int valueTile = (tileSet.charAt(0) == '0')? Character.getNumericValue(tileSet.charAt(1)):Integer.valueOf(tileSet);
+        if(valueTile >= 50){
             traversable = false;
         } else {
             traversable = true;
