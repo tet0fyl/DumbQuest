@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 import models.ennemis.Ennemi;
 import models.ennemis.Plant;
 import models.ennemis.Soldier;
+import models.ennemis.Worm;
 import models.worldMap.WorldMap;
 import utils.RessourcePath;
 
@@ -71,6 +72,8 @@ public class Player extends Moveable {
             ((Soldier) ennemi).setAttacked(true);
         } else if (ennemi instanceof Plant){
             ((Plant) ennemi).setAttacked(true);
+        } else if (ennemi instanceof Worm){
+            ((Worm) ennemi).setAttacked(true);
         }
     }
 

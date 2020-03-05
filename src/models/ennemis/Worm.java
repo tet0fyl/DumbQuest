@@ -1,23 +1,39 @@
 package models.ennemis;
 
-import javafx.scene.paint.Color;
+import javafx.scene.image.ImageView;
+import models.Player;
 import models.worldMap.Tile;
+import models.worldMap.WorldMap;
+import utils.RessourcePath;
 
 public class Worm extends Ennemi {
     public boolean isInTheGround, isTargeting, isTargetDone , isOutSide;
-    private int inTheGroundBuffer = 10;
-    private int trackingBuffer = 3;
-    private int outSideBuffer = 10;
+    private int inTheGroundBuffer = 15;
+    private int trackingBuffer = 7;
+    private int outSideBuffer = 20;
     private int inTheGround = inTheGroundBuffer;
     private int tracking = trackingBuffer;
     private int outSide = outSideBuffer;
     private Tile targetTile;
 
+    protected boolean isMoving, isAttacking, isStandingBy, isAttacked, isAlive;
+    private double mainImageWidth,mainImageHeight;
+    private int animationFrameDamageBuffer = 4;
+    private int animationAttackFrameBuffer = 3;
+    private int animationAttackFrame = 0;
+    private int animationDamageFrame = animationFrameDamageBuffer;
+    private int animationMain = 0;
+    private boolean releaseAttack = false;
+    private int animationMoveFrameBuffer = 3;
+    private int animationMoveFrame = 0;
+    private ImageView mainImage;
+    private ImageView[] currentSpriteMove;
+
 
     public Worm(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,1,1,1,1,1);
-        //initModels();
-        //initView(Color.PINK);
+        super(areaX, areaY, tileX, tileY,4,4,4,4,1);
+        mainImageWidth = WorldMap.tileWidth*3;
+        initSprite();
         isTargeting = false;
         isInTheGround = true;
         isTargetDone = false;
@@ -26,7 +42,13 @@ public class Worm extends Ennemi {
 
     @Override
     public void animate() {
-        super.animate();
+
+        if(isAttacking){
+            attackAnimation();
+        }
+        if(isAttacked){
+            damageAnimation();
+        }
         if(isInTheGround && !isTargeting){
             intheGroundAnimation();
         }
@@ -38,30 +60,68 @@ public class Worm extends Ennemi {
         }
     }
 
-    /*public void attackAnimation() {
-        if(animationAttackFrame != 0){
-            animationAttackFrame--;
-        } else if (isInTheGround){
+    public void attackAnimation(){
+        if(animationAttackFrame != animationAttackFrameBuffer){
+            animationAttackFrame++;
+        } else{
             isAttacking = false;
-            animationAttackFrame = 4;
+            animationAttackFrame = 0;
         }
-    }*/
+    }
+
+    public void damageAnimation() {
+        if(animationDamageFrame != 0){
+            animationDamageFrame--;
+            if(mainImage.getOpacity() == 0){
+                mainImage.setOpacity(1);
+            } else {
+                mainImage.setOpacity(0);
+            }
+        } else{
+            isAttacked = false;
+            animationDamageFrame = animationFrameDamageBuffer;
+        }
+    }
+
+    public void attack(Player player){
+        isAttacking = true;
+        player.setAttacked(true);
+    }
 
     public void intheGroundAnimation(){
         isTargetDone = false;
         if(inTheGround != 0){
             inTheGround--;
-            //System.out.println("Je suis sous le sol");
         } else{
+            mainImage.setOpacity(1);
             isTargeting = true;
             inTheGround = inTheGroundBuffer;
         }
     }
 
+    protected void initSprite(){
+        currentSpriteMove = new ImageView[]{
+                new ImageView(RessourcePath.urlSpriteWorm + "/0.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/1.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/2.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/3.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/4.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/5.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/6.png" ),
+        };
+        mainImage = new ImageView();
+        centerAnImage(mainImage, mainImageWidth);
+        mainImage.setImage(currentSpriteMove[0].getImage());
+        getChildren().add(mainImage);
+    }
+
     public void trackingAnimation(){
         if(tracking != 0){
             tracking--;
-            //System.out.println("Je me prepare");
+            if(tracking > trackingBuffer - 3){
+                animationMain++;
+                mainImage.setImage(currentSpriteMove[animationMain].getImage());
+            }
         } else{
             isOutSide = true;
             isInTheGround = false;
@@ -72,8 +132,16 @@ public class Worm extends Ennemi {
     public void outsideAnimation(){
         if(outSide != 0){
             outSide--;
-            //System.out.println("Je suis dehors");
+            if(animationMain < currentSpriteMove.length - 1 && outSide > 5){
+                animationMain++;
+                mainImage.setImage(currentSpriteMove[animationMain].getImage());
+            }
+            if(animationMain != 0 && outSide <= 5){
+                animationMain--;
+                mainImage.setImage(currentSpriteMove[animationMain].getImage());
+            }
         } else{
+            mainImage.setOpacity(0);
             isOutSide = false;
             isTargeting = false;
             isInTheGround = true;
@@ -83,7 +151,6 @@ public class Worm extends Ennemi {
 
     public void teleport(Tile targetTile){
         this.targetTile = targetTile;
-        //targetTile.getGraphic().setFill(Color.RED);
         x = targetTile.getLayoutX();
         y = targetTile.getLayoutY();
         update();
@@ -169,4 +236,141 @@ public class Worm extends Ennemi {
     public void setTargetTile(Tile targetTile) {
         this.targetTile = targetTile;
     }
+
+    public boolean isTargetDone() {
+        return isTargetDone;
+    }
+
+    public void setTargetDone(boolean targetDone) {
+        isTargetDone = targetDone;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
+    }
+
+    public boolean isStandingBy() {
+        return isStandingBy;
+    }
+
+    public void setStandingBy(boolean standingBy) {
+        isStandingBy = standingBy;
+    }
+
+    public boolean isAttacked() {
+        return isAttacked;
+    }
+
+    public void setAttacked(boolean attacked) {
+        isAttacked = attacked;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public double getMainImageWidth() {
+        return mainImageWidth;
+    }
+
+    public void setMainImageWidth(double mainImageWidth) {
+        this.mainImageWidth = mainImageWidth;
+    }
+
+    public double getMainImageHeight() {
+        return mainImageHeight;
+    }
+
+    public void setMainImageHeight(double mainImageHeight) {
+        this.mainImageHeight = mainImageHeight;
+    }
+
+    public int getAnimationFrameDamageBuffer() {
+        return animationFrameDamageBuffer;
+    }
+
+    public void setAnimationFrameDamageBuffer(int animationFrameDamageBuffer) {
+        this.animationFrameDamageBuffer = animationFrameDamageBuffer;
+    }
+
+    public int getAnimationAttackFrameBuffer() {
+        return animationAttackFrameBuffer;
+    }
+
+    public void setAnimationAttackFrameBuffer(int animationAttackFrameBuffer) {
+        this.animationAttackFrameBuffer = animationAttackFrameBuffer;
+    }
+
+    public int getAnimationAttackFrame() {
+        return animationAttackFrame;
+    }
+
+    public void setAnimationAttackFrame(int animationAttackFrame) {
+        this.animationAttackFrame = animationAttackFrame;
+    }
+
+    public int getAnimationDamageFrame() {
+        return animationDamageFrame;
+    }
+
+    public void setAnimationDamageFrame(int animationDamageFrame) {
+        this.animationDamageFrame = animationDamageFrame;
+    }
+
+    public boolean isReleaseAttack() {
+        return releaseAttack;
+    }
+
+    public void setReleaseAttack(boolean releaseAttack) {
+        this.releaseAttack = releaseAttack;
+    }
+
+    public int getAnimationMoveFrameBuffer() {
+        return animationMoveFrameBuffer;
+    }
+
+    public void setAnimationMoveFrameBuffer(int animationMoveFrameBuffer) {
+        this.animationMoveFrameBuffer = animationMoveFrameBuffer;
+    }
+
+    public int getAnimationMoveFrame() {
+        return animationMoveFrame;
+    }
+
+    public void setAnimationMoveFrame(int animationMoveFrame) {
+        this.animationMoveFrame = animationMoveFrame;
+    }
+
+    public ImageView getMainImage() {
+        return mainImage;
+    }
+
+    public void setMainImage(ImageView mainImage) {
+        this.mainImage = mainImage;
+    }
+
+    public ImageView[] getCurrentSpriteMove() {
+        return currentSpriteMove;
+    }
+
+    public void setCurrentSpriteMove(ImageView[] currentSpriteMove) {
+        this.currentSpriteMove = currentSpriteMove;
+    }
+
 }

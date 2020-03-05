@@ -110,11 +110,11 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                         }
                     }
                 }
-            } /*else if (ennemi instanceof Worm){
-                if (ennemi.collision(player) && !ennemi.isAttacking() && ((Worm) ennemi).isOutSide ){
-                    ennemi.attack(player);
+            } else if (ennemi instanceof Worm){
+                if (ennemi.collision(player) && !((Worm) ennemi).isAttacking() && ((Worm) ennemi).isOutSide ){
+                    ((Worm) ennemi).attack(player);
                 }
-            }*/
+            }
         }
     }
 
