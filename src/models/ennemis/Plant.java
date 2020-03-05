@@ -17,8 +17,8 @@ public class Plant extends Ennemi {
         super(areaX, areaY, tileX, tileY);
         isReloading = false;
         projectiles = new ArrayList<Projectile>();
-        initModels();
-        initView(Color.BLUE);
+        //initModels();
+        //initView(Color.BLUE);
         vitesse = 2;
     }
 

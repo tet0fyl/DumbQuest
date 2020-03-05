@@ -16,8 +16,8 @@ public class Worm extends Ennemi {
 
     public Worm(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY);
-        initModels();
-        initView(Color.PINK);
+        //initModels();
+        //initView(Color.PINK);
         isTargeting = false;
         isInTheGround = true;
         isTargetDone = false;
@@ -38,15 +38,14 @@ public class Worm extends Ennemi {
         }
     }
 
-    @Override
-    public void attackAnimation() {
+    /*public void attackAnimation() {
         if(animationAttackFrame != 0){
             animationAttackFrame--;
         } else if (isInTheGround){
             isAttacking = false;
             animationAttackFrame = 4;
         }
-    }
+    }*/
 
     public void intheGroundAnimation(){
         isTargetDone = false;

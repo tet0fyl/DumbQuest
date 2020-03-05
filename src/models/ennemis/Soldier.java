@@ -1,5 +1,6 @@
 package models.ennemis;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import models.Direction;
 import models.GraphNode;
@@ -15,16 +16,30 @@ public class Soldier extends Ennemi {
     private int waitingttackReadyBuffer = 5;
     private int waitingAttackReady = waitingttackReadyBuffer;
 
+
+    protected boolean isInvincible, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isBlocking;
+    private double mainImageWidth,mainImageHeight;
+    private int animationFrameDamageBuffer = 4;
+    private int animationAttackFrameBuffer = 3;
+    private int animationAttackFrame = 0;
+    private int animationDamageFrame = animationFrameDamageBuffer;
+    private boolean releaseAttack = false;
+    private int animationMoveFrameBuffer = 3;
+    private int animationMoveFrame = 0;
+    private ImageView mainImage;
+    private ImageView[] currentSpriteMove;
+    private ImageView[] currentSpriteAttack;
+    private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
+
     public Soldier(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY);
-        initModels(3,3,2,2);
+        //initModels(3,3,2,2);
         isAttackRready = false;
         isPreparingAttack = false;
-        initView(Color.BISQUE);
-        vitesse = 2;
+        //initView(Color.BISQUE);
+        //vitesse = 2;
     }
 
-    @Override
     public void attackAnimation() {
         if(animationAttackFrame != 0){
             isAttackRready = false;
@@ -36,9 +51,7 @@ public class Soldier extends Ennemi {
         }
     }
 
-    @Override
     public void animate() {
-        super.animate();
         if(isPreparingAttack){
             if(waitingAttackReady != 0){
                 waitingAttackReady--;
