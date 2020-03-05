@@ -37,11 +37,6 @@ public class Plant extends Ennemi {
         }
     }
 
-    @Override
-    public void attackAnimation() {
-        super.attackAnimation();
-    }
-
     public void waitingReload(){
         if(shootRateBuffer != 0){
             shootRateBuffer--;

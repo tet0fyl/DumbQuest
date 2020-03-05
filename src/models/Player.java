@@ -18,11 +18,6 @@ public class Player extends Moveable {
     }
 
     @Override
-    public void animate() {
-        super.animate();
-    }
-
-    @Override
     public void damageAnimation() {
         if(animationDamageFrame != 0){
             isInvincible = true;
@@ -38,6 +33,8 @@ public class Player extends Moveable {
             animationDamageFrame = animationFrameDamageBuffer;
         }
     }
+
+
 
     public boolean isInvincible() {
         return isInvincible;

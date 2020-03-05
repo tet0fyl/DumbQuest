@@ -1,16 +1,19 @@
 package models;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import models.worldMap.WorldMap;
+import utils.RessourcePath;
+
 
 public class Moveable extends Pane {
     protected byte pv;
     protected byte pvMax;
     protected int vitesse;
     protected Double rightConstraint, leftConstraint, topConstraint, bottomConstraint;
-    protected boolean isBlockInAxisX, isBlockInAxisY, isRightConstraint, isLeftConstraint, isTopConstraint, isBottomConstraint, isAttacking, isStandingBy, isAttacked, isAlive, isBlocking;
+    protected boolean isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isBlocking;
     protected Rectangle hitBox;
     protected double hitBoxWidth;
     protected double hitBoxHeight;
@@ -24,15 +27,77 @@ public class Moveable extends Pane {
     protected double y;
     protected double prevX;
     protected double prevY;
+    protected double mainImageWidth,mainImageHeight;
     protected int animationFrameDamageBuffer = 4;
-    protected int animationAttackFrame = 4;
+    protected int animationAttackFrameBuffer = 3;
+    protected int animationAttackFrame = 0;
     protected int animationDamageFrame = animationFrameDamageBuffer;
     protected boolean releaseAttack = false;
+    protected int animationMoveFrameBuffer = 3;
+    protected int animationMoveFrame = 0;
+    private ImageView mainImage;
+    private ImageView[] currentSpriteMove;
+    private ImageView[] currentSpriteAttack;
+    private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
 
     public Moveable(int areaX, int areaY, int tileX, int tileY){
         this.x = areaX * WorldMap.areaWidth + tileX * WorldMap.tileWidth;
         this.y = areaY * WorldMap.areaHeight + tileY * WorldMap.tileHeight;
 
+    }
+
+    protected void initSprite(){
+        moveLeft = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/3.png" ),
+        };
+
+        moveRight = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/3.png" ),
+        };
+        moveUp = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/3.png" ),
+        };
+
+        moveDown = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/3.png" ),
+        };
+
+        attackDown = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/3.png" ),
+        };
+        attackUp = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/3.png" ),
+        };
+        attackRight = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/3.png" ),
+        };
+        attackLeft = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/3.png" ),
+        };
     }
 
     protected void initModels(double tileX, double tileY, double attackBoxX, double attackBoxY){
@@ -45,6 +110,7 @@ public class Moveable extends Pane {
         attackHeight = WorldMap.tileHeight * attackBoxY/4;;
         hitBoxWidth = skinWidth - 10;
         hitBoxHeight = skinHeight -10;
+        isMoving = false;
     }
 
     protected void initModels(double tileX, double tileY){
@@ -63,8 +129,10 @@ public class Moveable extends Pane {
         pvMax = 3;
         pv=pvMax;
         vitesse=5;
-        skinWidth = WorldMap.tileWidth * 3/4;
-        skinHeight = WorldMap.tileHeight * 3/4;
+        skinWidth = WorldMap.tileWidth;
+        skinHeight = WorldMap.tileHeight;
+        mainImageWidth = WorldMap.tileWidth*2;
+        mainImageHeight = WorldMap.tileHeight*2;
         attackWidth = skinWidth;
         attackHeight = skinHeight;
         hitBoxWidth = skinWidth - 10;
@@ -83,6 +151,16 @@ public class Moveable extends Pane {
         skin.setWidth(skinWidth);
         skin.setHeight(skinHeight);
 
+        mainImage = new ImageView();
+        mainImage.setImage(moveRight[0].getImage());
+        currentSpriteMove = moveRight;
+        currentSpriteAttack = attackRight;
+        mainImage.setFitHeight(mainImageWidth);
+        mainImage.setFitWidth(mainImageHeight);
+        mainImage.setLayoutX(skinWidth/2 - mainImageWidth/2);
+        mainImage.setLayoutY(skinHeight/2 - mainImageHeight/2);
+        mainImage.setPreserveRatio(true);
+
         update();
 
         hitBox = new Rectangle();
@@ -91,27 +169,36 @@ public class Moveable extends Pane {
         hitBox.setHeight(hitBoxHeight);
         hitBox.setX((skinWidth/2 - hitBoxWidth/2));
         hitBox.setY((skinHeight/2 - hitBoxHeight/2));
-        getChildren().addAll(skin, hitBox, attackBox);
+        getChildren().addAll( skin, hitBox, attackBox, mainImage);
     }
 
     public void move(Direction mouvement){
+        isMoving = true;
         if(mouvement.equals(Direction.GO_UP)){
             y -= vitesse;
+            currentSpriteMove = moveUp;
+            currentSpriteAttack = attackUp;
             attackBox.setX(skinWidth/2 - attackWidth/2);
             attackBox.setY(-skinHeight + attackHeight/2);
         }
         else if(mouvement.equals(Direction.GO_DOWN)){
             y += vitesse;
+            currentSpriteMove = moveDown;
+            currentSpriteAttack = attackDown;
             attackBox.setX(skinWidth/2 - attackWidth/2);
             attackBox.setY(skinHeight);
         }
         else if(mouvement.equals(Direction.GO_RIGHT) ){
             x += vitesse;
+            currentSpriteMove = moveRight;
+            currentSpriteAttack = attackRight;
             attackBox.setX(skinWidth);
             attackBox.setY(skinHeight/2 - attackHeight/2);
         }
         else if(mouvement.equals(Direction.GO_LEFT) ){
             x -= vitesse;
+            currentSpriteMove = moveLeft;
+            currentSpriteAttack = attackLeft;
             attackBox.setX(-skinWidth+attackWidth/2);
             attackBox.setY(skinHeight/2 - attackHeight/2);
         }
@@ -149,18 +236,32 @@ public class Moveable extends Pane {
         if(isAttacking){
             attackAnimation();
         }
+        else if(isMoving){
+            moveAnimation();
+        }
         if(isAttacked){
             damageAnimation();
         }
     }
 
     public void attackAnimation(){
-        if(animationAttackFrame != 0){
-            animationAttackFrame--;
+        if(animationAttackFrame != animationAttackFrameBuffer){
+            animationAttackFrame++;
+            mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
         } else{
             isAttacking = false;
-            animationAttackFrame = 4;
+            animationAttackFrame = 0;
         }
+    }
+
+    public void moveAnimation(){
+        if(animationMoveFrame != animationMoveFrameBuffer){
+            animationMoveFrame++;
+            mainImage.setImage(currentSpriteMove[animationMoveFrame].getImage());
+        } else {
+            animationMoveFrame = 0;
+        }
+        isMoving=false;
     }
 
     public void damageAnimation(){
@@ -271,38 +372,6 @@ public class Moveable extends Pane {
 
     public void setVitesse(int vitesse) {
         this.vitesse = vitesse;
-    }
-
-    public boolean isRightConstraint() {
-        return isRightConstraint;
-    }
-
-    public void setRightConstraint(boolean rightConstraint) {
-        isRightConstraint = rightConstraint;
-    }
-
-    public boolean isLeftConstraint() {
-        return isLeftConstraint;
-    }
-
-    public void setLeftConstraint(boolean leftConstraint) {
-        isLeftConstraint = leftConstraint;
-    }
-
-    public boolean isTopConstraint() {
-        return isTopConstraint;
-    }
-
-    public void setTopConstraint(boolean topConstraint) {
-        isTopConstraint = topConstraint;
-    }
-
-    public boolean isBottomConstraint() {
-        return isBottomConstraint;
-    }
-
-    public void setBottomConstraint(boolean bottomConstraint) {
-        isBottomConstraint = bottomConstraint;
     }
 
     public boolean isStandingBy() {
@@ -441,22 +510,6 @@ public class Moveable extends Pane {
 
     public void setBottomConstraint(Double bottomConstraint) {
         this.bottomConstraint = bottomConstraint;
-    }
-
-    public boolean isBlockInAxisX() {
-        return isBlockInAxisX;
-    }
-
-    public void setBlockInAxisX(boolean blockInAxisX) {
-        isBlockInAxisX = blockInAxisX;
-    }
-
-    public boolean isBlockInAxisY() {
-        return isBlockInAxisY;
-    }
-
-    public void setBlockInAxisY(boolean blockInAxisY) {
-        isBlockInAxisY = blockInAxisY;
     }
 
     public boolean isBlocking() {
