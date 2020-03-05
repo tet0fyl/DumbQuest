@@ -15,7 +15,7 @@ public class Worm extends Ennemi {
 
 
     public Worm(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY);
+        super(areaX, areaY, tileX, tileY,1,1,1,1,1);
         //initModels();
         //initView(Color.PINK);
         isTargeting = false;

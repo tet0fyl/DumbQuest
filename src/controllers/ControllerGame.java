@@ -64,7 +64,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     }
 
     public void handerPlayerAttack() {
-        /*player.setAttacking(true);
+        player.setAttacking(true);
         for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
             if(ennemi instanceof Worm){
                 if(player.attackTouch(ennemi) && ((Worm) ennemi).isOutSide) player.attack(ennemi);
@@ -72,14 +72,14 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             if (player.attackTouch(ennemi)) {
                     player.attack(ennemi);
             }
-        }*/
+        }
     }
 
     public void handleEnnemiAttack(){
-        /*for(Ennemi ennemi: worldMap.getCurrentArea().getEnnemiArrayList()){
+        for(Ennemi ennemi: worldMap.getCurrentArea().getEnnemiArrayList()){
             if(ennemi instanceof Soldier){
-                    if(ennemi.attackTouch(player) && !ennemi.isAttacking() && ((Soldier) ennemi).isAttackReady()){
-                        ennemi.attack(player);
+                    if(ennemi.attackTouch(player) && !((Soldier) ennemi).isAttacking() && ((Soldier) ennemi).isAttackReady()){
+                        ((Soldier) ennemi).attack(player);
                     }
                     if(ennemi.attackTouch(player) && !((Soldier) ennemi).isPreparingAttack()) {
                         ((Soldier) ennemi).setPreparingAttackReady(true);
@@ -99,7 +99,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                             projectile.move();
                             projectile.update();
                             if(projectile.collision(player)) {
-                                ennemi.attack(player);
+                                ((Plant) ennemi).attack(player);
                                 projectile.setHasExploded(true);
                                 worldMap.getChildren().remove(projectile);
                             }
@@ -110,12 +110,12 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                         }
                     }
                 }
-            } else if (ennemi instanceof Worm){
+            } /*else if (ennemi instanceof Worm){
                 if (ennemi.collision(player) && !ennemi.isAttacking() && ((Worm) ennemi).isOutSide ){
                     ennemi.attack(player);
                 }
-            }
-        }*/
+            }*/
+        }
     }
 
     public synchronized void moveEnnemi(){

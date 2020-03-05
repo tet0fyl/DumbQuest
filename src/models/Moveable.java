@@ -69,9 +69,6 @@ public class Moveable extends Pane {
         rect.setY((skinHeight/2 - height/2));
     }
 
-    public void move(Direction mouvement){
-    }
-
     public void memory(){
         prevX = x;
         prevY = y;

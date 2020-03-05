@@ -15,7 +15,7 @@ public class Boss extends Ennemi {
     private int tiredBuffer = tired;
 
     public Boss(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY);
+        super(areaX, areaY, tileX, tileY,1,1,1,1,1);
     }
 
     @Override

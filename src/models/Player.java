@@ -2,6 +2,9 @@ package models;
 
 
 import javafx.scene.image.ImageView;
+import models.ennemis.Ennemi;
+import models.ennemis.Plant;
+import models.ennemis.Soldier;
 import models.worldMap.WorldMap;
 import utils.RessourcePath;
 
@@ -28,9 +31,6 @@ public class Player extends Moveable {
         animationFrameDamageBuffer = 10;
         animationDamageFrame = animationFrameDamageBuffer;
         initSprite();
-        //initView(Color.AZURE);
-        System.out.println(WorldMap.tileWidth);
-        System.out.println(WorldMap.tileHeight);
     }
 
     public void move(Direction mouvement){
@@ -40,7 +40,7 @@ public class Player extends Moveable {
             currentSpriteMove = moveUp;
             currentSpriteAttack = attackUp;
             attackBox.setX(skinWidth/2 - attackWidth/2);
-            attackBox.setY(-skinHeight + attackHeight/2);
+            attackBox.setY(-skinHeight);
         }
         else if(mouvement.equals(Direction.GO_DOWN)){
             y += vitesse;
@@ -60,8 +60,17 @@ public class Player extends Moveable {
             x -= vitesse;
             currentSpriteMove = moveLeft;
             currentSpriteAttack = attackLeft;
-            attackBox.setX(-skinWidth+attackWidth/2);
+            attackBox.setX(-skinWidth);
             attackBox.setY(skinHeight/2 - attackHeight/2);
+        }
+    }
+
+    public void attack(Ennemi ennemi){
+        isAttacking = true;
+        if(ennemi instanceof Soldier){
+            ((Soldier) ennemi).setAttacked(true);
+        } else if (ennemi instanceof Plant){
+            ((Plant) ennemi).setAttacked(true);
         }
     }
 
@@ -82,10 +91,10 @@ public class Player extends Moveable {
         if(animationDamageFrame != 0){
             isInvincible = true;
             animationDamageFrame--;
-            if(skin.getOpacity() == 0){
-                skin.setOpacity(1);
+            if(mainImage.getOpacity() == 0){
+                mainImage.setOpacity(1);
             } else {
-                skin.setOpacity(0);
+                mainImage.setOpacity(0);
             }
         } else{
             isAttacked = false;
