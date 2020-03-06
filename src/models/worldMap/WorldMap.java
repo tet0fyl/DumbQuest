@@ -1,8 +1,11 @@
 package models.worldMap;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import models.Player;
 import models.ennemis.*;
 import utils.Config;
@@ -20,17 +23,17 @@ public class WorldMap extends Pane {
     public static final double areaWidth = Config.gameWindowWidth;
     public static final double areaHeight = Config.gameWindowHeight;
 
-    private PerspectiveCamera camera;
-    private int cameraVitesse;
     private AreaMap[][] areaMap;
     private Group gridWorldMap;
     private AreaMap playerCurrentArea;
     private AreaMap playerPrevArea;
     private Tile playerCurrentTile;
     private Tile playerPrevTile;
+    private Timeline translateTimeline;
+    private int x = 0;
+    private int y = 0;
 
     public WorldMap() {
-        cameraVitesse = 2;
         gridWorldMap = new Group();
         areaMap = new AreaMap[areaXNumber][areaYNumber];
         playerCurrentArea = areaMap[0][0];
@@ -54,10 +57,6 @@ public class WorldMap extends Pane {
         getChildren().addAll(gridWorldMap);
     }
 
-    public void initCamera(PerspectiveCamera camera){
-        this.camera = camera;
-    }
-
     public void addPlayer(Player player){
         getChildren().add(player);
     }
@@ -68,14 +67,14 @@ public class WorldMap extends Pane {
 
     public ArrayList<Ennemi> ennemisArea2(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Plant(0, 0, 10, 10));
-        ennemis.add(new Soldier(0, 0, 3, 10));
+        ennemis.add(new Plant(0, 0, 10, 8));
+        ennemis.add(new Worm(0, 0, 3, 10));
         return ennemis;
     }
 
     public ArrayList<Ennemi> ennemisArea1(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Worm(0, 0, 3, 10));
+        ennemis.add(new Soldier(0, 0, 14, 2));
 
         return ennemis;
     }
@@ -165,6 +164,15 @@ public class WorldMap extends Pane {
 
     }
 
+    public void moveCamera() {
+        translateTimeline = new Timeline();
+        translateTimeline.getKeyFrames().addAll(
+                new KeyFrame(new Duration(750), new KeyValue(layoutXProperty(), -getCurrentArea().getX())),
+                new KeyFrame(new Duration(750), new KeyValue(layoutYProperty(), -getCurrentArea().getY())));
+        translateTimeline.setCycleCount(1);
+        translateTimeline.play();
+    }
+
     public AreaMap getAreaMap(double x, double y) {
             return areaMap[(int)(x / WorldMap.areaWidth)][(int)(y / WorldMap.areaHeight)];
     }
@@ -210,10 +218,6 @@ public class WorldMap extends Pane {
          getCurrentArea().setEnnemiArrayList(ennemis);
     }
 
-    public PerspectiveCamera getCamera() {
-        return camera;
-    }
-
     public static int getTileXNumber() {
         return tileXNumber;
     }
@@ -244,10 +248,6 @@ public class WorldMap extends Pane {
 
     public static double getAreaHeight() {
         return areaHeight;
-    }
-
-    public int getCameraVitesse() {
-        return cameraVitesse;
     }
 
     public AreaMap[][] getAreaMap() {

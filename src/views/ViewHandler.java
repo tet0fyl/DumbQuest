@@ -17,18 +17,15 @@ public class ViewHandler extends Application {
     private ViewGame viewGame;
     private ControllerGame controllerGame;
     private ControllerKeyBoard controllerKeyBoard;
-    private PerspectiveCamera camera;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         root = new Group();
         scene = new Scene(root, Config.gameWindowWidth,Config.gameWindowHeight);
-        camera = new PerspectiveCamera();
 
         setViewGame();
 
-        scene.setCamera(camera);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -42,9 +39,5 @@ public class ViewHandler extends Application {
 
     public ViewGame getViewGame() {
         return viewGame;
-    }
-
-    public PerspectiveCamera getCamera() {
-        return camera;
     }
 }

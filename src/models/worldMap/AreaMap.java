@@ -71,4 +71,40 @@ public class AreaMap extends Pane {
     public int getIndiceY() {
         return indiceY;
     }
+
+    public Group getGraphic() {
+        return graphic;
+    }
+
+    public void setGraphic(Group graphic) {
+        this.graphic = graphic;
+    }
+
+    public void setTiles(Tile[][] tiles) {
+        this.tiles = tiles;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setIndiceX(int indiceX) {
+        this.indiceX = indiceX;
+    }
+
+    public void setIndiceY(int indiceY) {
+        this.indiceY = indiceY;
+    }
 }

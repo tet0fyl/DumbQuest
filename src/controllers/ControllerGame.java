@@ -26,7 +26,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         this.gameTL = new GameTL(this);
         memoControllerKeyBoardSpacePressed = false;
         partie = new Partie();
-        partie.getWorldMap().initCamera(viewHandler.getCamera());
         player = partie.getPlayer();
         worldMap = partie.getWorldMap();
 
@@ -168,12 +167,14 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         worldMap.watchPlayer(player);
     }
 
-    //TODO: Transition camera fluide et lancer le calcule si le joueur a changer d area
     public void updateCamera(){
         if(worldMap.playerHasMoveToAnOtherArea()){
-            worldMap.getCamera().setTranslateX(worldMap.getCamera().translateXProperty().doubleValue() + (player.getAreaCoordX()*WorldMap.areaWidth - worldMap.getCamera().getTranslateX()));
-            worldMap.getCamera().setTranslateY(worldMap.getCamera().translateYProperty().doubleValue() + (player.getAreaCoordY()*WorldMap.areaHeight - worldMap.getCamera().getTranslateY()));
+            worldMap.moveCamera();
         }
+    }
+
+    public void ennemisRespawn(){
+
     }
 
 
