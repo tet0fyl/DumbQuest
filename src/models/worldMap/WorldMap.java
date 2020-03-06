@@ -69,13 +69,13 @@ public class WorldMap extends Pane {
         ArrayList<Ennemi> ennemis = new ArrayList<>();
         ennemis.add(new Plant(0, 0, 10, 8));
         ennemis.add(new Worm(0, 0, 3, 10));
+        ennemis.add(new Soldier(0, 0, 14, 2));
         return ennemis;
     }
 
     public ArrayList<Ennemi> ennemisArea1(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Soldier(0, 0, 14, 2));
-
+        ennemis.add(new Boss(0, 0, 14, 2));
         return ennemis;
     }
 
@@ -200,6 +200,7 @@ public class WorldMap extends Pane {
 
     public boolean playerHasMoveToAnOtherArea(){
         if(!playerCurrentArea.equals(playerPrevArea)){
+            playerPrevArea.ennemisRespawn();
             playerPrevArea=playerCurrentArea;
             return true;
         }

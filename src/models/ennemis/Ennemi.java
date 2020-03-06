@@ -16,5 +16,11 @@ public abstract class Ennemi extends Moveable{
         respawnY = getY();
     }
 
+    public void respawn(){
+        x= respawnX;
+        y = respawnY;
+        update();
+    }
+
 
 }

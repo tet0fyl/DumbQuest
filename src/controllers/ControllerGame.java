@@ -114,6 +114,9 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                     ((Worm) ennemi).attack(player);
                 }
             }
+            else if(ennemi instanceof Boss){
+
+            }
         }
     }
 
@@ -131,6 +134,21 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             if(enemi instanceof Worm){
                 if(((Worm) enemi).isTargeting && !((Worm) enemi).isTargetDone){
                     ((Worm) enemi).teleport(worldMap.getPlayerCurrentTile());
+                }
+            } else if(enemi instanceof Boss){
+                if(((Boss) enemi).getPhase() == 1){
+                    if(((Boss) enemi).isTargeting()){
+                        //for (int i = 0; i < ; i++) {
+                           // for (int j = 0; j < ; j++) {
+
+                           // }
+                      //  }
+                        ((Boss) enemi).setTarget(worldMap.getPlayerCurrentTile());
+                        ((Boss) enemi).setTargeting(false);
+                    } else {
+                        ((Boss) enemi).move();
+                        enemi.update();
+                    }
                 }
             }
         }
@@ -171,10 +189,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         if(worldMap.playerHasMoveToAnOtherArea()){
             worldMap.moveCamera();
         }
-    }
-
-    public void ennemisRespawn(){
-
     }
 
 

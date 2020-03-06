@@ -64,6 +64,12 @@ public class AreaMap extends Pane {
             getChildren().add(ennemi);
     }
 
+    public void ennemisRespawn(){
+        for(Ennemi ennemi: ennemiArrayList){
+            ennemi.respawn();
+        }
+    }
+
     public int getIndiceX() {
         return indiceX;
     }
