@@ -50,6 +50,10 @@ public class AreaMap extends Pane {
         return tiles[(int)((x / WorldMap.tileWidth) % WorldMap.tileXNumber)][(int)((y / WorldMap.tileHeight) % WorldMap.tileYNumber)];
     }
 
+    public Tile getTileByPixel(Ennemi ennemi) {
+        return tiles[(int)((ennemi.getX() / WorldMap.tileWidth) % WorldMap.tileXNumber)][(int)((ennemi.getY() / WorldMap.tileHeight) % WorldMap.tileYNumber)];
+    }
+
     public Tile getTileByCoord(int x, int y) {
         return tiles[x][y];
     }

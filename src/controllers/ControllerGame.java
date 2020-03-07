@@ -115,7 +115,45 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                 }
             }
             else if(ennemi instanceof Boss){
-
+                if(((Boss) ennemi).getPhase() == 1){
+                    if(((Boss) ennemi).isAttackRready() && !((Boss) ennemi).isAttacking()) {
+                        ((Boss) ennemi).setAttacking(true);
+                        worldMap.makeEarthQuake();
+                        if (ennemi.attackTouch(player)) {
+                            ((Boss) ennemi).attack(player);
+                        }
+                    }
+                } else if (((Boss) ennemi).getPhase() == 2){
+                    if (((Boss) ennemi).isAttackRready() && !((Boss) ennemi).isAttacking()) {
+                        ((Boss) ennemi).setAttacking(true);
+                        Projectile projectile = ((Boss) ennemi).shoot(worldMap.getPlayerCurrentTile());
+                        projectile.setVitesse(5);
+                        worldMap.addElement(projectile);
+                        projectile = ((Boss) ennemi).shoot(worldMap.getCurrentArea().getTileByCoord(player.getTileCoordX()+3,player.getTileCoordY() ));
+                        projectile.setVitesse(8);
+                        worldMap.addElement(projectile);
+                        projectile = ((Boss) ennemi).shoot(worldMap.getCurrentArea().getTileByCoord(player.getTileCoordX()-3,player.getTileCoordY() ));
+                        projectile.setVitesse(10);
+                        worldMap.addElement(projectile);
+                    }
+                    if(((Boss) ennemi).getProjectiles().size() != 0 ){
+                        for(Projectile projectile: ((Boss) ennemi).getProjectiles()){
+                            if(!projectile.isHasExploded()){
+                                projectile.move();
+                                projectile.update();
+                                if(projectile.collision(player)) {
+                                    ((Boss) ennemi).attack(player);
+                                    projectile.setHasExploded(true);
+                                    worldMap.getChildren().remove(projectile);
+                                }
+                                if(projectileColliderMap(projectile)){
+                                    projectile.setHasExploded(true);
+                                    worldMap.getChildren().remove(projectile);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -135,19 +173,41 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                 if(((Worm) enemi).isTargeting && !((Worm) enemi).isTargetDone){
                     ((Worm) enemi).teleport(worldMap.getPlayerCurrentTile());
                 }
-            } else if(enemi instanceof Boss){
-                if(((Boss) enemi).getPhase() == 1){
-                    if(((Boss) enemi).isTargeting()){
-                        //for (int i = 0; i < ; i++) {
-                           // for (int j = 0; j < ; j++) {
-
-                           // }
-                      //  }
-                        ((Boss) enemi).setTarget(worldMap.getPlayerCurrentTile());
-                        ((Boss) enemi).setTargeting(false);
-                    } else {
+            } else if(enemi instanceof Boss) {
+                if (((Boss) enemi).getPhase() == 1) {
+                    if (((Boss) enemi).isTargeting()) {
+                        Tile destination = null;
+                        for (int i = -1 + worldMap.getPlayerCurrentTile().getIndiceX(); i < 1 + worldMap.getPlayerCurrentTile().getIndiceX(); i++) {
+                            for (int j = -1 + worldMap.getPlayerCurrentTile().getIndiceY(); j < 1 + worldMap.getPlayerCurrentTile().getIndiceY(); j++) {
+                                if (i == worldMap.getPlayerCurrentArea().getIndiceX() && j == worldMap.getPlayerCurrentArea().getIndiceY())
+                                    continue;
+                                if (worldMap.getTileByCoord(i, j).isTraversable()) {
+                                    destination = worldMap.getTileByCoord(i, j);
+                                    break;
+                                }
+                            }
+                        }
+                        if (destination != null) {
+                            ((Boss) enemi).setTarget(destination);
+                            ((Boss) enemi).setTargeting(false);
+                        }
+                    } else if (!((Boss) enemi).isTargetReached()) {
                         ((Boss) enemi).move();
-                        enemi.update();
+                    } else if (((Boss) enemi).isPivoting()) {
+                        ((Boss) enemi).pivotToTarget(worldMap.getPlayerCurrentTile(), worldMap.getCurrentArea().getTileByPixel(enemi));
+                        ((Boss) enemi).setPreparingAttack(true);
+                    }
+                } else if (((Boss) enemi).getPhase() == 2) {
+                    if (((Boss) enemi).isTargeting()) {
+                        Tile destination = worldMap.getTileByCoord(player.getTileCoordX(), 1);
+                        ((Boss) enemi).setTarget(destination);
+                        ((Boss) enemi).setTargeting(false);
+
+                    } else if (!((Boss) enemi).isTargetReached()) {
+                        ((Boss) enemi).move();
+                    } else if (((Boss) enemi).isPivoting()) {
+                        ((Boss) enemi).pivotToTarget(worldMap.getPlayerCurrentTile(), worldMap.getCurrentArea().getTileByPixel(enemi));
+                        ((Boss) enemi).setPreparingAttack(true);
                     }
                 }
             }

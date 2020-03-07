@@ -30,6 +30,7 @@ public class WorldMap extends Pane {
     private Tile playerCurrentTile;
     private Tile playerPrevTile;
     private Timeline translateTimeline;
+    private Timeline earthQuake;
     private int x = 0;
     private int y = 0;
 
@@ -51,7 +52,6 @@ public class WorldMap extends Pane {
         gridWorldMap.getChildren().add(areaMap[1][1]);
         gridWorldMap.getChildren().add(areaMap[2][1]);
         gridWorldMap.getChildren().add(areaMap[2][0]);
-
         playerCurrentArea = areaMap[0][0];
         playerPrevArea = playerCurrentArea;
         getChildren().addAll(gridWorldMap);
@@ -171,6 +171,17 @@ public class WorldMap extends Pane {
                 new KeyFrame(new Duration(750), new KeyValue(layoutYProperty(), -getCurrentArea().getY())));
         translateTimeline.setCycleCount(1);
         translateTimeline.play();
+    }
+
+    public void makeEarthQuake() {
+        earthQuake = new Timeline();
+        double posZero = getCurrentArea().getX();
+        earthQuake.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, new KeyValue(layoutXProperty(), posZero - 10)),
+                new KeyFrame(new Duration(5), new KeyValue(layoutXProperty(), posZero + 10)),
+                new KeyFrame(new Duration(10), new KeyValue(layoutXProperty(), posZero)));
+        earthQuake.setCycleCount(150);
+        earthQuake.play();
     }
 
     public AreaMap getAreaMap(double x, double y) {

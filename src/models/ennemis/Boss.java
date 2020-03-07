@@ -3,7 +3,6 @@ package models.ennemis;
 import javafx.scene.image.ImageView;
 import models.Direction;
 import models.GraphNode;
-import models.Moveable;
 import models.Player;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
@@ -14,9 +13,10 @@ import java.util.ArrayList;
 public class Boss extends Ennemi {
 
     private int phaseMax = 3;
-    private int phase = 1;
+    private int phase = 2;
+    private int maxVitesse = 10;
     private boolean isTired,isReloading;
-    private ArrayList<Projectile> projectiles;
+    private ArrayList<Projectile> projectiles = new ArrayList<>();
     private int shootRate = 10;
     private int shootRateBuffer = shootRate;
     private int tired = 10;
@@ -24,14 +24,16 @@ public class Boss extends Ennemi {
     private ArrayList<GraphNode> destinationPath;
     private Integer currentNodeDestinationPath = 0;
     private boolean isAttackRready, isPreparingAttack;
-    private int waitingttackReadyBuffer = 5;
-    private int waitingAttackReady = waitingttackReadyBuffer;
+    private int waitingttackReadyBuffer = 7;
+    private int waitingAttackReady = 0;
 
 
-    protected boolean isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isTargeting, isTargetDone, isInvicible;
+    protected boolean isAfterAttacking, isPivoting, isTargetReached, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isTargeting, isTargetDone, isInvicible;
     private double mainImageWidth,mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
+    private int animationAfterAttackingFrameBuffer = 10;
+    private int animationAfterAtacking = 0;
     private int animationAttackFrame = 0;
     private int animationDamageFrame = animationFrameDamageBuffer;
     private boolean releaseAttack = false;
@@ -43,9 +45,10 @@ public class Boss extends Ennemi {
     private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
     private Tile target;
     private double angle;
+    private double vx, vy;
 
     public Boss(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,8,8,8,8,1);
+        super(areaX, areaY, tileX, tileY,8,8,8,8,10);
         mainImageWidth = WorldMap.tileWidth*3;
         isTargeting = true;
         initSprite();
@@ -53,20 +56,16 @@ public class Boss extends Ennemi {
 
     @Override
     public void animate() {
-
+        timerPhase();
         if(isAttacked){
             damageAnimation();
         }
-        if(phase == 1 ){
-            phase1();
-        } else if(phase == 2 ){
-
-        } else if(phase == 3 ){
-
+        if(isPreparingAttack){
+            preparingAttackAnimation();
         }
-    }
-
-    public void phase1() {
+        if(isAfterAttacking){
+            afterAttackingAnimation();
+        }
         if(isAttacking){
             attackAnimation();
         }
@@ -75,25 +74,49 @@ public class Boss extends Ennemi {
         }
     }
 
+    public void timerPhase(){
+        if(phase == 1){
+
+        } else if (phase == 2){
+            waitingttackReadyBuffer= 2;
+            animationAfterAttackingFrameBuffer= 2;
+        } else if (phase == 3){
+
+        }
+    }
+
     public void setTarget(Tile tile){
         this.target = tile;
-        double targetX = target.getTheCenterX();
-        double targetY = target.getTheCenterY();
-        vitesse = 5;
-        angle = -Math.atan2(targetY - getTheCenterHitBoxY(),
-                targetX - getTheCenterHitBoxX());
     }
 
     public void move(){
-        double  vx = Math.cos(angle) * vitesse,
-                vy = Math.sin(angle) * vitesse;
-        x += vx;
-        y -= vy;
+        if(Math.abs(x - target.getX()) > 10 ) {
+            if (x > target.getX()) move(Direction.GO_LEFT);
+            if (x < target.getX()) move(Direction.GO_RIGHT);
+        }
+        else if(Math.abs(y - target.getY()) > 10) {
+            if(y > target.getY()) move(Direction.GO_UP);
+            if(y < target.getY()) move(Direction.GO_DOWN);
+        }else {
+            isTargetReached = true;
+            isPivoting = true;
+        }
+        update();
+    }
+
+    public void pivotToTarget(Tile target, Tile ownTile){
+        vitesse = 1;
+        if( ownTile.getIndiceX() > target.getIndiceX()) move(Direction.GO_LEFT);
+        if(ownTile.getIndiceX() < target.getIndiceX()) move(Direction.GO_RIGHT);
+        if(ownTile.getIndiceY() > target.getIndiceY()) move(Direction.GO_UP);
+        if(ownTile.getIndiceY() < target.getIndiceY()) move(Direction.GO_DOWN);
+        isPivoting = false;
+        isPreparingAttack = true;
+        vitesse = maxVitesse;
     }
 
         public void moveAnimation(){
-            waitingAttackReady = waitingttackReadyBuffer;
-            if(animationMoveFrame != animationMoveFrameBuffer){
+            if(animationMoveFrame != currentSpriteMove.length-1){
                 animationMoveFrame++;
                 mainImage.setImage(currentSpriteMove[animationMoveFrame].getImage());
             } else {
@@ -117,13 +140,40 @@ public class Boss extends Ennemi {
         }
 
         public void attackAnimation(){
-            if(animationAttackFrame != animationAttackFrameBuffer){
+            if(animationAttackFrame < currentSpriteAttack.length-1){
                 animationAttackFrame++;
                 mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
             } else{
                 isAttacking = false;
                 isAttackRready = false;
                 animationAttackFrame = 0;
+                isAfterAttacking = true;
+            }
+        }
+
+        public void afterAttackingAnimation(){
+            if(animationAfterAtacking != animationAfterAttackingFrameBuffer){
+                animationAfterAtacking++;
+            } else {
+                animationAfterAtacking=0;
+                isAfterAttacking=false;
+                isTargeting = true;
+                isTargetReached = false;
+            }
+        }
+
+        public void preparingAttackAnimation(){
+            if(waitingAttackReady <= waitingttackReadyBuffer){
+                waitingAttackReady++;
+                if(waitingAttackReady <= 3){
+                    animationAttackFrame++;
+                    mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
+                }
+            } else {
+                waitingAttackReady = 0;
+                animationAttackFrame = 0;
+                isPreparingAttack = false;
+                isAttackRready = true;
             }
         }
 
@@ -178,6 +228,9 @@ public class Boss extends Ennemi {
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/move/1.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/move/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/move/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/6.png" ),
         };
 
         moveRight = new ImageView[]{
@@ -185,12 +238,18 @@ public class Boss extends Ennemi {
                 new ImageView(RessourcePath.urlSpriteGolem + "/right/move/1.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/right/move/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/right/move/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/6.png" ),
         };
         moveUp = new ImageView[]{
                 new ImageView(RessourcePath.urlSpriteGolem + "/up/move/0.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/up/move/1.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/up/move/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/up/move/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/6.png" ),
         };
 
         moveDown = new ImageView[]{
@@ -198,6 +257,9 @@ public class Boss extends Ennemi {
                 new ImageView(RessourcePath.urlSpriteGolem + "/down/move/1.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/down/move/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/down/move/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/6.png" ),
         };
 
         attackDown = new ImageView[]{
@@ -205,24 +267,36 @@ public class Boss extends Ennemi {
                 new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/1.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/6.png" ),
         };
         attackUp = new ImageView[]{
                 new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/0.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/1.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/6.png" ),
         };
         attackRight = new ImageView[]{
                 new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/0.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/1.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/6.png" ),
         };
         attackLeft = new ImageView[]{
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/0.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/1.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/6.png" ),
         };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
@@ -586,5 +660,29 @@ public class Boss extends Ennemi {
 
     public void setInvicible(boolean invicible) {
         isInvicible = invicible;
+    }
+
+    public boolean isTargetReached() {
+        return isTargetReached;
+    }
+
+    public void setTargetReached(boolean targetReached) {
+        isTargetReached = targetReached;
+    }
+
+    public boolean isPivoting() {
+        return isPivoting;
+    }
+
+    public void setPivoting(boolean pivoting) {
+        isPivoting = pivoting;
+    }
+
+    public boolean isAfterAttacking() {
+        return isAfterAttacking;
+    }
+
+    public void setAfterAttacking(boolean afterAttacking) {
+        isAfterAttacking = afterAttacking;
     }
 }
