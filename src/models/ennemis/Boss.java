@@ -13,7 +13,10 @@ import java.util.ArrayList;
 public class Boss extends Ennemi {
 
     private int phaseMax = 3;
-    private int phase = 2;
+    private int phaseCurrent = 1;
+    private int phase = 1;
+    private int numberAtckPerPhaseThreshold = 3;
+    private int numberAtckPerPhase = 0;
     private int maxVitesse = 10;
     private boolean isTired,isReloading;
     private ArrayList<Projectile> projectiles = new ArrayList<>();
@@ -45,12 +48,12 @@ public class Boss extends Ennemi {
     private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
     private Tile target;
     private double angle;
-    private double vx, vy;
 
     public Boss(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY,8,8,8,8,10);
         mainImageWidth = WorldMap.tileWidth*3;
         isTargeting = true;
+        isInvicible = true;
         initSprite();
     }
 
@@ -75,11 +78,19 @@ public class Boss extends Ennemi {
     }
 
     public void timerPhase(){
+        if(numberAtckPerPhase == numberAtckPerPhaseThreshold){
+            numberAtckPerPhase = 0;
+            phase--;
+            if(phase == 0){
+                phase = phaseCurrent;
+            }
+        }
         if(phase == 1){
-
+            waitingttackReadyBuffer= 7;
+            animationAfterAttackingFrameBuffer= 10;
         } else if (phase == 2){
-            waitingttackReadyBuffer= 2;
-            animationAfterAttackingFrameBuffer= 2;
+            waitingttackReadyBuffer= 1;
+            animationAfterAttackingFrameBuffer= 1;
         } else if (phase == 3){
 
         }
@@ -135,6 +146,9 @@ public class Boss extends Ennemi {
                 }
             } else{
                 isAttacked = false;
+                isInvicible = true;
+                phase++; phaseCurrent++;
+                numberAtckPerPhase = 0;
                 animationDamageFrame = animationFrameDamageBuffer;
             }
         }
@@ -148,13 +162,16 @@ public class Boss extends Ennemi {
                 isAttackRready = false;
                 animationAttackFrame = 0;
                 isAfterAttacking = true;
+                numberAtckPerPhase++;
             }
         }
 
         public void afterAttackingAnimation(){
+            isInvicible = false;
             if(animationAfterAtacking != animationAfterAttackingFrameBuffer){
                 animationAfterAtacking++;
             } else {
+                isInvicible = true;
                 animationAfterAtacking=0;
                 isAfterAttacking=false;
                 isTargeting = true;

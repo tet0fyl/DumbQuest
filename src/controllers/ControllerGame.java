@@ -67,8 +67,11 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
             if(ennemi instanceof Worm){
                 if(player.attackTouch(ennemi) && ((Worm) ennemi).isOutSide) player.attack(ennemi);
-            } else
-            if (player.attackTouch(ennemi)) {
+            } else if (ennemi instanceof Boss) {
+                if(player.attackTouch(ennemi) && !((Boss) ennemi).isInvicible()) {
+                    player.attack(ennemi);
+                }
+            } else if (player.attackTouch(ennemi)) {
                     player.attack(ennemi);
             }
         }
@@ -123,19 +126,20 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                             ((Boss) ennemi).attack(player);
                         }
                     }
-                } else if (((Boss) ennemi).getPhase() == 2){
+                } else if (((Boss) ennemi).getPhase() == 2) {
                     if (((Boss) ennemi).isAttackRready() && !((Boss) ennemi).isAttacking()) {
                         ((Boss) ennemi).setAttacking(true);
                         Projectile projectile = ((Boss) ennemi).shoot(worldMap.getPlayerCurrentTile());
                         projectile.setVitesse(5);
                         worldMap.addElement(projectile);
-                        projectile = ((Boss) ennemi).shoot(worldMap.getCurrentArea().getTileByCoord(player.getTileCoordX()+3,player.getTileCoordY() ));
+                        projectile = ((Boss) ennemi).shoot(worldMap.getCurrentArea().getTileByCoord(player.getTileCoordX() + 3, player.getTileCoordY()));
                         projectile.setVitesse(8);
                         worldMap.addElement(projectile);
-                        projectile = ((Boss) ennemi).shoot(worldMap.getCurrentArea().getTileByCoord(player.getTileCoordX()-3,player.getTileCoordY() ));
+                        projectile = ((Boss) ennemi).shoot(worldMap.getCurrentArea().getTileByCoord(player.getTileCoordX() - 3, player.getTileCoordY()));
                         projectile.setVitesse(10);
                         worldMap.addElement(projectile);
                     }
+                }
                     if(((Boss) ennemi).getProjectiles().size() != 0 ){
                         for(Projectile projectile: ((Boss) ennemi).getProjectiles()){
                             if(!projectile.isHasExploded()){
@@ -151,7 +155,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                                     worldMap.getChildren().remove(projectile);
                                 }
                             }
-                        }
                     }
                 }
             }
