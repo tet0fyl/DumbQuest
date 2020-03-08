@@ -39,27 +39,28 @@ public class ControllerGame implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent mouseEvent) {
         if(mouseEvent.getSource().equals(viewHandler.getViewGame().getBtnReprendre())){
-
+            handlePauseKeyPressed();
         }
         if(mouseEvent.getSource().equals(viewHandler.getViewGame().getBtnRecommencer())){
-
+            viewHandler.setViewGame();
         }
         if(mouseEvent.getSource().equals(viewHandler.getViewGame().getBtnQuitter())){
-
+            viewHandler.setViewMenu();
         }
     }
 
     public void handlePauseKeyPressed(){
         if(!partie.isYouLose() && !partie.isYouWin()){
-        if(!partie.isOnPause()){
-            partie.setOnPause(true);
-            viewHandler.getViewGame().initPopUp(ViewGame.PopUpType.PAUSE);
-            gameTL.stop();
-        } else {
-            partie.setOnPause(false);
-            viewHandler.getViewGame().removePopUp();
-            gameTL.start();
-        }
+            if(!partie.isOnPause()){
+                partie.setOnPause(true);
+                viewHandler.getViewGame().initPopUp(ViewGame.PopUpType.PAUSE);
+                gameTL.stop();
+            } else {
+                partie.setOnPause(false);
+                viewHandler.getViewGame().removePopUp();
+                gameTL.start();
+                viewHandler.getRoot().requestFocus();
+            }
         }
     }
 

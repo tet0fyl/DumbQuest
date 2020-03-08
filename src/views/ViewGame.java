@@ -46,6 +46,9 @@ public class ViewGame {
     public void setEvent(ControllerGame controllerGame, ControllerKeyBoard controllerKeyBoard){
         root.setOnKeyPressed(controllerKeyBoard);
         root.setOnKeyReleased(controllerKeyBoard);
+        btnReprendre.setOnMouseClicked(controllerGame);
+        btnRecommencer.setOnMouseClicked(controllerGame);
+        btnQuitter.setOnMouseClicked(controllerGame);
         root.requestFocus();
     }
 
