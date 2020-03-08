@@ -27,17 +27,19 @@ public class Boss extends Ennemi {
     private ArrayList<GraphNode> destinationPath;
     private Integer currentNodeDestinationPath = 0;
     private boolean isAttackRready, isPreparingAttack;
-    private int waitingttackReadyBuffer = 7;
+    private int waitingttackReadyBuffer = 2;
     private int waitingAttackReady = 0;
-
+    private ArrayList<Worm> friend = new ArrayList<>();
 
     protected boolean isAfterAttacking, isPivoting, isTargetReached, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isTargeting, isTargetDone, isInvicible;
     private double mainImageWidth,mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
-    private int animationAfterAttackingFrameBuffer = 10;
+    private int animationAfterAttackingFrameBuffer = 2;
     private int animationAfterAtacking = 0;
     private int animationAttackFrame = 0;
+    private int animationNotInvicibleFrameBuffer = 20;
+    private int animationNotInvicibleFrame = 0;
     private int animationDamageFrame = animationFrameDamageBuffer;
     private boolean releaseAttack = false;
     private int animationMoveFrameBuffer = 3;
@@ -60,39 +62,34 @@ public class Boss extends Ennemi {
     @Override
     public void animate() {
         timerPhase();
+        if(!isInvicible){
+            notInvisibleAnimation();
+        } else {
+            if(isPreparingAttack){
+                preparingAttackAnimation();
+            }
+            if(isAfterAttacking){
+                afterAttackingAnimation();
+            }
+            if(isAttacking){
+                attackAnimation();
+            }
+            else if(isMoving) {
+                moveAnimation();
+            }
+        }
         if(isAttacked){
             damageAnimation();
-        }
-        if(isPreparingAttack){
-            preparingAttackAnimation();
-        }
-        if(isAfterAttacking){
-            afterAttackingAnimation();
-        }
-        if(isAttacking){
-            attackAnimation();
-        }
-        else if(isMoving){
-            moveAnimation();
         }
     }
 
     public void timerPhase(){
-        if(numberAtckPerPhase == numberAtckPerPhaseThreshold){
+        if(numberAtckPerPhase > numberAtckPerPhaseThreshold){
             numberAtckPerPhase = 0;
             phase--;
             if(phase == 0){
                 phase = phaseCurrent;
             }
-        }
-        if(phase == 1){
-            waitingttackReadyBuffer= 7;
-            animationAfterAttackingFrameBuffer= 10;
-        } else if (phase == 2){
-            waitingttackReadyBuffer= 1;
-            animationAfterAttackingFrameBuffer= 1;
-        } else if (phase == 3){
-
         }
     }
 
@@ -167,12 +164,29 @@ public class Boss extends Ennemi {
         }
 
         public void afterAttackingAnimation(){
-            isInvicible = false;
             if(animationAfterAtacking != animationAfterAttackingFrameBuffer){
                 animationAfterAtacking++;
             } else {
+                System.out.println(numberAtckPerPhase);
+                if(numberAtckPerPhase == numberAtckPerPhaseThreshold && phase == 1){
+                    isInvicible = false;
+                } else {
+                    animationAfterAtacking=0;
+                    isAfterAttacking=false;
+                    isTargeting = true;
+                    isTargetReached = false;
+                }
+            }
+        }
+
+
+        public void notInvisibleAnimation(){
+            if(animationNotInvicibleFrame != animationNotInvicibleFrameBuffer){
+                animationNotInvicibleFrame++;
+            } else {
                 isInvicible = true;
                 animationAfterAtacking=0;
+                animationNotInvicibleFrame=0;
                 isAfterAttacking=false;
                 isTargeting = true;
                 isTargetReached = false;
@@ -193,6 +207,7 @@ public class Boss extends Ennemi {
                 isAttackRready = true;
             }
         }
+
 
     public Projectile shoot(Tile tileTarget) {
         Projectile projectile = new Projectile(this, tileTarget);
