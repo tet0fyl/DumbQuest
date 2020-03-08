@@ -8,4 +8,5 @@ public class RessourcePath {
     public static final String urlSpritePlant = "assets/sprite/plant";
     public static final String urlSpriteWorm = "assets/sprite/worm";
     public static final String urlSpriteGolem = "assets/sprite/golem";
+    public static final String urlSpriteExplo = "assets/sprite/explosion";
 }

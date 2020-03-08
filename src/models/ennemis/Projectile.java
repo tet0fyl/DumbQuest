@@ -1,11 +1,13 @@
 package models.ennemis;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import models.Moveable;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
+import utils.RessourcePath;
 
 
 public class Projectile extends Pane {
@@ -15,11 +17,14 @@ public class Projectile extends Pane {
     public Circle skin;
     public Circle blur;
     public double vitesse;
-    public boolean hasExploded;
+    public boolean hasExploded, isDestroyed;
     private double x,y;
     private double targetX;
     private double targetY;
     private double angle;
+    private ImageView[] sprites;
+    private ImageView sprite;
+    private int spriteFrame = 0;
 
     public Projectile(Moveable moveableLauncher, Tile target){
         hitBox = new Circle();
@@ -42,6 +47,7 @@ public class Projectile extends Pane {
         vitesse = 5;
         angle = -Math.atan2(targetY - getTheCenterY(),
                 targetX - getTheCenterX());
+        initSprite();
     }
 
     public boolean collision(Moveable other){
@@ -64,6 +70,23 @@ public class Projectile extends Pane {
                 vy = Math.sin(angle) * vitesse;
         x += vx;
         y -= vy;
+    }
+
+    public void animate(){
+        blur.setOpacity(0);
+        skin.setOpacity(0);
+        if(hasExploded){
+            explosionAnimation();
+        }
+    }
+
+    public void explosionAnimation(){
+        if(spriteFrame < sprites.length - 1 ){
+            spriteFrame++;
+            sprite.setImage(sprites[spriteFrame].getImage());
+        } else {
+            isDestroyed = true;
+        }
     }
 
     public void update(){
@@ -101,6 +124,17 @@ public class Projectile extends Pane {
 
     public void setHitBox(Circle hitBox) {
         this.hitBox = hitBox;
+    }
+
+    protected void initSprite(){
+        sprites = new ImageView[11];
+        for (int i = 0; i < sprites.length ; i++) {
+            sprites[i] = new ImageView(RessourcePath.urlSpriteExplo + "/" + i + ".png" );
+        }
+        sprite = new ImageView();
+        centerAnImage(sprite,100);
+        sprite.setImage(sprites[spriteFrame].getImage());
+        getChildren().add(sprite);
     }
 
     public Circle getSkin() {
@@ -151,5 +185,10 @@ public class Projectile extends Pane {
         this.y = y;
     }
 
-
+    public void centerAnImage(ImageView img, double width){
+        img.setFitHeight(width);
+        img.setPreserveRatio(true);
+        img.setLayoutX(10/2 - width/2);
+        img.setLayoutY(10/2 - img.getFitHeight()/2);
+    }
 }

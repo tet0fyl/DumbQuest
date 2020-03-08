@@ -103,12 +103,14 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                             if(projectile.collision(player)) {
                                 ((Plant) ennemi).attack(player);
                                 projectile.setHasExploded(true);
-                                worldMap.getChildren().remove(projectile);
                             }
                             if(projectileColliderMap(projectile)){
                                 projectile.setHasExploded(true);
-                                worldMap.getChildren().remove(projectile);
                             }
+                        } else if(!projectile.isDestroyed){
+                            projectile.animate();
+                        } else {
+                            worldMap.getChildren().remove(projectile);
                         }
                     }
                 }
@@ -139,24 +141,35 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                         projectile.setVitesse(10);
                         worldMap.addElement(projectile);
                     }
-                }
-                    if(((Boss) ennemi).getProjectiles().size() != 0 ){
-                        for(Projectile projectile: ((Boss) ennemi).getProjectiles()){
-                            if(!projectile.isHasExploded()){
-                                projectile.move();
-                                projectile.update();
-                                if(projectile.collision(player)) {
-                                    ((Boss) ennemi).attack(player);
-                                    projectile.setHasExploded(true);
-                                    worldMap.getChildren().remove(projectile);
-                                }
-                                if(projectileColliderMap(projectile)){
-                                    projectile.setHasExploded(true);
-                                    worldMap.getChildren().remove(projectile);
-                                }
-                            }
+                } else if ( ((Boss) ennemi).getPhase() == 3) {
+                    if(((Boss) ennemi).isTargetReached()){
+                        ((Boss) ennemi).setTargeting(true);
+                        ((Boss) ennemi).setTargetReached(false);
+                        ((Boss) ennemi).setNumberAtckPerPhase(((Boss) ennemi).getNumberAtckPerPhase()+1);
+                    }
+                    if(ennemi.collision(player)){
+                        ((Boss) ennemi).attack(player);
                     }
                 }
+                    if(((Boss) ennemi).getProjectiles().size() != 0 ) {
+                        for (Projectile projectile : ((Boss) ennemi).getProjectiles()) {
+                            if (!projectile.isHasExploded()) {
+                                projectile.move();
+                                projectile.update();
+                                if (projectile.collision(player)) {
+                                    ((Boss) ennemi).attack(player);
+                                    projectile.setHasExploded(true);
+                                }
+                                if (projectileColliderMap(projectile)) {
+                                    projectile.setHasExploded(true);
+                                }
+                            } else if(!projectile.isDestroyed){
+                                projectile.animate();
+                            } else {
+                                worldMap.getChildren().remove(projectile);
+                            }
+                        }
+                    }
             }
         }
     }
@@ -212,7 +225,22 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                         ((Boss) enemi).pivotToTarget(worldMap.getPlayerCurrentTile(), worldMap.getCurrentArea().getTileByPixel(enemi));
                         ((Boss) enemi).setPreparingAttack(true);
                     }
-                }
+                } else if (((Boss) enemi).getPhase() == 3){
+                    if (((Boss) enemi).isTargeting()) {
+                        Tile destination;
+                        if(((Boss) enemi).isPhase3Left()){
+                            destination = worldMap.getTileByCoord(0, player.getTileCoordY());
+                            ((Boss) enemi).setPhase3Left(false);
+                        } else {
+                            destination = worldMap.getTileByCoord(WorldMap.tileXNumber-1, player.getTileCoordY());
+                            ((Boss) enemi).setPhase3Left(true);
+                        }
+                        ((Boss) enemi).setTarget(destination);
+                        ((Boss) enemi).setTargeting(false);
+                    } else if (!((Boss) enemi).isTargetReached()) {
+                        ((Boss) enemi).move();
+                    }
+            }
             }
         }
     }
@@ -246,6 +274,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public void worldMapWatcher(){
         worldMap.watchPlayer(player);
+
     }
 
     public void updateCamera(){

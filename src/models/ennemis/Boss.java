@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class Boss extends Ennemi {
 
     private int phaseMax = 3;
-    private int phaseCurrent = 1;
-    private int phase = 1;
+    private int phaseCurrent = 3;
+    private int phase = 3;
     private int numberAtckPerPhaseThreshold = 3;
     private int numberAtckPerPhase = 0;
     private int maxVitesse = 10;
@@ -23,6 +23,7 @@ public class Boss extends Ennemi {
     private int shootRate = 10;
     private int shootRateBuffer = shootRate;
     private int tired = 10;
+    private int deathAnimationFrame = 0;
     private int tiredBuffer = tired;
     private ArrayList<GraphNode> destinationPath;
     private Integer currentNodeDestinationPath = 0;
@@ -30,8 +31,9 @@ public class Boss extends Ennemi {
     private int waitingttackReadyBuffer = 2;
     private int waitingAttackReady = 0;
     private ArrayList<Worm> friend = new ArrayList<>();
+    private boolean phase3Left = true;
 
-    protected boolean isAfterAttacking, isPivoting, isTargetReached, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isTargeting, isTargetDone, isInvicible;
+    protected boolean isDying, isAfterAttacking, isPivoting, isTargetReached, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isTargeting, isTargetDone, isInvicible, isAttackInMovement;
     private double mainImageWidth,mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
@@ -47,7 +49,7 @@ public class Boss extends Ennemi {
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
     private ImageView[] currentSpriteAttack;
-    private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
+    private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight, deathSprite;
     private Tile target;
     private double angle;
 
@@ -81,6 +83,9 @@ public class Boss extends Ennemi {
         if(isAttacked){
             damageAnimation();
         }
+        if(isDying){
+            deathAnimation();
+        }
     }
 
     public void timerPhase(){
@@ -90,6 +95,9 @@ public class Boss extends Ennemi {
             if(phase == 0){
                 phase = phaseCurrent;
             }
+        }
+        if(phaseCurrent > 3){
+            isDying = true;
         }
     }
 
@@ -123,6 +131,16 @@ public class Boss extends Ennemi {
         vitesse = maxVitesse;
     }
 
+    public void deathAnimation(){
+        if(deathAnimationFrame != deathSprite.length-1){
+            deathAnimationFrame++;
+            mainImage.setImage(deathSprite[deathAnimationFrame].getImage());
+        } else {
+            animationMoveFrame = 0;
+            isAlive = false;
+        }
+    }
+
         public void moveAnimation(){
             if(animationMoveFrame != currentSpriteMove.length-1){
                 animationMoveFrame++;
@@ -144,7 +162,8 @@ public class Boss extends Ennemi {
             } else{
                 isAttacked = false;
                 isInvicible = true;
-                phase++; phaseCurrent++;
+                phaseCurrent++;
+                phase=phaseCurrent;
                 numberAtckPerPhase = 0;
                 animationDamageFrame = animationFrameDamageBuffer;
             }
@@ -167,7 +186,6 @@ public class Boss extends Ennemi {
             if(animationAfterAtacking != animationAfterAttackingFrameBuffer){
                 animationAfterAtacking++;
             } else {
-                System.out.println(numberAtckPerPhase);
                 if(numberAtckPerPhase == numberAtckPerPhaseThreshold && phase == 1){
                     isInvicible = false;
                 } else {
@@ -178,7 +196,6 @@ public class Boss extends Ennemi {
                 }
             }
         }
-
 
         public void notInvisibleAnimation(){
             if(animationNotInvicibleFrame != animationNotInvicibleFrameBuffer){
@@ -329,6 +346,15 @@ public class Boss extends Ennemi {
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/4.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/5.png" ),
                 new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/6.png" ),
+        };
+        deathSprite = new ImageView[]{
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/0.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/1.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/2.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/4.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/5.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/6.png" ),
         };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
@@ -716,5 +742,93 @@ public class Boss extends Ennemi {
 
     public void setAfterAttacking(boolean afterAttacking) {
         isAfterAttacking = afterAttacking;
+    }
+
+    public int getPhaseCurrent() {
+        return phaseCurrent;
+    }
+
+    public void setPhaseCurrent(int phaseCurrent) {
+        this.phaseCurrent = phaseCurrent;
+    }
+
+    public int getNumberAtckPerPhaseThreshold() {
+        return numberAtckPerPhaseThreshold;
+    }
+
+    public void setNumberAtckPerPhaseThreshold(int numberAtckPerPhaseThreshold) {
+        this.numberAtckPerPhaseThreshold = numberAtckPerPhaseThreshold;
+    }
+
+    public int getNumberAtckPerPhase() {
+        return numberAtckPerPhase;
+    }
+
+    public void setNumberAtckPerPhase(int numberAtckPerPhase) {
+        this.numberAtckPerPhase = numberAtckPerPhase;
+    }
+
+    public int getMaxVitesse() {
+        return maxVitesse;
+    }
+
+    public void setMaxVitesse(int maxVitesse) {
+        this.maxVitesse = maxVitesse;
+    }
+
+    public ArrayList<Worm> getFriend() {
+        return friend;
+    }
+
+    public void setFriend(ArrayList<Worm> friend) {
+        this.friend = friend;
+    }
+
+    public int getAnimationAfterAttackingFrameBuffer() {
+        return animationAfterAttackingFrameBuffer;
+    }
+
+    public void setAnimationAfterAttackingFrameBuffer(int animationAfterAttackingFrameBuffer) {
+        this.animationAfterAttackingFrameBuffer = animationAfterAttackingFrameBuffer;
+    }
+
+    public int getAnimationAfterAtacking() {
+        return animationAfterAtacking;
+    }
+
+    public void setAnimationAfterAtacking(int animationAfterAtacking) {
+        this.animationAfterAtacking = animationAfterAtacking;
+    }
+
+    public int getAnimationNotInvicibleFrameBuffer() {
+        return animationNotInvicibleFrameBuffer;
+    }
+
+    public void setAnimationNotInvicibleFrameBuffer(int animationNotInvicibleFrameBuffer) {
+        this.animationNotInvicibleFrameBuffer = animationNotInvicibleFrameBuffer;
+    }
+
+    public int getAnimationNotInvicibleFrame() {
+        return animationNotInvicibleFrame;
+    }
+
+    public void setAnimationNotInvicibleFrame(int animationNotInvicibleFrame) {
+        this.animationNotInvicibleFrame = animationNotInvicibleFrame;
+    }
+
+    public boolean isPhase3Left() {
+        return phase3Left;
+    }
+
+    public void setPhase3Left(boolean phase3Left) {
+        this.phase3Left = phase3Left;
+    }
+
+    public boolean isAttackInMovement() {
+        return isAttackInMovement;
+    }
+
+    public void setAttackInMovement(boolean attackInMovement) {
+        isAttackInMovement = attackInMovement;
     }
 }
