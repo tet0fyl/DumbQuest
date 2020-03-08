@@ -2,6 +2,7 @@ package views;
 
 import controllers.ControllerGame;
 import controllers.ControllerKeyBoard;
+import controllers.ControllerMenu;
 import javafx.application.Application;
 import javafx.scene.Camera;
 import javafx.scene.Group;
@@ -16,8 +17,10 @@ public class ViewHandler extends Application {
     private Scene scene;
     private Group root;
     private ViewGame viewGame;
+    private ViewMenu viewMenu;
     private ControllerGame controllerGame;
     private ControllerKeyBoard controllerKeyBoard;
+    private ControllerMenu controllerMenu;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -38,7 +41,41 @@ public class ViewHandler extends Application {
         controllerKeyBoard = new ControllerKeyBoard(controllerGame);
     }
 
+    public void setViewMenu(){
+        viewMenu = new ViewMenu(root);
+        viewMenu.clearAndInitRoot();
+        controllerMenu = new ControllerMenu(this);
+    }
+
     public ViewGame getViewGame() {
         return viewGame;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public Group getRoot() {
+        return root;
+    }
+
+    public ViewMenu getViewMenu() {
+        return viewMenu;
+    }
+
+    public ControllerGame getControllerGame() {
+        return controllerGame;
+    }
+
+    public ControllerKeyBoard getControllerKeyBoard() {
+        return controllerKeyBoard;
+    }
+
+    public ControllerMenu getControllerMenu() {
+        return controllerMenu;
     }
 }
