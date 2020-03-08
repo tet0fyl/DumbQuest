@@ -16,7 +16,7 @@ public class Worm extends Ennemi {
     private int outSide = outSideBuffer;
     private Tile targetTile;
 
-    protected boolean isMoving, isAttacking, isStandingBy, isAttacked, isAlive;
+    protected boolean isMoving, isAttacking, isStandingBy, isAttacked;
     private double mainImageWidth,mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
@@ -33,6 +33,8 @@ public class Worm extends Ennemi {
     public Worm(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY,4,4,4,4,1);
         mainImageWidth = WorldMap.tileWidth*3;
+        pvMax=2;
+        pv=pvMax;
         initSprite();
         isTargeting = false;
         isInTheGround = true;
@@ -86,6 +88,7 @@ public class Worm extends Ennemi {
     public void attack(Player player){
         isAttacking = true;
         player.setAttacked(true);
+        player.subitDegat();
     }
 
     public void intheGroundAnimation(){
@@ -275,14 +278,6 @@ public class Worm extends Ennemi {
 
     public void setAttacked(boolean attacked) {
         isAttacked = attacked;
-    }
-
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
     }
 
     public double getMainImageWidth() {

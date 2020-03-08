@@ -107,6 +107,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public void handleEnnemiAttack(){
         for(Ennemi ennemi: worldMap.getCurrentArea().getEnnemiArrayList()){
+            if(!ennemi.isDying()){
             if(ennemi instanceof Soldier){
                     if(ennemi.attackTouch(player) && !((Soldier) ennemi).isAttacking() && ((Soldier) ennemi).isAttackReady()){
                         ((Soldier) ennemi).attack(player);
@@ -203,10 +204,12 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                     }
             }
         }
+        }
     }
 
     public synchronized void moveEnnemi(){
         for(Ennemi enemi: worldMap.getCurrentArea().getEnnemiArrayList()){
+            if(!enemi.isDying()){
             if(enemi instanceof Soldier){
                 if(worldMap.playerHasMoveToAnOtherTile()){
                     ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
@@ -274,12 +277,15 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             }
             }
         }
+        }
     }
 
     public void majAnimation() {
         player.animate();
         for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
-            ennemi.animate();
+            if(ennemi.isAlive()){
+                ennemi.animate();
+            }
         }
     }
 

@@ -54,7 +54,7 @@ public class Boss extends Ennemi {
     private double angle;
 
     public Boss(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,8,8,8,8,10);
+        super(areaX, areaY, tileX, tileY,8,8,4,4,10);
         mainImageWidth = WorldMap.tileWidth*3;
         isTargeting = true;
         isInvicible = true;

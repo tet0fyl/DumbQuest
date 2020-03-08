@@ -12,7 +12,7 @@ public class Player extends Moveable {
     private PlayerHud playerHud;
     protected boolean isInvincible, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isBlocking;
     private double mainImageWidth,mainImageHeight;
-    private int animationFrameDamageBuffer = 4;
+    private int animationFrameDamageBuffer = 10;
     private int animationAttackFrameBuffer = 3;
     private int animationAttackFrame = 0;
     private int animationDamageFrame = animationFrameDamageBuffer;
@@ -27,11 +27,9 @@ public class Player extends Moveable {
     public Player(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY,3,3,3,3,5);
         mainImageWidth = WorldMap.tileWidth*2;
-        pvMax = 2;
+        pvMax = 20;
         pv = pvMax;
         playerHud = new PlayerHud(this);
-        animationFrameDamageBuffer = 10;
-        animationDamageFrame = animationFrameDamageBuffer;
         initSprite();
     }
 
@@ -71,10 +69,13 @@ public class Player extends Moveable {
         isAttacking = true;
         if(ennemi instanceof Soldier){
             ((Soldier) ennemi).setAttacked(true);
+            ennemi.subitDegat();
         } else if (ennemi instanceof Plant){
             ((Plant) ennemi).setAttacked(true);
+            ennemi.subitDegat();
         } else if (ennemi instanceof Worm){
             ((Worm) ennemi).setAttacked(true);
+            ennemi.subitDegat();
         } else if (ennemi instanceof Boss){
             ((Boss) ennemi).setAttacked(true);
         }

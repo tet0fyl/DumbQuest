@@ -19,7 +19,7 @@ public class Soldier extends Ennemi {
     private int waitingAttackReady = waitingttackReadyBuffer;
 
 
-    protected boolean isMoving, isAttacking, isStandingBy, isAttacked, isAlive;
+    protected boolean isMoving, isAttacking, isStandingBy, isAttacked;
     private double mainImageWidth,mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
@@ -28,14 +28,18 @@ public class Soldier extends Ennemi {
     private boolean releaseAttack = false;
     private int animationMoveFrameBuffer = 3;
     private int animationMoveFrame = 0;
+    private int deathAnimationFrame= 0;
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
     private ImageView[] currentSpriteAttack;
+    private ImageView[] deathSprite;
     private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
 
     public Soldier(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,4,4,2,2,2);
+        super(areaX, areaY, tileX, tileY,4,4,4,4,2);
         mainImageWidth = WorldMap.tileWidth*2;
+        pvMax = 3;
+        pv = pvMax;
         isAttackRready = false;
         isPreparingAttack = false;
         initSprite();
@@ -93,6 +97,12 @@ public class Soldier extends Ennemi {
                 new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/2.png" ),
                 new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/3.png" ),
         };
+        deathSprite = new ImageView[]{
+                new ImageView(RessourcePath.urlSpriteGoblin + "/death/0.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/death/1.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/death/2.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/death/3.png" ),
+        };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
         currentSpriteAttack = attackRight;
@@ -114,7 +124,22 @@ public class Soldier extends Ennemi {
         if(isPreparingAttack) {
             preparingAttack();
         }
+        if(pv<=0){
+            isDying=true;
+        }
+        if(isDying){
+            deathAnimation();
+        }
+    }
 
+    public void deathAnimation(){
+        if(deathAnimationFrame != deathSprite.length-1){
+            deathAnimationFrame++;
+            mainImage.setImage(deathSprite[deathAnimationFrame].getImage());
+        } else {
+            animationMoveFrame = 0;
+            isAlive = false;
+        }
     }
 
     public void preparingAttack() {
@@ -224,6 +249,7 @@ public class Soldier extends Ennemi {
     public void attack(Player player){
         isAttacking = true;
         player.setAttacked(true);
+        player.subitDegat();
     }
 
 

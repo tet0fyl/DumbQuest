@@ -9,20 +9,25 @@ public abstract class Ennemi extends Moveable{
 
     private double respawnX;
     private double respawnY;
-    protected boolean isAlive;
+    protected boolean isAlive, isDying;
+    protected int pv, pvMax;
 
     public Ennemi(int areaX, int areaY, int tileX, int tileY, double boxWidth, double boxHeight, double attackBoxX, double attackBoxY, int vitesse) {
         super(areaX, areaY, tileX, tileY,boxWidth, boxHeight,attackBoxX,attackBoxY,vitesse);
         respawnX = getX();
         respawnY = getY();
+        isDying = false;
         isAlive = true;
-
     }
 
     public void respawn(){
         x= respawnX;
         y = respawnY;
         update();
+    }
+
+    public void subitDegat(){
+        pv-= 1;
     }
 
     public double getRespawnX() {
@@ -47,5 +52,29 @@ public abstract class Ennemi extends Moveable{
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+    }
+
+    public boolean isDying() {
+        return isDying;
+    }
+
+    public void setDying(boolean dying) {
+        isDying = dying;
+    }
+
+    public int getPv() {
+        return pv;
+    }
+
+    public void setPv(int pv) {
+        this.pv = pv;
+    }
+
+    public int getPvMax() {
+        return pvMax;
+    }
+
+    public void setPvMax(int pvMax) {
+        this.pvMax = pvMax;
     }
 }

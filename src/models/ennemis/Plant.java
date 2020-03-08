@@ -31,6 +31,8 @@ public class Plant extends Ennemi {
     public Plant(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY,4,4,1,1,1);
         isReloading = false;
+        pvMax=2;
+        pv=pvMax;
         projectiles = new ArrayList<Projectile>();
         mainImageWidth = WorldMap.tileWidth;
         initSprite();
@@ -81,6 +83,7 @@ public class Plant extends Ennemi {
     public void attack(Player player){
         isAttacking = true;
         player.setAttacked(true);
+        player.subitDegat();
     }
 
     public void damageAnimation() {
