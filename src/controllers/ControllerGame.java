@@ -199,9 +199,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                             }
                         }
                     }
-                    if(!ennemi.isAlive()){
-                        partie.setYouWin(true);
-                    }
             }
         }
         }
@@ -286,6 +283,11 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             if(ennemi.isAlive()){
                 ennemi.animate();
             }
+            if(ennemi instanceof Boss){
+                if(!ennemi.isAlive()){
+                    partie.setYouWin(true);
+                }
+            }
         }
     }
 
@@ -311,7 +313,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public void worldMapWatcher(){
         worldMap.watchPlayer(player);
-
     }
 
     public void updateCamera(){
