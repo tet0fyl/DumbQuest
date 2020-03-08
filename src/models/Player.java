@@ -27,7 +27,7 @@ public class Player extends Moveable {
     public Player(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY,3,3,3,3,5);
         mainImageWidth = WorldMap.tileWidth*2;
-        pvMax = 20;
+        pvMax = 2;
         pv = pvMax;
         playerHud = new PlayerHud(this);
         animationFrameDamageBuffer = 10;

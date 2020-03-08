@@ -49,6 +49,9 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         if (spaceBarrePlayerAttackImpulse()) handerPlayerAttack();
         player.valideTheMove(playerColliderMap());
         player.update();
+        if(player.getPv()<=0){
+            partie.setYouLose(true);
+        }
     }
 
     public boolean spaceBarrePlayerAttackImpulse() {
