@@ -23,15 +23,22 @@ public class GameTL extends AnimationTimer {
             return;
         }
 
-        controllerGame.worldMapWatcher();
-        controllerGame.handlePlayer();
-        controllerGame.updateCamera();
-        controllerGame.moveEnnemi();
-        controllerGame.handleEnnemiAttack();
+        if(!controllerGame.getPartie().isYouWin() && !controllerGame.getPartie().isYouLose()){
+            controllerGame.worldMapWatcher();
+            controllerGame.handlePlayer();
+            controllerGame.updateCamera();
+            controllerGame.moveEnnemi();
+            controllerGame.handleEnnemiAttack();
 
-        if( now - lu150ms >= 150_000_000 ) {
+            if( now - lu150ms >= 150_000_000 ) {
                 controllerGame.majAnimation();
                 lu150ms = now;
             }
+        } else if (controllerGame.getPartie().isYouWin()){
+            controllerGame.getViewHandler().getViewGame().initPopUp();
+        } else if(controllerGame.getPartie().isYouLose()){
+
+        }
+
     }
 }

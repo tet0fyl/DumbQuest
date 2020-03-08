@@ -9,6 +9,7 @@ import utils.RessourcePath;
 public class Player extends Moveable {
     protected byte pv;
     protected byte pvMax;
+    private PlayerHud playerHud;
     protected boolean isInvincible, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isBlocking;
     private double mainImageWidth,mainImageHeight;
     private int animationFrameDamageBuffer = 4;
@@ -26,6 +27,9 @@ public class Player extends Moveable {
     public Player(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY,3,3,3,3,5);
         mainImageWidth = WorldMap.tileWidth*2;
+        pvMax = 20;
+        pv = pvMax;
+        playerHud = new PlayerHud(this);
         animationFrameDamageBuffer = 10;
         animationDamageFrame = animationFrameDamageBuffer;
         initSprite();
@@ -183,6 +187,11 @@ public class Player extends Moveable {
         currentSpriteMove = moveRight;
         mainImage.setImage(currentSpriteMove[0].getImage());
         getChildren().add(mainImage);
+    }
+
+    public void subitDegat(){
+        pv -=1;
+        playerHud.update();
     }
 
     public boolean isInvincible() {
@@ -415,5 +424,9 @@ public class Player extends Moveable {
 
     public void setAttackRight(ImageView[] attackRight) {
         this.attackRight = attackRight;
+    }
+
+    public PlayerHud getPlayerHud() {
+        return playerHud;
     }
 }

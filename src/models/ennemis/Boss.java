@@ -33,7 +33,7 @@ public class Boss extends Ennemi {
     private ArrayList<Worm> friend = new ArrayList<>();
     private boolean phase3Left = true;
 
-    protected boolean isDying, isAfterAttacking, isPivoting, isTargetReached, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isTargeting, isTargetDone, isInvicible, isAttackInMovement;
+    protected boolean isDying, isAfterAttacking, isPivoting, isTargetReached, isMoving, isAttacking, isStandingBy, isAttacked, isTargeting, isTargetDone, isInvicible, isAttackInMovement;
     private double mainImageWidth,mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
@@ -268,6 +268,7 @@ public class Boss extends Ennemi {
     public void attack(Player player){
         isAttacking = true;
         player.setAttacked(true);
+        player.subitDegat();
     }
 
 
@@ -830,5 +831,29 @@ public class Boss extends Ennemi {
 
     public void setAttackInMovement(boolean attackInMovement) {
         isAttackInMovement = attackInMovement;
+    }
+
+    public int getDeathAnimationFrame() {
+        return deathAnimationFrame;
+    }
+
+    public void setDeathAnimationFrame(int deathAnimationFrame) {
+        this.deathAnimationFrame = deathAnimationFrame;
+    }
+
+    public boolean isDying() {
+        return isDying;
+    }
+
+    public void setDying(boolean dying) {
+        isDying = dying;
+    }
+
+    public ImageView[] getDeathSprite() {
+        return deathSprite;
+    }
+
+    public void setDeathSprite(ImageView[] deathSprite) {
+        this.deathSprite = deathSprite;
     }
 }

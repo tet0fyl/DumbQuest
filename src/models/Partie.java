@@ -21,4 +21,28 @@ public class Partie {
     public WorldMap getWorldMap() {
         return worldMap;
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setWorldMap(WorldMap worldMap) {
+        this.worldMap = worldMap;
+    }
+
+    public boolean isYouWin() {
+        return youWin;
+    }
+
+    public void setYouWin(boolean youWin) {
+        this.youWin = youWin;
+    }
+
+    public boolean isYouLose() {
+        return youLose;
+    }
+
+    public void setYouLose(boolean youLose) {
+        this.youLose = youLose;
+    }
 }

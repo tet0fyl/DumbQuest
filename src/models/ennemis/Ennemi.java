@@ -9,7 +9,7 @@ public abstract class Ennemi extends Moveable{
 
     private double respawnX;
     private double respawnY;
-    private boolean isAlive;
+    protected boolean isAlive;
 
     public Ennemi(int areaX, int areaY, int tileX, int tileY, double boxWidth, double boxHeight, double attackBoxX, double attackBoxY, int vitesse) {
         super(areaX, areaY, tileX, tileY,boxWidth, boxHeight,attackBoxX,attackBoxY,vitesse);
@@ -25,5 +25,27 @@ public abstract class Ennemi extends Moveable{
         update();
     }
 
+    public double getRespawnX() {
+        return respawnX;
+    }
 
+    public void setRespawnX(double respawnX) {
+        this.respawnX = respawnX;
+    }
+
+    public double getRespawnY() {
+        return respawnY;
+    }
+
+    public void setRespawnY(double respawnY) {
+        this.respawnY = respawnY;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
 }

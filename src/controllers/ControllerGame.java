@@ -30,6 +30,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         worldMap = partie.getWorldMap();
 
         this.viewHandler.getViewGame().addWorldMap(partie.getWorldMap());
+        this.viewHandler.getViewGame().getRoot().getChildren().add(player.getPlayerHud());
         this.viewHandler.getViewGame().setEvent(this, controllerKeyBoard);
         this.gameTL.start();
     }
@@ -170,6 +171,9 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                             }
                         }
                     }
+                    if(!ennemi.isAlive()){
+                        partie.setYouWin(true);
+                    }
             }
         }
     }
@@ -290,5 +294,9 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public ViewHandler getViewHandler() {
+        return viewHandler;
     }
 }
