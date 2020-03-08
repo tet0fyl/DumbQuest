@@ -7,6 +7,7 @@ import models.ennemis.*;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 import timeline.GameTL;
+import views.ViewGame;
 import views.ViewHandler;
 
 import java.util.ArrayList;
@@ -30,14 +31,36 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         worldMap = partie.getWorldMap();
 
         this.viewHandler.getViewGame().addWorldMap(partie.getWorldMap());
-        this.viewHandler.getViewGame().getRoot().getChildren().add(player.getPlayerHud());
+        this.viewHandler.getViewGame().addPlayerHud(player.getPlayerHud());
         this.viewHandler.getViewGame().setEvent(this, controllerKeyBoard);
         this.gameTL.start();
     }
 
     @Override
     public void handle(MouseEvent mouseEvent) {
+        if(mouseEvent.getSource().equals(viewHandler.getViewGame().getBtnReprendre())){
 
+        }
+        if(mouseEvent.getSource().equals(viewHandler.getViewGame().getBtnRecommencer())){
+
+        }
+        if(mouseEvent.getSource().equals(viewHandler.getViewGame().getBtnQuitter())){
+
+        }
+    }
+
+    public void handlePauseKeyPressed(){
+        if(!partie.isYouLose() && !partie.isYouWin()){
+        if(!partie.isOnPause()){
+            partie.setOnPause(true);
+            viewHandler.getViewGame().initPopUp(ViewGame.PopUpType.PAUSE);
+            gameTL.stop();
+        } else {
+            partie.setOnPause(false);
+            viewHandler.getViewGame().removePopUp();
+            gameTL.start();
+        }
+        }
     }
 
     public void handlePlayer() {

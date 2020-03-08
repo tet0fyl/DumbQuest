@@ -9,4 +9,9 @@ public class RessourcePath {
     public static final String urlSpriteWorm = "assets/sprite/worm";
     public static final String urlSpriteGolem = "assets/sprite/golem";
     public static final String urlSpriteExplo = "assets/sprite/explosion";
+    public static final String urlStylesheet = "assets/css/styles.css";
+
+    public static final String fontPixel = "../assets/font/8bit.ttf";
+
+
 }

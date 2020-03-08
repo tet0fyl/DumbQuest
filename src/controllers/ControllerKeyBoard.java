@@ -37,8 +37,7 @@ public class ControllerKeyBoard implements EventHandler<KeyEvent> {
                 spaceBarrePressed=true;
             }
             if( keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.P ) {
-                //TODO: Menu Pause
-                //controllerGame.handlePauseKeyPressed();
+                controllerGame.handlePauseKeyPressed();
             }
         } else if( keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED) ) {
             if( keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.KP_UP || keyEvent.getCode() == KeyCode.Z ) {

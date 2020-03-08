@@ -2,6 +2,7 @@ package timeline;
 
 import controllers.ControllerGame;
 import javafx.animation.AnimationTimer;
+import views.ViewGame;
 
 public class GameTL extends AnimationTimer {
     private ControllerGame controllerGame;
@@ -35,9 +36,11 @@ public class GameTL extends AnimationTimer {
                 lu150ms = now;
             }
         } else if (controllerGame.getPartie().isYouWin()){
-            controllerGame.getViewHandler().getViewGame().initPopUp();
+            controllerGame.getViewHandler().getViewGame().initPopUp(ViewGame.PopUpType.WIN);
+            stop();
         } else if(controllerGame.getPartie().isYouLose()){
-
+            controllerGame.getViewHandler().getViewGame().initPopUp(ViewGame.PopUpType.LOSE);
+            stop();
         }
 
     }

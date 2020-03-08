@@ -9,6 +9,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utils.Config;
+import utils.RessourcePath;
 
 public class ViewHandler extends Application {
     private Stage primaryStage;
@@ -23,7 +24,7 @@ public class ViewHandler extends Application {
         this.primaryStage = primaryStage;
         root = new Group();
         scene = new Scene(root, Config.gameWindowWidth,Config.gameWindowHeight);
-
+        root.getStylesheets().add(RessourcePath.urlStylesheet);
         setViewGame();
 
         primaryStage.setScene(scene);

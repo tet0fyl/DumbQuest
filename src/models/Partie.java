@@ -5,8 +5,10 @@ import models.worldMap.WorldMap;
 public class Partie {
     private Player player;
     private WorldMap worldMap;
+    private boolean gameEnd = false;
     private boolean youWin = false;
     private boolean youLose = false;
+    private boolean onPause = false;
 
     public Partie(){
         worldMap = new WorldMap();
@@ -44,5 +46,21 @@ public class Partie {
 
     public void setYouLose(boolean youLose) {
         this.youLose = youLose;
+    }
+
+    public boolean isOnPause() {
+        return onPause;
+    }
+
+    public void setOnPause(boolean onPause) {
+        this.onPause = onPause;
+    }
+
+    public boolean isGameEnd() {
+        return gameEnd;
+    }
+
+    public void setGameEnd(boolean gameEnd) {
+        this.gameEnd = gameEnd;
     }
 }
