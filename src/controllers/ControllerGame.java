@@ -125,7 +125,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                     if(((Boss) ennemi).isAttackRready() && !((Boss) ennemi).isAttacking()) {
                         ((Boss) ennemi).setAttacking(true);
                         worldMap.makeEarthQuake();
-                        if (ennemi.attackTouch(player)) {
+                        if (ennemi.attackTouch(player) || ennemi.collision(player)) {
                             ((Boss) ennemi).attack(player);
                         }
                     }
@@ -148,7 +148,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                         ((Boss) ennemi).setTargetReached(false);
                         ((Boss) ennemi).setNumberAtckPerPhase(((Boss) ennemi).getNumberAtckPerPhase()+1);
                     }
-                    if(ennemi.collision(player)){
+                    if(ennemi.collision(player) && !((Boss) ennemi).isAttacking()){
                         ((Boss) ennemi).attack(player);
                     }
                 }

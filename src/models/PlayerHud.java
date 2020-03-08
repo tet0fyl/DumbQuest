@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import models.worldMap.WorldMap;
 
 
 public class PlayerHud extends Pane {
@@ -14,7 +15,7 @@ public class PlayerHud extends Pane {
     private Group grpLifeBarre;
     private Rectangle rectContainerContainer;
     private Rectangle rectLifeBarreFill;
-    private double widthLifeBarre = 300;
+    private double widthLifeBarre = WorldMap.tileWidth*3;
     private double heightLifeBarre = 10;
 
     public PlayerHud(Player player){
@@ -41,7 +42,13 @@ public class PlayerHud extends Pane {
 
     public void update(){
         double newWitdh = player.getPv() *  widthLifeBarre / player.getPvMax();
-        System.out.println(newWitdh);
+        if(player.getPv() > player.getPvMax()/2){
+            rectLifeBarreFill.setFill(Color.GREEN);
+        }else if(player.getPv() > player.getPvMax()/3){
+            rectLifeBarreFill.setFill(Color.ORANGE);
+        }else{
+            rectLifeBarreFill.setFill(Color.RED);
+        }
         rectLifeBarreFill.setWidth(newWitdh);
     }
 }

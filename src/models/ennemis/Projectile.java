@@ -48,6 +48,7 @@ public class Projectile extends Pane {
         angle = -Math.atan2(targetY - getTheCenterY(),
                 targetX - getTheCenterX());
         initSprite();
+        hitBox.setOpacity(0);
     }
 
     public boolean collision(Moveable other){
