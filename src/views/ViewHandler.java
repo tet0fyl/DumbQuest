@@ -37,16 +37,24 @@ public class ViewHandler extends Application {
     }
 
     public void setViewGame(){
+        if(controllerGame != null){
+            controllerGame.getGameTL().stop();
+        }
         viewGame = new ViewGame(root);
         viewGame.clearAndInitRoot();
         controllerGame = new ControllerGame(this);
         controllerKeyBoard = new ControllerKeyBoard(controllerGame);
+        controllerGame.getGameTL().start();
     }
 
     public void setViewMenu(){
+        if(controllerGame != null){
+            controllerGame.getGameTL().stop();
+        }
         viewMenu = new ViewMenu(root);
         viewMenu.clearAndInitRoot();
         controllerMenu = new ControllerMenu(this);
+        controllerMenu.getMenuTL().start();
     }
 
     public ViewGame getViewGame() {

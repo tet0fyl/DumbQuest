@@ -8,7 +8,7 @@ public class GameTL extends AnimationTimer {
     private ControllerGame controllerGame;
     private Long playerAttackTimerRealease;
     private boolean firstTime;
-    private long now, lu150ms;
+    private long lu150ms;
 
     public GameTL(ControllerGame controllerGame) {
         this.controllerGame = controllerGame;
@@ -18,7 +18,6 @@ public class GameTL extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-        this.now = now;
         if( firstTime ) {
             firstTime = false;
             return;

@@ -11,6 +11,8 @@ public class RessourcePath {
     public static final String urlSpriteExplo = "assets/sprite/explosion";
     public static final String urlStylesheet = "assets/css/styles.css";
 
+    public static final String urlImgBackGroundMenu = "/assets/background/menu.png";
+
     public static final String fontPixel = "../assets/font/8bit.ttf";
 
 

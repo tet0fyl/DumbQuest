@@ -33,7 +33,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         this.viewHandler.getViewGame().addWorldMap(partie.getWorldMap());
         this.viewHandler.getViewGame().addPlayerHud(player.getPlayerHud());
         this.viewHandler.getViewGame().setEvent(this, controllerKeyBoard);
-        this.gameTL.start();
     }
 
     @Override
@@ -336,5 +335,21 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public ViewHandler getViewHandler() {
         return viewHandler;
+    }
+
+    public ControllerKeyBoard getControllerKeyBoard() {
+        return controllerKeyBoard;
+    }
+
+    public GameTL getGameTL() {
+        return gameTL;
+    }
+
+    public WorldMap getWorldMap() {
+        return worldMap;
+    }
+
+    public boolean isMemoControllerKeyBoardSpacePressed() {
+        return memoControllerKeyBoardSpacePressed;
     }
 }
