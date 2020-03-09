@@ -27,6 +27,8 @@ public class Plant extends Ennemi {
     private int animationMoveFrame = 0;
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
+    private int deathAnimationFrame= 0;
+    private ImageView[] deathSprite;
 
     public Plant(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY,4,4,1,1,1);
@@ -46,6 +48,11 @@ public class Plant extends Ennemi {
                 new ImageView(RessourcePath.urlSpritePlant + "/2.png" ),
                 new ImageView(RessourcePath.urlSpritePlant + "/3.png" ),
         };
+        deathSprite = new ImageView[]{
+                new ImageView(RessourcePath.urlSpritePlant + "/death/0.png" ),
+                new ImageView(RessourcePath.urlSpritePlant + "/death/1.png" ),
+                new ImageView(RessourcePath.urlSpritePlant + "/death/2.png" ),
+        };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
         mainImage.setImage(currentSpriteMove[0].getImage());
@@ -63,11 +70,31 @@ public class Plant extends Ennemi {
     @Override
     public void animate() {
         jiggling();
-        if(isAttacked){
-            damageAnimation();
+        if(isDying){
+            deathAnimation();
+        } else {
+            if(isAttacked){
+                damageAnimation();
+            }
+            if(isReloading){
+                waitingReload();
+            }
+            if(pv<=0){
+                isDying=true;
+            }
+
+
         }
-        if(isReloading){
-            waitingReload();
+    }
+
+    public void deathAnimation(){
+        if(deathAnimationFrame != deathSprite.length-1){
+            deathAnimationFrame++;
+            System.out.println(deathAnimationFrame);
+            mainImage.setImage(deathSprite[deathAnimationFrame].getImage());
+        } else {
+            animationMoveFrame = 0;
+            isAlive = false;
         }
     }
 

@@ -70,7 +70,9 @@ public class AreaMap extends Pane {
 
     public void ennemisRespawn(){
         for(Ennemi ennemi: ennemiArrayList){
-            ennemi.respawn();
+            if(ennemi.isAlive()){
+                ennemi.respawn();
+            }
         }
     }
 

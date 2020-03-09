@@ -28,6 +28,8 @@ public class Worm extends Ennemi {
     private int animationMoveFrame = 0;
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
+    private int deathAnimationFrame= 0;
+    private ImageView[] deathSprite;
 
 
     public Worm(int areaX, int areaY, int tileX, int tileY) {
@@ -44,23 +46,40 @@ public class Worm extends Ennemi {
 
     @Override
     public void animate() {
-
-        if(isAttacking){
-            attackAnimation();
-        }
-        if(isAttacked){
-            damageAnimation();
-        }
-        if(isInTheGround && !isTargeting){
-            intheGroundAnimation();
-        }
-        if(isTargeting && !isOutSide){
-            trackingAnimation();
-        }
-        if(isOutSide){
-            outsideAnimation();
+        if(isDying){
+            deathAnimation();
+        } else {
+            if(isAttacking){
+                attackAnimation();
+            }
+            if(isAttacked){
+                damageAnimation();
+            }
+            if(isInTheGround && !isTargeting){
+                intheGroundAnimation();
+            }
+            if(isTargeting && !isOutSide){
+                trackingAnimation();
+            }
+            if(isOutSide){
+                outsideAnimation();
+            }
+            if(pv<=0){
+                isDying=true;
+            }
         }
     }
+
+    public void deathAnimation(){
+        if(deathAnimationFrame != deathSprite.length-1){
+            deathAnimationFrame++;
+            mainImage.setImage(deathSprite[deathAnimationFrame].getImage());
+        } else {
+            animationMoveFrame = 0;
+            isAlive = false;
+        }
+    }
+
 
     public void attackAnimation(){
         if(animationAttackFrame != animationAttackFrameBuffer){
@@ -111,6 +130,12 @@ public class Worm extends Ennemi {
                 new ImageView(RessourcePath.urlSpriteWorm + "/4.png" ),
                 new ImageView(RessourcePath.urlSpriteWorm + "/5.png" ),
                 new ImageView(RessourcePath.urlSpriteWorm + "/6.png" ),
+        };
+        deathSprite = new ImageView[]{
+                new ImageView(RessourcePath.urlSpriteWorm + "/death/0.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/death/1.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/death/2.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/death/3.png" ),
         };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);

@@ -124,25 +124,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                     Projectile projectile = ((Plant) ennemi).shoot(worldMap.getPlayerCurrentTile());
                     worldMap.addElement(projectile);
                 }
-                if(((Plant) ennemi).getProjectiles().size() != 0 ){
-                    for(Projectile projectile: ((Plant) ennemi).getProjectiles()){
-                        if(!projectile.isHasExploded()){
-                            projectile.move();
-                            projectile.update();
-                            if(projectile.collision(player)) {
-                                ((Plant) ennemi).attack(player);
-                                projectile.setHasExploded(true);
-                            }
-                            if(projectileColliderMap(projectile)){
-                                projectile.setHasExploded(true);
-                            }
-                        } else if(!projectile.isDestroyed){
-                            projectile.animate();
-                        } else {
-                            worldMap.getChildren().remove(projectile);
-                        }
-                    }
-                }
+
             } else if (ennemi instanceof Worm){
                 if (ennemi.collision(player) && !((Worm) ennemi).isAttacking() && ((Worm) ennemi).isOutSide ){
                     ((Worm) ennemi).attack(player);
@@ -180,27 +162,49 @@ public class ControllerGame implements EventHandler<MouseEvent> {
                         ((Boss) ennemi).attack(player);
                     }
                 }
-                    if(((Boss) ennemi).getProjectiles().size() != 0 ) {
-                        for (Projectile projectile : ((Boss) ennemi).getProjectiles()) {
-                            if (!projectile.isHasExploded()) {
-                                projectile.move();
-                                projectile.update();
-                                if (projectile.collision(player)) {
-                                    ((Boss) ennemi).attack(player);
-                                    projectile.setHasExploded(true);
-                                }
-                                if (projectileColliderMap(projectile)) {
-                                    projectile.setHasExploded(true);
-                                }
-                            } else if(!projectile.isDestroyed){
-                                projectile.animate();
-                            } else {
-                                worldMap.getChildren().remove(projectile);
-                            }
-                        }
-                    }
             }
         }
+            if(ennemi instanceof Plant){
+                if(((Plant) ennemi).getProjectiles().size() != 0 ){
+                    for(Projectile projectile: ((Plant) ennemi).getProjectiles()){
+                        if(!projectile.isHasExploded()){
+                            projectile.move();
+                            projectile.update();
+                            if(projectile.collision(player)) {
+                                ((Plant) ennemi).attack(player);
+                                projectile.setHasExploded(true);
+                            }
+                            if(projectileColliderMap(projectile)){
+                                projectile.setHasExploded(true);
+                            }
+                        } else if(!projectile.isDestroyed){
+                            projectile.animate();
+                        } else {
+                            worldMap.getChildren().remove(projectile);
+                        }
+                    }
+                }
+            } else if (ennemi instanceof  Boss){
+                if(((Boss) ennemi).getProjectiles().size() != 0 ) {
+                    for (Projectile projectile : ((Boss) ennemi).getProjectiles()) {
+                        if (!projectile.isHasExploded()) {
+                            projectile.move();
+                            projectile.update();
+                            if (projectile.collision(player)) {
+                                ((Boss) ennemi).attack(player);
+                                projectile.setHasExploded(true);
+                            }
+                            if (projectileColliderMap(projectile)) {
+                                projectile.setHasExploded(true);
+                            }
+                        } else if(!projectile.isDestroyed){
+                            projectile.animate();
+                        } else {
+                            worldMap.getChildren().remove(projectile);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -208,7 +212,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         for(Ennemi enemi: worldMap.getCurrentArea().getEnnemiArrayList()){
             if(!enemi.isDying()){
             if(enemi instanceof Soldier){
-                if(worldMap.playerHasMoveToAnOtherTile()){
+                if(!worldMap.playerHasMoveToAnOtherTile()){
                     ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
                     ((Soldier) enemi).setDestination(path);
                 }

@@ -29,10 +29,10 @@ public class Soldier extends Ennemi {
     private int animationMoveFrameBuffer = 3;
     private int animationMoveFrame = 0;
     private int deathAnimationFrame= 0;
+    private ImageView[] deathSprite;
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
     private ImageView[] currentSpriteAttack;
-    private ImageView[] deathSprite;
     private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
 
     public Soldier(int areaX, int areaY, int tileX, int tileY) {

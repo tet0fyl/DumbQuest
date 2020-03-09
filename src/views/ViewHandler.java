@@ -28,7 +28,9 @@ public class ViewHandler extends Application {
         root = new Group();
         scene = new Scene(root, Config.gameWindowWidth,Config.gameWindowHeight);
         root.getStylesheets().add(RessourcePath.urlStylesheet);
-        setViewGame();
+
+        setViewMenu();
+        //setViewGame();
 
         primaryStage.setScene(scene);
         primaryStage.show();

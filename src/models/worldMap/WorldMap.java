@@ -67,15 +67,17 @@ public class WorldMap extends Pane {
 
     public ArrayList<Ennemi> ennemisArea2(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Worm(0, 0, 3, 10));
+        ennemis.add(new Boss(0, 0, 14, 2));
         ennemis.add(new Plant(0, 0, 10, 8));
-        ennemis.add(new Soldier(0, 0, 14, 2));
+        ennemis.add(new Worm(0, 0, 3, 10));
         return ennemis;
     }
 
     public ArrayList<Ennemi> ennemisArea1(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Boss(0, 0, 14, 2));
+        ennemis.add(new Soldier(0, 0, 14, 2));
+        ennemis.add(new Soldier(0, 0, 10, 2));
+        ennemis.add(new Soldier(0, 0, 14, 5));
         return ennemis;
     }
 
