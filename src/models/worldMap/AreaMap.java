@@ -1,5 +1,6 @@
 package models.worldMap;
 
+import exception.AreaMapConstructionException;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import models.ennemis.Ennemi;
@@ -15,7 +16,19 @@ public class AreaMap extends Pane {
     private int indiceY;
     private ArrayList<Ennemi> ennemiArrayList;
 
-    public AreaMap(String[][] tileSets, int areaX, int areaY){
+    public AreaMap(String[][] tileSets, int areaX, int areaY) {
+        /* Exception */
+        try{
+            for (int i = 0; i < tileSets.length; i++) {
+                for (int j = 0; j < tileSets[i].length; j++) {
+                    if(tileSets[i].length > WorldMap.tileXNumber) throw new AreaMapConstructionException("TileSet en trop row : " + i + " ! limite de la row a : " + WorldMap.tileXNumber);
+                }
+            }
+            if(tileSets.length > WorldMap.tileYNumber) throw new AreaMapConstructionException("Tile set en trop row : " + tileSets.length + " limite des cols a : " + WorldMap.tileYNumber);
+        } catch (AreaMapConstructionException err){
+            err.printStackTrace();
+        }
+
         indiceX = areaX;
         indiceY = areaY;
         this.x = areaX * WorldMap.areaWidth;

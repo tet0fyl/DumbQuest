@@ -1,5 +1,6 @@
 package models.worldMap;
 
+import exception.AreaMapConstructionException;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;

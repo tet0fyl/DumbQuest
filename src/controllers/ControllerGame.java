@@ -3,6 +3,7 @@ package controllers;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import models.*;
+import models.Direction;
 import models.ennemis.*;
 import models.ia.GraphNode;
 import models.ia.IA;

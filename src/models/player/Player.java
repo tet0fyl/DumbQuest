@@ -2,6 +2,7 @@ package models.player;
 
 
 import javafx.scene.image.ImageView;
+import models.Direction;
 import models.Moveable;
 import models.ennemis.*;
 import models.worldMap.WorldMap;

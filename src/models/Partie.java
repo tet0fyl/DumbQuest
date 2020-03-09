@@ -1,5 +1,6 @@
 package models;
 
+import exception.AreaMapConstructionException;
 import models.player.Player;
 import models.worldMap.WorldMap;
 
@@ -12,9 +13,9 @@ public class Partie {
     private boolean onPause = false;
 
     public Partie(){
-        worldMap = new WorldMap();
-        player = new Player(0,0,2,4);
-        worldMap.addPlayer(player);
+            worldMap = new WorldMap();
+            player = new Player(0, 0, 2, 4);
+            worldMap.addPlayer(player);
     }
 
     public Player getPlayer() {
