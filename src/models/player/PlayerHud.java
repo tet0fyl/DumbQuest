@@ -1,4 +1,4 @@
-package models;
+package models.player;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

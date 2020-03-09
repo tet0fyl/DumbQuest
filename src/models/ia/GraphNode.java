@@ -1,8 +1,6 @@
-package models;
+package models.ia;
 
 import models.worldMap.Tile;
-
-import java.util.ArrayList;
 
 public class GraphNode {
     public int f;

@@ -6,7 +6,7 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import models.Player;
+import models.player.Player;
 import models.ennemis.*;
 import utils.Config;
 

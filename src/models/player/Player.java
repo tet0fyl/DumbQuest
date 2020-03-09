@@ -1,7 +1,8 @@
-package models;
+package models.player;
 
 
 import javafx.scene.image.ImageView;
+import models.Moveable;
 import models.ennemis.*;
 import models.worldMap.WorldMap;
 import utils.RessourcePath;

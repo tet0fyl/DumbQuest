@@ -1,5 +1,6 @@
 package models;
 
+import models.player.Player;
 import models.worldMap.WorldMap;
 
 public class Partie {

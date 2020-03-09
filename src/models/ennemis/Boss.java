@@ -2,8 +2,8 @@ package models.ennemis;
 
 import javafx.scene.image.ImageView;
 import models.Direction;
-import models.GraphNode;
-import models.Player;
+import models.ia.GraphNode;
+import models.player.Player;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 import utils.RessourcePath;

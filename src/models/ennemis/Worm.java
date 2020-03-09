@@ -1,7 +1,7 @@
 package models.ennemis;
 
 import javafx.scene.image.ImageView;
-import models.Player;
+import models.player.Player;
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
 import utils.RessourcePath;

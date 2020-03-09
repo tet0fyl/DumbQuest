@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import models.PlayerHud;
+import models.player.PlayerHud;
 import models.worldMap.WorldMap;
 import utils.Config;
 import utils.RessourcePath;

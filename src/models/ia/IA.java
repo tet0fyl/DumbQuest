@@ -1,4 +1,4 @@
-package models;
+package models.ia;
 
 import models.worldMap.Tile;
 import models.worldMap.WorldMap;
