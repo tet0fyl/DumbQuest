@@ -159,7 +159,7 @@ public class Moveable extends Pane {
     }
 
     public double getTheCenterAttackX(){
-        return (attackWidth/2 + attackBox.getX() + x);
+        return (attackWidth/2 + attackBox.getX() + x );
     }
 
     public double getTheCenterAttackY(){

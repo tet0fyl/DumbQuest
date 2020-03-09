@@ -95,7 +95,9 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public void handerPlayerAttack() {
         player.setAttacking(true);
+        System.out.println(player.getX());
         for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
+            System.out.println(ennemi.getX());
             if(ennemi instanceof Worm){
                 if(player.attackTouch(ennemi) && ((Worm) ennemi).isOutSide) player.attack(ennemi);
             } else if (ennemi instanceof Boss) {
@@ -215,7 +217,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         for(Ennemi enemi: worldMap.getCurrentArea().getEnnemiArrayList()){
             if(!enemi.isDying()){
             if(enemi instanceof Soldier){
-                if(!worldMap.playerHasMoveToAnOtherTile()){
+                if(worldMap.playerHasMoveToAnOtherTile()){
                     ArrayList<GraphNode> path = IA.aStarPathFinding(worldMap.getCurrentArea().getTiles(),worldMap.getTileByCoord(enemi.getTileCoordX(),enemi.getTileCoordY()),worldMap.getPlayerCurrentTile());
                     ((Soldier) enemi).setDestination(path);
                 }
