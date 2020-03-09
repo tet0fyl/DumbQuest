@@ -2,7 +2,6 @@ package controllers;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
-import javafx.scene.input.MouseEvent;
 import timeline.MenuTL;
 import views.ViewHandler;
 
@@ -19,7 +18,7 @@ public class ControllerMenu implements EventHandler<InputEvent> {
 
     @Override
     public void handle(InputEvent inputEvent) {
-
+        viewHandler.setViewGame();
     }
 
     public ViewHandler getViewHandler() {

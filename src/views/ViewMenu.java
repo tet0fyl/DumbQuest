@@ -16,17 +16,18 @@ public class ViewMenu {
     private Group root;
     private VBox container;
     private VBox topBox, bottomBox, backgroundWindowBox;
-    private ImageView backgroundMoving;
+    private ImageView backgroundMoving, imgLogo;
     private Label lblStartMsg;
 
     public ViewMenu(Group root) {
         this.root = root;
+
         container = new VBox();
         topBox = new VBox();
         bottomBox = new VBox();
         backgroundMoving = new ImageView(RessourcePath.urlImgBackGroundMenu);
         backgroundMoving.setFitWidth(Config.gameWindowWidth*2);
-        backgroundMoving.setPreserveRatio((true));
+        backgroundMoving.setPreserveRatio(true);
         backgroundWindowBox = new VBox();
         topBox.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
         bottomBox.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
@@ -42,14 +43,23 @@ public class ViewMenu {
         bottomBox.setAlignment(Pos.CENTER);
         backgroundMoving.setEffect(new GaussianBlur());
 
+
+        imgLogo = new ImageView(RessourcePath.urlImgBackMainLogo);
+        imgLogo.setFitWidth(Config.gameWindowWidth/2);
+        imgLogo.setFitHeight(imgLogo.getFitWidth()/2);
+        imgLogo.setLayoutX(Config.gameWindowWidth/2 - Config.gameWindowWidth/4);
+        imgLogo.setLayoutY(topBox.getPrefHeight()-imgLogo.getFitHeight()/2);
+
     }
 
     public void clearAndInitRoot(){
         root.getChildren().clear();
-        root.getChildren().addAll(backgroundMoving,container);
+        root.getChildren().addAll(backgroundMoving,container,imgLogo);
     }
 
     public void setEvent(ControllerMenu controllerMenu){
+        root.setOnKeyPressed(controllerMenu);
+        root.requestFocus();
     }
 
     public static Label initLbl(int fontSize, String textContent){
@@ -86,5 +96,9 @@ public class ViewMenu {
 
     public Label getLblStartMsg() {
         return lblStartMsg;
+    }
+
+    public ImageView getImgLogo() {
+        return imgLogo;
     }
 }

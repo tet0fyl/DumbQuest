@@ -12,9 +12,9 @@ import utils.Config;
 
 public class MenuTL  extends AnimationTimer {
     private ControllerMenu controllerMenu;
-    private Timeline backgroundTimeLineAxisX, backgroundTimeLineAxisY, clignotementTimeline ;
+    private Timeline backgroundTimeLineAxisX, backgroundTimeLineAxisY, clignotementTimeline, logoJiggling ;
     private long lu150ms;
-    private ImageView backgroundMenu;
+    private ImageView backgroundMenu, imgLogo;
     private VBox vBoxTop, vBoxBottom;
     private Label lblStart;
 
@@ -25,9 +25,11 @@ public class MenuTL  extends AnimationTimer {
         this.vBoxTop = controllerMenu.getViewHandler().getViewMenu().getTopBox();
         this.vBoxBottom = controllerMenu.getViewHandler().getViewMenu().getBottomBox();
         this.lblStart = controllerMenu.getViewHandler().getViewMenu().getLblStartMsg();
+        this.imgLogo = controllerMenu.getViewHandler().getViewMenu().getImgLogo();
         initBackgroundTimelineAxisX();
         initBackgroundTimelineAxisY();
         initClignotementTimeline();
+        initLogoJigglingTimeline();
     }
 
     @Override
@@ -58,16 +60,33 @@ public class MenuTL  extends AnimationTimer {
     public void initClignotementTimeline(){
         clignotementTimeline = new Timeline();
         clignotementTimeline.getKeyFrames().addAll(
-                new KeyFrame(new Duration(20000), new KeyValue(lblStart.opacityProperty(), 0)));
+                new KeyFrame(Duration.ZERO, new KeyValue(lblStart.opacityProperty(), 0)),
+                new KeyFrame(new Duration(750), new KeyValue(lblStart.opacityProperty(), 1)));
         clignotementTimeline.setCycleCount(Animation.INDEFINITE);
         clignotementTimeline.setAutoReverse(true);
         clignotementTimeline.play();
+    }
+
+    public void initLogoJigglingTimeline(){
+        logoJiggling = new Timeline();
+        logoJiggling.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, new KeyValue(imgLogo.rotateProperty(), -3)),
+                new KeyFrame(new Duration(3000), new KeyValue(imgLogo.rotateProperty(), 3)));
+        logoJiggling.setCycleCount(Animation.INDEFINITE);
+        logoJiggling.setAutoReverse(true);
+        logoJiggling.play();
     }
 
     public void stopAll(){
         backgroundTimeLineAxisX.stop();
         backgroundTimeLineAxisY.stop();
         clignotementTimeline.stop();
+        logoJiggling.stop();
+    }
 
+    @Override
+    public void stop() {
+        super.stop();
+        stopAll();
     }
 }

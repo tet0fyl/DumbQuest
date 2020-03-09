@@ -37,8 +37,9 @@ public class ViewHandler extends Application {
     }
 
     public void setViewGame(){
-        if(controllerGame != null){
-            controllerGame.getGameTL().stop();
+        if(controllerMenu != null){
+            controllerMenu.getMenuTL().stop();
+            controllerMenu = null;
         }
         viewGame = new ViewGame(root);
         viewGame.clearAndInitRoot();
@@ -50,6 +51,8 @@ public class ViewHandler extends Application {
     public void setViewMenu(){
         if(controllerGame != null){
             controllerGame.getGameTL().stop();
+            controllerGame = null;
+            controllerKeyBoard=null;
         }
         viewMenu = new ViewMenu(root);
         viewMenu.clearAndInitRoot();
