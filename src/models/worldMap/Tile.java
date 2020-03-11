@@ -15,12 +15,12 @@ public class Tile extends Pane {
     private int indiceX;
     private int indiceY;
 
-    public Tile(String tileSet, int tileX, int tileY){
+    public Tile(String tileSet, int areaX, int areaY, int tileX, int tileY){
         indiceX = tileX;
         indiceY = tileY;
         this.tileSet = tileSet;
-        this.x = tileX * WorldMap.tileWidth;
-        this.y = tileY * WorldMap.tileHeight;
+        this.x = tileX * WorldMap.tileWidth + areaX * WorldMap.areaWidth;
+        this.y = tileY * WorldMap.tileHeight + areaY * WorldMap.areaHeight;
         graphic = new ImageView(RessourcePath.urlTileSet + tileSet +  ".png");
 
         graphic.setFitWidth(WorldMap.tileWidth);

@@ -27,7 +27,7 @@ public class Player extends Moveable {
     private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
 
     public Player(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,3,3,3,3,5);
+        super(areaX, areaY, tileX, tileY,3,3,3,3,(int)(WorldMap.tileWidth/4));
         mainImageWidth = WorldMap.tileWidth*2;
         pvMax = 20;
         pv = pvMax;

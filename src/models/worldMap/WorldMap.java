@@ -104,7 +104,7 @@ public class WorldMap extends Pane {
 
     public ArrayList<Ennemi> ennemisArea1(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Soldier(0, 0, 14, 2));
+        ennemis.add(new Soldier(1, 0, 14, 2));
         return ennemis;
     }
 
@@ -127,9 +127,9 @@ public class WorldMap extends Pane {
 
     public ArrayList<Ennemi> ennemisArea2(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Soldier(0, 0, 14, 10));
-        ennemis.add(new Plant(0, 0, 1, 1));
-        ennemis.add(new Plant(0, 0, 1, 9));
+        ennemis.add(new Soldier(1, 1, 14, 10));
+        ennemis.add(new Plant(1, 1, 1, 1));
+        ennemis.add(new Plant(1, 1, 1, 9));
         return ennemis;
     }
 
@@ -154,11 +154,10 @@ public class WorldMap extends Pane {
 
     public ArrayList<Ennemi> ennemisArea3(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Soldier(0, 0, 5, 5));
-        ennemis.add(new Plant(0, 0, 1, 1));
-        ennemis.add(new Plant(0, 0, 15, 9));
-        ennemis.add(new Plant(0, 0, 15, 1));
-        ennemis.add(new Worm(0, 0, 3, 10));
+        ennemis.add(new Soldier(2, 1, 5, 5));
+        ennemis.add(new Plant(2, 1, 1, 1));
+        ennemis.add(new Plant(2, 1, 14, 9));
+        ennemis.add(new Worm(2, 1, 3, 10));
         return ennemis;
     }
 
@@ -182,7 +181,7 @@ public class WorldMap extends Pane {
 
     public ArrayList<Ennemi> ennemisArea4(){
         ArrayList<Ennemi> ennemis = new ArrayList<>();
-        ennemis.add(new Boss(0, 0, 10, 2));
+        ennemis.add(new Boss(2, 0, 10, 2));
         return ennemis;
     }
 
@@ -197,7 +196,10 @@ public class WorldMap extends Pane {
 
     public void makeEarthQuake() {
         earthQuake = new Timeline();
-        double posZero = getCurrentArea().getX();
+        double posZero = getCurrentArea().getIndiceX() * WorldMap.areaWidth;
+        System.out.println("POS Z");
+        System.out.println(posZero);
+        System.out.println(layoutXProperty());
         earthQuake.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, new KeyValue(layoutXProperty(), posZero - 10)),
                 new KeyFrame(new Duration(5), new KeyValue(layoutXProperty(), posZero + 10)),

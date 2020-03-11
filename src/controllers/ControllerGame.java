@@ -33,7 +33,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
         partie = new Partie();
         player = partie.getPlayer();
         worldMap = partie.getWorldMap();
-
         this.viewHandler.getViewGame().addWorldMap(partie.getWorldMap());
         this.viewHandler.getViewGame().addPlayerHud(player.getPlayerHud());
         this.viewHandler.getViewGame().setEvent(this, controllerKeyBoard);
@@ -305,6 +304,9 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             for (int j = player.getYMin(); j <= player.getYMax(); j++) {
                 Tile tile = worldMap.getAreaMap(i,j).getTileByPixel(i,j);
                 if (!tile.isTraversable()) {
+                    System.out.println(worldMap.getAreaMap(i,j).getTileByPixel(i,j).getIndiceX());
+                    System.out.println(worldMap.getAreaMap(i,j).getTileByPixel(i,j).getIndiceY());
+                    System.out.println(worldMap.getAreaMap(i,j).getIndiceX());
                     return false;
                 }
             }

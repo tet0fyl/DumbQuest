@@ -35,15 +35,14 @@ public class AreaMap extends Pane {
         this.y = areaY * WorldMap.areaHeight;
         ennemiArrayList = new ArrayList<>();
         tiles = new Tile[WorldMap.tileXNumber][WorldMap.tileYNumber];
-        setLayoutX(x);
-        setLayoutY(y);
+        //setLayoutX(x);
+        //setLayoutY(y);
         setWidth(WorldMap.areaWidth);
         setHeight(WorldMap.areaHeight);
         graphic = new Group();
         for (int i = 0; i < WorldMap.tileXNumber; i++) {
             for (int j = 0; j < WorldMap.tileYNumber; j++) {
-                //System.out.println(i + " : " + j + " => " + tileSets[i][j]);
-                Tile tile = new Tile(tileSets[j][i],i,j);
+                Tile tile = new Tile(tileSets[j][i],areaX,areaY,i,j);
                 tiles[i][j] = tile;
                 graphic.getChildren().add(tile);
             }

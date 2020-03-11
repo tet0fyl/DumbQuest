@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class Boss extends Ennemi {
 
     private int phaseMax = 3;
-    private int phaseCurrent = 3;
-    private int phase = 3;
+    private int phaseCurrent = 1;
+    private int phase = 1;
     private int numberAtckPerPhaseThreshold = 3;
     private int numberAtckPerPhase = 0;
     private int maxVitesse = 10;
