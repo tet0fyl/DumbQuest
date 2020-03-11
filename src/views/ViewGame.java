@@ -22,14 +22,14 @@ public class ViewGame {
     private VBox screen;
     private WorldMap worldMap;
     private PlayerHud playerHud;
-    public enum PopUpType {LOSE, WIN, PAUSE};
     private Button btnReprendre, btnQuitter, btnRecommencer;
 
+    ;
     public ViewGame(Group root) {
         this.root = root;
-        btnRecommencer = initBtn(10,"RECOMMENCER","btn-secondary");
-        btnQuitter = initBtn(10,"QUITTER","btn-secondary");
-        btnReprendre = initBtn(10,"REPRENDRE","btn-secondary");
+        btnRecommencer = initBtn(10, "RECOMMENCER", "btn-secondary");
+        btnQuitter = initBtn(10, "QUITTER", "btn-secondary");
+        btnReprendre = initBtn(10, "REPRENDRE", "btn-secondary");
 
         screen = new VBox();
         screen.setPrefHeight(Config.gameWindowHeight);
@@ -38,12 +38,28 @@ public class ViewGame {
         screen.setAlignment(Pos.CENTER);
     }
 
-    public void clearAndInitRoot(){
+    public static Button initBtn(int fontSize, String textContent, String styleClass) {
+        Button b = new Button(textContent);
+        b.setMinWidth(150);
+        b.setFont(Font.loadFont(ViewGame.class.getResourceAsStream(RessourcePath.fontPixel), fontSize));
+        b.getStyleClass().add(styleClass);
+        return b;
+    }
+
+    public static Label initTitle(int fontSize, String textContent) {
+        Label t = new Label();
+        t.setText(textContent);
+        t.setFont(Font.loadFont(ViewGame.class.getResourceAsStream(RessourcePath.fontPixel), fontSize));
+        t.setRotate(15);
+        return t;
+    }
+
+    public void clearAndInitRoot() {
         root.getChildren().clear();
         root.getChildren().add(screen);
     }
 
-    public void setEvent(ControllerGame controllerGame, ControllerKeyBoard controllerKeyBoard){
+    public void setEvent(ControllerGame controllerGame, ControllerKeyBoard controllerKeyBoard) {
         root.setOnKeyPressed(controllerKeyBoard);
         root.setOnKeyReleased(controllerKeyBoard);
         btnReprendre.setOnMouseClicked(controllerGame);
@@ -52,68 +68,52 @@ public class ViewGame {
         root.requestFocus();
     }
 
-    public void initPopUp(PopUpType popUpType){
+    public void initPopUp(PopUpType popUpType) {
         refreshScreen();
         worldMap.setEffect(new GaussianBlur());
         playerHud.setEffect(new GaussianBlur());
-        if(screen.getChildren().contains(popUp)) root.getChildren().remove(popUp);
+        if (screen.getChildren().contains(popUp)) root.getChildren().remove(popUp);
         popUp = new VBox();
         popUp.getStyleClass().add("popUp");
         popUp.setAlignment(Pos.CENTER);
-        popUp.setPrefHeight(Config.gameWindowHeight/2);
+        popUp.setPrefHeight(Config.gameWindowHeight / 2);
         Label title = null;
         VBox choiceVBox = new VBox();
         choiceVBox.setAlignment(Pos.CENTER);
         choiceVBox.setPadding(new Insets(20));
-        if(popUpType.equals(PopUpType.PAUSE)){
-            title = initTitle(20,"PAUSE");
-            choiceVBox.getChildren().addAll(btnReprendre,btnRecommencer,btnQuitter);
-        } else if(popUpType.equals(PopUpType.LOSE)){
-            title = initTitle(20,"YOU DIED");
-            choiceVBox.getChildren().addAll(btnRecommencer,btnQuitter);
-        } else if(popUpType.equals(PopUpType.WIN)){
-            title = initTitle(20,"YOU WIN");
-            choiceVBox.getChildren().addAll(btnRecommencer,btnQuitter);
+        if (popUpType.equals(PopUpType.PAUSE)) {
+            title = initTitle(20, "PAUSE");
+            choiceVBox.getChildren().addAll(btnReprendre, btnRecommencer, btnQuitter);
+        } else if (popUpType.equals(PopUpType.LOSE)) {
+            title = initTitle(20, "YOU DIED");
+            choiceVBox.getChildren().addAll(btnRecommencer, btnQuitter);
+        } else if (popUpType.equals(PopUpType.WIN)) {
+            title = initTitle(20, "YOU WIN");
+            choiceVBox.getChildren().addAll(btnRecommencer, btnQuitter);
         }
         popUp.getChildren().addAll(title, choiceVBox);
         screen.getChildren().add(popUp);
     }
 
-    public void removePopUp(){
+    public void removePopUp() {
         worldMap.setEffect(null);
         playerHud.setEffect(null);
         screen.getChildren().remove(popUp);
     }
 
-    public void refreshScreen(){
+    public void refreshScreen() {
         root.getChildren().remove(screen);
         root.getChildren().add(screen);
     }
 
-    public void addWorldMap(WorldMap worldMap){
+    public void addWorldMap(WorldMap worldMap) {
         this.worldMap = worldMap;
         root.getChildren().add(worldMap);
     }
 
-    public void addPlayerHud(PlayerHud playerHud){
+    public void addPlayerHud(PlayerHud playerHud) {
         this.playerHud = playerHud;
         root.getChildren().add(playerHud);
-    }
-
-    public static Button initBtn(int fontSize, String textContent, String styleClass){
-        Button b = new Button(textContent);
-        b.setMinWidth(150);
-        b.setFont(Font.loadFont(ViewGame.class.getResourceAsStream(RessourcePath.fontPixel), fontSize));
-        b.getStyleClass().add(styleClass);
-        return b;
-    }
-
-    public static Label initTitle(int fontSize, String textContent){
-        Label t = new Label();
-        t.setText(textContent);
-        t.setFont(Font.loadFont(ViewGame.class.getResourceAsStream(RessourcePath.fontPixel), fontSize));
-        t.setRotate(15);
-        return t;
     }
 
     public Group getRoot() {
@@ -147,4 +147,6 @@ public class ViewGame {
     public Button getBtnRecommencer() {
         return btnRecommencer;
     }
+
+    public enum PopUpType {LOSE, WIN, PAUSE}
 }

@@ -1,33 +1,30 @@
 package models.ennemis;
 
-import models.*;
-import models.worldMap.Tile;
+import models.Moveable;
 
-import java.util.ArrayList;
+public abstract class Ennemi extends Moveable {
 
-public abstract class Ennemi extends Moveable{
-
-    private double respawnX;
-    private double respawnY;
     protected boolean isAlive, isDying;
     protected int pv, pvMax;
+    private double respawnX;
+    private double respawnY;
 
     public Ennemi(int areaX, int areaY, int tileX, int tileY, double boxWidth, double boxHeight, double attackBoxX, double attackBoxY, int vitesse) {
-        super(areaX, areaY, tileX, tileY,boxWidth, boxHeight,attackBoxX,attackBoxY,vitesse);
+        super(areaX, areaY, tileX, tileY, boxWidth, boxHeight, attackBoxX, attackBoxY, vitesse);
         respawnX = getX();
         respawnY = getY();
         isDying = false;
         isAlive = true;
     }
 
-    public void respawn(){
-        x= respawnX;
+    public void respawn() {
+        x = respawnX;
         y = respawnY;
         update();
     }
 
-    public void subitDegat(){
-        pv-= 1;
+    public void subitDegat() {
+        pv -= 1;
     }
 
     public double getRespawnX() {

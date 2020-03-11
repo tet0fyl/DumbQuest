@@ -12,13 +12,14 @@ import java.util.ArrayList;
 
 public class Boss extends Ennemi {
 
+    protected boolean isDying, isAfterAttacking, isPivoting, isTargetReached, isMoving, isAttacking, isStandingBy, isAttacked, isTargeting, isTargetDone, isInvicible, isAttackInMovement;
     private int phaseMax = 3;
     private int phaseCurrent = 1;
     private int phase = 1;
     private int numberAtckPerPhaseThreshold = 3;
     private int numberAtckPerPhase = 0;
     private int maxVitesse = 10;
-    private boolean isTired,isReloading;
+    private boolean isTired, isReloading;
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private int shootRate = 10;
     private int shootRateBuffer = shootRate;
@@ -32,9 +33,7 @@ public class Boss extends Ennemi {
     private int waitingAttackReady = 0;
     private ArrayList<Worm> friend = new ArrayList<>();
     private boolean phase3Left = true;
-
-    protected boolean isDying, isAfterAttacking, isPivoting, isTargetReached, isMoving, isAttacking, isStandingBy, isAttacked, isTargeting, isTargetDone, isInvicible, isAttackInMovement;
-    private double mainImageWidth,mainImageHeight;
+    private double mainImageWidth, mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
     private int animationAfterAttackingFrameBuffer = 2;
@@ -49,13 +48,13 @@ public class Boss extends Ennemi {
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
     private ImageView[] currentSpriteAttack;
-    private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight, deathSprite;
+    private ImageView[] moveLeft, moveRight, moveUp, moveDown, attackUp, attackDown, attackLeft, attackRight, deathSprite;
     private Tile target;
     private double angle;
 
     public Boss(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,8,8,4,4,10);
-        mainImageWidth = WorldMap.tileWidth*3;
+        super(areaX, areaY, tileX, tileY, 8, 8, 4, 4, 10);
+        mainImageWidth = WorldMap.tileWidth * 3;
         isTargeting = true;
         isInvicible = true;
         initSprite();
@@ -64,75 +63,69 @@ public class Boss extends Ennemi {
     @Override
     public void animate() {
         timerPhase();
-        if(!isInvicible){
+        if (!isInvicible) {
             notInvisibleAnimation();
         } else {
-            if(isPreparingAttack){
+            if (isPreparingAttack) {
                 preparingAttackAnimation();
             }
-            if(isAfterAttacking){
+            if (isAfterAttacking) {
                 afterAttackingAnimation();
             }
-            if(isAttacking){
+            if (isAttacking) {
                 attackAnimation();
-            }
-            else if(isMoving) {
+            } else if (isMoving) {
                 moveAnimation();
             }
         }
-        if(isAttacked){
+        if (isAttacked) {
             damageAnimation();
         }
-        if(isDying){
+        if (isDying) {
             deathAnimation();
         }
     }
 
-    public void timerPhase(){
-        if(numberAtckPerPhase > numberAtckPerPhaseThreshold){
+    public void timerPhase() {
+        if (numberAtckPerPhase > numberAtckPerPhaseThreshold) {
             numberAtckPerPhase = 0;
             phase--;
-            if(phase == 0){
+            if (phase == 0) {
                 phase = phaseCurrent;
             }
         }
-        if(phaseCurrent > 3){
+        if (phaseCurrent > 3) {
             isDying = true;
         }
     }
 
-    public void setTarget(Tile tile){
-        this.target = tile;
-    }
-
-    public void move(){
-        if(Math.abs(x - target.getX()) > 10 ) {
+    public void move() {
+        if (Math.abs(x - target.getX()) > 10) {
             if (x > target.getX()) move(Direction.GO_LEFT);
             if (x < target.getX()) move(Direction.GO_RIGHT);
-        }
-        else if(Math.abs(y - target.getY()) > 10) {
-            if(y > target.getY()) move(Direction.GO_UP);
-            if(y < target.getY()) move(Direction.GO_DOWN);
-        }else {
+        } else if (Math.abs(y - target.getY()) > 10) {
+            if (y > target.getY()) move(Direction.GO_UP);
+            if (y < target.getY()) move(Direction.GO_DOWN);
+        } else {
             isTargetReached = true;
             isPivoting = true;
         }
         update();
     }
 
-    public void pivotToTarget(Tile target, Tile ownTile){
+    public void pivotToTarget(Tile target, Tile ownTile) {
         vitesse = 1;
-        if( ownTile.getIndiceX() > target.getIndiceX()) move(Direction.GO_LEFT);
-        if(ownTile.getIndiceX() < target.getIndiceX()) move(Direction.GO_RIGHT);
-        if(ownTile.getIndiceY() > target.getIndiceY()) move(Direction.GO_UP);
-        if(ownTile.getIndiceY() < target.getIndiceY()) move(Direction.GO_DOWN);
+        if (ownTile.getIndiceX() > target.getIndiceX()) move(Direction.GO_LEFT);
+        if (ownTile.getIndiceX() < target.getIndiceX()) move(Direction.GO_RIGHT);
+        if (ownTile.getIndiceY() > target.getIndiceY()) move(Direction.GO_UP);
+        if (ownTile.getIndiceY() < target.getIndiceY()) move(Direction.GO_DOWN);
         isPivoting = false;
         isPreparingAttack = true;
         vitesse = maxVitesse;
     }
 
-    public void deathAnimation(){
-        if(deathAnimationFrame != deathSprite.length-1){
+    public void deathAnimation() {
+        if (deathAnimationFrame != deathSprite.length - 1) {
             deathAnimationFrame++;
             mainImage.setImage(deathSprite[deathAnimationFrame].getImage());
         } else {
@@ -141,90 +134,89 @@ public class Boss extends Ennemi {
         }
     }
 
-        public void moveAnimation(){
-            if(animationMoveFrame != currentSpriteMove.length-1){
-                animationMoveFrame++;
-                mainImage.setImage(currentSpriteMove[animationMoveFrame].getImage());
+    public void moveAnimation() {
+        if (animationMoveFrame != currentSpriteMove.length - 1) {
+            animationMoveFrame++;
+            mainImage.setImage(currentSpriteMove[animationMoveFrame].getImage());
+        } else {
+            animationMoveFrame = 0;
+        }
+        isMoving = false;
+    }
+
+    public void damageAnimation() {
+        if (animationDamageFrame != 0) {
+            animationDamageFrame--;
+            if (mainImage.getOpacity() == 0) {
+                mainImage.setOpacity(1);
             } else {
-                animationMoveFrame = 0;
+                mainImage.setOpacity(0);
             }
-            isMoving=false;
+        } else {
+            isAttacked = false;
+            isInvicible = true;
+            phaseCurrent++;
+            phase = phaseCurrent;
+            numberAtckPerPhase = 0;
+            animationDamageFrame = animationFrameDamageBuffer;
         }
+    }
 
-        public void damageAnimation() {
-            if(animationDamageFrame != 0){
-                animationDamageFrame--;
-                if(mainImage.getOpacity() == 0){
-                    mainImage.setOpacity(1);
-                } else {
-                    mainImage.setOpacity(0);
-                }
-            } else{
-                isAttacked = false;
-                isInvicible = true;
-                phaseCurrent++;
-                phase=phaseCurrent;
-                numberAtckPerPhase = 0;
-                animationDamageFrame = animationFrameDamageBuffer;
-            }
+    public void attackAnimation() {
+        if (animationAttackFrame < currentSpriteAttack.length - 1) {
+            animationAttackFrame++;
+            mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
+        } else {
+            isAttacking = false;
+            isAttackRready = false;
+            animationAttackFrame = 0;
+            isAfterAttacking = true;
+            numberAtckPerPhase++;
         }
+    }
 
-        public void attackAnimation(){
-            if(animationAttackFrame < currentSpriteAttack.length-1){
-                animationAttackFrame++;
-                mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
-            } else{
-                isAttacking = false;
-                isAttackRready = false;
-                animationAttackFrame = 0;
-                isAfterAttacking = true;
-                numberAtckPerPhase++;
-            }
-        }
-
-        public void afterAttackingAnimation(){
-            if(animationAfterAtacking != animationAfterAttackingFrameBuffer){
-                animationAfterAtacking++;
+    public void afterAttackingAnimation() {
+        if (animationAfterAtacking != animationAfterAttackingFrameBuffer) {
+            animationAfterAtacking++;
+        } else {
+            if (numberAtckPerPhase == numberAtckPerPhaseThreshold && phase == 1) {
+                isInvicible = false;
             } else {
-                if(numberAtckPerPhase == numberAtckPerPhaseThreshold && phase == 1){
-                    isInvicible = false;
-                } else {
-                    animationAfterAtacking=0;
-                    isAfterAttacking=false;
-                    isTargeting = true;
-                    isTargetReached = false;
-                }
-            }
-        }
-
-        public void notInvisibleAnimation(){
-            if(animationNotInvicibleFrame != animationNotInvicibleFrameBuffer){
-                animationNotInvicibleFrame++;
-            } else {
-                isInvicible = true;
-                animationAfterAtacking=0;
-                animationNotInvicibleFrame=0;
-                isAfterAttacking=false;
+                animationAfterAtacking = 0;
+                isAfterAttacking = false;
                 isTargeting = true;
                 isTargetReached = false;
             }
         }
+    }
 
-        public void preparingAttackAnimation(){
-            if(waitingAttackReady <= waitingttackReadyBuffer){
-                waitingAttackReady++;
-                if(waitingAttackReady <= 3){
-                    animationAttackFrame++;
-                    mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
-                }
-            } else {
-                waitingAttackReady = 0;
-                animationAttackFrame = 0;
-                isPreparingAttack = false;
-                isAttackRready = true;
-            }
+    public void notInvisibleAnimation() {
+        if (animationNotInvicibleFrame != animationNotInvicibleFrameBuffer) {
+            animationNotInvicibleFrame++;
+        } else {
+            isInvicible = true;
+            animationAfterAtacking = 0;
+            animationNotInvicibleFrame = 0;
+            isAfterAttacking = false;
+            isTargeting = true;
+            isTargetReached = false;
         }
+    }
 
+    public void preparingAttackAnimation() {
+        if (waitingAttackReady <= waitingttackReadyBuffer) {
+            waitingAttackReady++;
+            if (waitingAttackReady <= 3) {
+                animationAttackFrame++;
+                mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
+            }
+        } else {
+            waitingAttackReady = 0;
+            animationAttackFrame = 0;
+            isPreparingAttack = false;
+            isAttackRready = true;
+        }
+    }
 
     public Projectile shoot(Tile tileTarget) {
         Projectile projectile = new Projectile(this, tileTarget);
@@ -233,129 +225,125 @@ public class Boss extends Ennemi {
         return projectile;
     }
 
-    public void move(Direction mouvement){
+    public void move(Direction mouvement) {
         isMoving = true;
-        if(mouvement.equals(Direction.GO_UP)){
+        if (mouvement.equals(Direction.GO_UP)) {
             y -= vitesse;
             currentSpriteMove = moveUp;
             currentSpriteAttack = attackUp;
-            attackBox.setX(skinWidth/2 - attackWidth/2);
+            attackBox.setX(skinWidth / 2 - attackWidth / 2);
             attackBox.setY(-skinHeight - (attackHeight - skinHeight));
-        }
-        else if(mouvement.equals(Direction.GO_DOWN)){
+        } else if (mouvement.equals(Direction.GO_DOWN)) {
             y += vitesse;
             currentSpriteMove = moveDown;
             currentSpriteAttack = attackDown;
-            attackBox.setX(skinWidth/2 - attackWidth/2);
+            attackBox.setX(skinWidth / 2 - attackWidth / 2);
             attackBox.setY(skinHeight);
-        }
-        else if(mouvement.equals(Direction.GO_RIGHT) ){
+        } else if (mouvement.equals(Direction.GO_RIGHT)) {
             x += vitesse;
             currentSpriteMove = moveRight;
             currentSpriteAttack = attackRight;
             attackBox.setX(skinWidth);
-            attackBox.setY(skinHeight/2 - attackHeight/2);
-        }
-        else if(mouvement.equals(Direction.GO_LEFT) ){
+            attackBox.setY(skinHeight / 2 - attackHeight / 2);
+        } else if (mouvement.equals(Direction.GO_LEFT)) {
             x -= vitesse;
             currentSpriteMove = moveLeft;
             currentSpriteAttack = attackLeft;
             attackBox.setX(-skinWidth - (attackWidth - skinWidth));
-            attackBox.setY(skinHeight/2 - attackHeight/2);
+            attackBox.setY(skinHeight / 2 - attackHeight / 2);
         }
     }
 
-    public void attack(Player player){
+    public void attack(Player player) {
         isAttacking = true;
         player.setAttacked(true);
         player.subitDegat();
     }
 
-
-    protected void initSprite(){
+    protected void initSprite() {
         moveLeft = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/move/6.png"),
         };
 
         moveRight = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/move/6.png"),
         };
         moveUp = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/move/6.png"),
         };
 
         moveDown = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/move/6.png"),
         };
 
         attackDown = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/down/attack/6.png"),
         };
         attackUp = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/up/attack/6.png"),
         };
         attackRight = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/right/attack/6.png"),
         };
         attackLeft = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/left/attack/6.png"),
         };
         deathSprite = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGolem + "/death/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/death/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/death/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/death/3.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/death/4.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/death/5.png" ),
-                new ImageView(RessourcePath.urlSpriteGolem + "/death/6.png" ),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/0.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/1.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/2.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/3.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/4.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/5.png"),
+                new ImageView(RessourcePath.urlSpriteGolem + "/death/6.png"),
         };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
@@ -383,10 +371,6 @@ public class Boss extends Ennemi {
 
     public boolean isTired() {
         return isTired;
-    }
-
-    public void setTired(boolean tired) {
-        isTired = tired;
     }
 
     public boolean isReloading() {
@@ -423,6 +407,10 @@ public class Boss extends Ennemi {
 
     public int getTired() {
         return tired;
+    }
+
+    public void setTired(boolean tired) {
+        isTired = tired;
     }
 
     public void setTired(int tired) {
@@ -703,6 +691,10 @@ public class Boss extends Ennemi {
 
     public Tile getTarget() {
         return target;
+    }
+
+    public void setTarget(Tile tile) {
+        this.target = tile;
     }
 
     public double getAngle() {

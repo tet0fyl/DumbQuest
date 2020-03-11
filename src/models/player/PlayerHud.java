@@ -21,11 +21,11 @@ public class PlayerHud extends Pane {
     private Group grpLifeBarre;
     private Rectangle rectContainerContainer;
     private Rectangle rectLifeBarreFill;
-    private double widthLifeBarre = WorldMap.tileWidth*3;
+    private double widthLifeBarre = WorldMap.tileWidth * 3;
     private double heightLifeBarre = 10;
     private Label lifePointLbl;
 
-    public PlayerHud(Player player){
+    public PlayerHud(Player player) {
         this.player = player;
         container = new VBox();
         grpLifeBarre = new Group();
@@ -39,38 +39,38 @@ public class PlayerHud extends Pane {
         rectContainerContainer.setWidth(widthLifeBarre);
         rectLifeBarreFill.setWidth(widthLifeBarre);
 
-        Label lifeTitle = initLbl(10,"LIFE :");
-        lifePointLbl = initLbl(10,player.getPv() + " / " + player.getPvMax());
+        Label lifeTitle = initLbl(10, "LIFE :");
+        lifePointLbl = initLbl(10, player.getPv() + " / " + player.getPvMax());
         HBox hBoxLifeBarreContainerInfoEtBarre = new HBox();
-        HBox.setMargin(grpLifeBarre,new Insets(0,5,0,0));
+        HBox.setMargin(grpLifeBarre, new Insets(0, 5, 0, 0));
         hBoxLifeBarreContainerInfoEtBarre.setAlignment(Pos.CENTER);
 
-        grpLifeBarre.getChildren().addAll(rectContainerContainer,rectLifeBarreFill);
-        hBoxLifeBarreContainerInfoEtBarre.getChildren().addAll(grpLifeBarre,lifePointLbl);
+        grpLifeBarre.getChildren().addAll(rectContainerContainer, rectLifeBarreFill);
+        hBoxLifeBarreContainerInfoEtBarre.getChildren().addAll(grpLifeBarre, lifePointLbl);
 
         update();
-        container.getChildren().addAll(lifeTitle,hBoxLifeBarreContainerInfoEtBarre);
+        container.getChildren().addAll(lifeTitle, hBoxLifeBarreContainerInfoEtBarre);
         getChildren().add(container);
         container.getStyleClass().add("hud");
     }
 
-    public void update(){
-        double newWitdh = player.getPv() *  widthLifeBarre / player.getPvMax();
-        lifePointLbl.setText(player.getPv() + "/" + player.getPvMax());
-        if(player.getPv() > player.getPvMax()/2){
-            rectLifeBarreFill.setFill(Color.GREEN);
-        }else if(player.getPv() > player.getPvMax()/3){
-            rectLifeBarreFill.setFill(Color.ORANGE);
-        }else{
-            rectLifeBarreFill.setFill(Color.RED);
-        }
-        rectLifeBarreFill.setWidth(newWitdh);
-    }
-
-    public static Label initLbl(int fontSize, String textContent){
+    public static Label initLbl(int fontSize, String textContent) {
         Label t = new Label();
         t.setText(textContent);
         t.setFont(Font.loadFont(ViewGame.class.getResourceAsStream(RessourcePath.fontPixel), fontSize));
         return t;
+    }
+
+    public void update() {
+        double newWitdh = player.getPv() * widthLifeBarre / player.getPvMax();
+        lifePointLbl.setText(player.getPv() + "/" + player.getPvMax());
+        if (player.getPv() > player.getPvMax() / 2) {
+            rectLifeBarreFill.setFill(Color.GREEN);
+        } else if (player.getPv() > player.getPvMax() / 3) {
+            rectLifeBarreFill.setFill(Color.ORANGE);
+        } else {
+            rectLifeBarreFill.setFill(Color.RED);
+        }
+        rectLifeBarreFill.setWidth(newWitdh);
     }
 }

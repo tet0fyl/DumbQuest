@@ -12,15 +12,13 @@ import java.util.ArrayList;
 
 public class Soldier extends Ennemi {
 
+    protected boolean isMoving, isAttacking, isStandingBy, isAttacked;
     private ArrayList<GraphNode> destinationPath;
     private Integer currentNodeDestinationPath = 0;
     private boolean isAttackRready, isPreparingAttack;
     private int waitingttackReadyBuffer = 5;
     private int waitingAttackReady = waitingttackReadyBuffer;
-
-
-    protected boolean isMoving, isAttacking, isStandingBy, isAttacked;
-    private double mainImageWidth,mainImageHeight;
+    private double mainImageWidth, mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
     private int animationAttackFrame = 0;
@@ -28,16 +26,16 @@ public class Soldier extends Ennemi {
     private boolean releaseAttack = false;
     private int animationMoveFrameBuffer = 3;
     private int animationMoveFrame = 0;
-    private int deathAnimationFrame= 0;
+    private int deathAnimationFrame = 0;
     private ImageView[] deathSprite;
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
     private ImageView[] currentSpriteAttack;
-    private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
+    private ImageView[] moveLeft, moveRight, moveUp, moveDown, attackUp, attackDown, attackLeft, attackRight;
 
     public Soldier(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,4,4,4,4,2);
-        mainImageWidth = WorldMap.tileWidth*2;
+        super(areaX, areaY, tileX, tileY, 4, 4, 4, 4, 2);
+        mainImageWidth = WorldMap.tileWidth * 2;
         pvMax = 3;
         pv = pvMax;
         isAttackRready = false;
@@ -45,63 +43,63 @@ public class Soldier extends Ennemi {
         initSprite();
     }
 
-    protected void initSprite(){
+    protected void initSprite() {
         moveLeft = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/left/move/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/left/move/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/left/move/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/left/move/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/left/move/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/left/move/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/left/move/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/left/move/3.png"),
         };
 
         moveRight = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/right/move/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/right/move/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/right/move/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/right/move/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/right/move/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/right/move/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/right/move/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/right/move/3.png"),
         };
         moveUp = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/up/move/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/up/move/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/up/move/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/up/move/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/up/move/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/up/move/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/up/move/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/up/move/3.png"),
         };
 
         moveDown = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/down/move/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/down/move/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/down/move/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/down/move/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/down/move/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/down/move/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/down/move/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/down/move/3.png"),
         };
 
         attackDown = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/down/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/down/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/down/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/down/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/down/attack/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/down/attack/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/down/attack/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/down/attack/3.png"),
         };
         attackUp = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/up/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/up/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/up/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/up/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/up/attack/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/up/attack/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/up/attack/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/up/attack/3.png"),
         };
         attackRight = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/right/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/right/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/right/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/right/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/right/attack/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/right/attack/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/right/attack/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/right/attack/3.png"),
         };
         attackLeft = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/left/attack/3.png"),
         };
         deathSprite = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteGoblin + "/death/0.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/death/1.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/death/2.png" ),
-                new ImageView(RessourcePath.urlSpriteGoblin + "/death/3.png" ),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/death/0.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/death/1.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/death/2.png"),
+                new ImageView(RessourcePath.urlSpriteGoblin + "/death/3.png"),
         };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
@@ -112,28 +110,27 @@ public class Soldier extends Ennemi {
     }
 
     public void animate() {
-        if(isAttacking){
+        if (isAttacking) {
             attackAnimation();
-        }
-        else if(isMoving){
+        } else if (isMoving) {
             moveAnimation();
         }
-        if(isAttacked){
+        if (isAttacked) {
             damageAnimation();
         }
-        if(isPreparingAttack) {
+        if (isPreparingAttack) {
             preparingAttack();
         }
-        if(pv<=0){
-            isDying=true;
+        if (pv <= 0) {
+            isDying = true;
         }
-        if(isDying){
+        if (isDying) {
             deathAnimation();
         }
     }
 
-    public void deathAnimation(){
-        if(deathAnimationFrame != deathSprite.length-1){
+    public void deathAnimation() {
+        if (deathAnimationFrame != deathSprite.length - 1) {
             deathAnimationFrame++;
             mainImage.setImage(deathSprite[deathAnimationFrame].getImage());
         } else {
@@ -143,110 +140,107 @@ public class Soldier extends Ennemi {
     }
 
     public void preparingAttack() {
-            if(waitingAttackReady != 0){
-                waitingAttackReady--;
-            } else {
-                isAttackRready = true;
-                isPreparingAttack = false;
-                waitingAttackReady = waitingttackReadyBuffer;
-            }
+        if (waitingAttackReady != 0) {
+            waitingAttackReady--;
+        } else {
+            isAttackRready = true;
+            isPreparingAttack = false;
+            waitingAttackReady = waitingttackReadyBuffer;
+        }
     }
 
-    public void moveAnimation(){
+    public void moveAnimation() {
         waitingAttackReady = waitingttackReadyBuffer;
-        if(animationMoveFrame != animationMoveFrameBuffer){
+        if (animationMoveFrame != animationMoveFrameBuffer) {
             animationMoveFrame++;
             mainImage.setImage(currentSpriteMove[animationMoveFrame].getImage());
         } else {
             animationMoveFrame = 0;
         }
-        isMoving=false;
+        isMoving = false;
     }
 
     public void damageAnimation() {
-        if(animationDamageFrame != 0){
+        if (animationDamageFrame != 0) {
             animationDamageFrame--;
-            if(mainImage.getOpacity() == 0){
+            if (mainImage.getOpacity() == 0) {
                 mainImage.setOpacity(1);
             } else {
                 mainImage.setOpacity(0);
             }
-        } else{
+        } else {
             isAttacked = false;
             animationDamageFrame = animationFrameDamageBuffer;
         }
     }
 
-    public void attackAnimation(){
-        if(animationAttackFrame != animationAttackFrameBuffer){
+    public void attackAnimation() {
+        if (animationAttackFrame != animationAttackFrameBuffer) {
             animationAttackFrame++;
             mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
-        } else{
+        } else {
             isAttacking = false;
             isAttackRready = false;
             animationAttackFrame = 0;
         }
     }
 
-    public void setDestination(ArrayList<GraphNode> destinationPath){
+    public void setDestination(ArrayList<GraphNode> destinationPath) {
         currentNodeDestinationPath = 1;
         this.destinationPath = destinationPath;
     }
 
-    public void moveToTarget(){
-        if(destinationPath != null){
+    public void moveToTarget() {
+        if (destinationPath != null) {
             Tile tile = destinationPath.get(currentNodeDestinationPath).tile;
-            if(Math.abs(tile.getTheCenterX() - (getTheCenterHitBoxX())) > 5){
+            if (Math.abs(tile.getTheCenterX() - (getTheCenterHitBoxX())) > 5) {
                 if (tile.getTheCenterX() < (getTheCenterHitBoxX())) move(Direction.GO_LEFT);
                 if (tile.getTheCenterX() > (getTheCenterHitBoxX())) move(Direction.GO_RIGHT);
             }
-            if(Math.abs(tile.getTheCenterY() - (getTheCenterHitBoxY())) > 5){
+            if (Math.abs(tile.getTheCenterY() - (getTheCenterHitBoxY())) > 5) {
                 if (tile.getTheCenterY() < (getTheCenterHitBoxY())) move(Direction.GO_UP);
                 if (tile.getTheCenterY() > (getTheCenterHitBoxY())) move(Direction.GO_DOWN);
             }
-            if(Math.abs(tile.getTheCenterX() - (getTheCenterHitBoxX())) <= 5 && Math.abs(tile.getTheCenterY() - (getTheCenterHitBoxY())) <= 5){
+            if (Math.abs(tile.getTheCenterX() - (getTheCenterHitBoxX())) <= 5 && Math.abs(tile.getTheCenterY() - (getTheCenterHitBoxY())) <= 5) {
                 currentNodeDestinationPath++;
             }
-            if(destinationPath.size()-1 <= currentNodeDestinationPath){
+            if (destinationPath.size() - 1 <= currentNodeDestinationPath) {
                 destinationPath = null;
             }
             update();
         }
     }
 
-    public void move(Direction mouvement){
+    public void move(Direction mouvement) {
         isMoving = true;
-        if(mouvement.equals(Direction.GO_UP)){
+        if (mouvement.equals(Direction.GO_UP)) {
             y -= vitesse;
             currentSpriteMove = moveUp;
             currentSpriteAttack = attackUp;
-            attackBox.setX(skinWidth/2 - attackWidth/2);
+            attackBox.setX(skinWidth / 2 - attackWidth / 2);
             attackBox.setY(-skinHeight - (attackHeight - skinHeight));
-        }
-        else if(mouvement.equals(Direction.GO_DOWN)){
+        } else if (mouvement.equals(Direction.GO_DOWN)) {
             y += vitesse;
             currentSpriteMove = moveDown;
             currentSpriteAttack = attackDown;
-            attackBox.setX(skinWidth/2 - attackWidth/2);
+            attackBox.setX(skinWidth / 2 - attackWidth / 2);
             attackBox.setY(skinHeight);
-        }
-        else if(mouvement.equals(Direction.GO_RIGHT) ){
+        } else if (mouvement.equals(Direction.GO_RIGHT)) {
             x += vitesse;
             currentSpriteMove = moveRight;
             currentSpriteAttack = attackRight;
             attackBox.setX(skinWidth);
-            attackBox.setY(skinHeight/2 - attackHeight/2);
-        }
-        else if(mouvement.equals(Direction.GO_LEFT) ){
+            attackBox.setY(skinHeight / 2 - attackHeight / 2);
+        } else if (mouvement.equals(Direction.GO_LEFT)) {
             x -= vitesse;
             currentSpriteMove = moveLeft;
             currentSpriteAttack = attackLeft;
             attackBox.setX(-skinWidth - (attackWidth - skinWidth));
-            attackBox.setY(skinHeight/2 - attackHeight/2);
+            attackBox.setY(skinHeight / 2 - attackHeight / 2);
         }
     }
 
-    public void attack(Player player){
+    public void attack(Player player) {
         isAttacking = true;
         player.setAttacked(true);
         player.subitDegat();
@@ -257,20 +251,20 @@ public class Soldier extends Ennemi {
         return destinationPath;
     }
 
-    public Tile getTheEndTile(){
-        return destinationPath.get(destinationPath.size()-1).tile;
+    public void setDestinationPath(ArrayList<GraphNode> destinationPath) {
+        this.destinationPath = destinationPath;
     }
 
-    public int getTheRestNodePathDestination(){
-        return  destinationPath.size() - currentNodeDestinationPath  ;
+    public Tile getTheEndTile() {
+        return destinationPath.get(destinationPath.size() - 1).tile;
+    }
+
+    public int getTheRestNodePathDestination() {
+        return destinationPath.size() - currentNodeDestinationPath;
     }
 
     public int getCurrentNodeDestinationPath() {
         return currentNodeDestinationPath;
-    }
-
-    public void setDestinationPath(ArrayList<GraphNode> destinationPath) {
-        this.destinationPath = destinationPath;
     }
 
     public void setCurrentNodeDestinationPath(Integer currentNodeDestinationPath) {
@@ -279,10 +273,6 @@ public class Soldier extends Ennemi {
 
     public boolean isAttackReady() {
         return isAttackRready;
-    }
-
-    public void setAttackRready(boolean attackRready) {
-        isAttackRready = attackRready;
     }
 
     public int getWaitingttackReadyBuffer() {
@@ -297,16 +287,24 @@ public class Soldier extends Ennemi {
         return waitingAttackReady;
     }
 
-    public void setPreparingAttack(int preparingAttack) {
-        this.waitingAttackReady = preparingAttack;
-    }
-
     public boolean isAttackRready() {
         return isAttackRready;
     }
 
+    public void setAttackRready(boolean attackRready) {
+        isAttackRready = attackRready;
+    }
+
     public boolean isPreparingAttack() {
         return isPreparingAttack;
+    }
+
+    public void setPreparingAttack(int preparingAttack) {
+        this.waitingAttackReady = preparingAttack;
+    }
+
+    public void setPreparingAttack(boolean preparingAttack) {
+        isPreparingAttack = preparingAttack;
     }
 
     public void setPreparingAttackReady(boolean preparingAttackReady) {
@@ -319,10 +317,6 @@ public class Soldier extends Ennemi {
 
     public void setWaitingAttackReady(int waitingAttackReady) {
         this.waitingAttackReady = waitingAttackReady;
-    }
-
-    public void setPreparingAttack(boolean preparingAttack) {
-        isPreparingAttack = preparingAttack;
     }
 
     public boolean isMoving() {

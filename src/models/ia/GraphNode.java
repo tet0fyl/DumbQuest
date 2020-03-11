@@ -11,13 +11,13 @@ public class GraphNode {
     public GraphNode parent;
     public Tile tile;
 
-    public GraphNode(Tile tile){
+    public GraphNode(Tile tile) {
         this.tile = tile;
         this.indiceX = tile.getIndiceX();
         this.indiceY = tile.getIndiceY();
-        f=0;
-        g=0;
-        h=0;
+        f = 0;
+        g = 0;
+        h = 0;
     }
 
     public boolean graphEquals(GraphNode o) {

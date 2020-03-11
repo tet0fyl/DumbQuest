@@ -18,7 +18,7 @@ public class Projectile extends Pane {
     public Circle blur;
     public double vitesse;
     public boolean hasExploded, isDestroyed;
-    private double x,y;
+    private double x, y;
     private double targetX;
     private double targetY;
     private double angle;
@@ -26,7 +26,7 @@ public class Projectile extends Pane {
     private ImageView sprite;
     private int spriteFrame = 0;
 
-    public Projectile(Moveable moveableLauncher, Tile target){
+    public Projectile(Moveable moveableLauncher, Tile target) {
         hitBox = new Circle();
         skin = new Circle();
         blur = new Circle();
@@ -41,7 +41,7 @@ public class Projectile extends Pane {
         x = moveableLauncher.getLayoutX();
         y = moveableLauncher.getLayoutY();
         update();
-        getChildren().addAll(hitBox,skin,blur);
+        getChildren().addAll(hitBox, skin, blur);
         targetX = target.getTheCenterX();
         targetY = target.getTheCenterY();
         vitesse = 5;
@@ -51,38 +51,40 @@ public class Projectile extends Pane {
         hitBox.setOpacity(0);
     }
 
-    public boolean collision(Moveable other){
-        if ( Math.abs(getTheCenterX() - other.getTheCenterHitBoxX()) > hitBox.getRadius() + other.getTheHalfSizeHitBoxX() ) return false;
-        if ( Math.abs(getTheCenterY() - other.getTheCenterHitBoxY()) > hitBox.getRadius() + other.getTheHalfSizeHitBoxY() ) return false;
+    public boolean collision(Moveable other) {
+        if (Math.abs(getTheCenterX() - other.getTheCenterHitBoxX()) > hitBox.getRadius() + other.getTheHalfSizeHitBoxX())
+            return false;
+        if (Math.abs(getTheCenterY() - other.getTheCenterHitBoxY()) > hitBox.getRadius() + other.getTheHalfSizeHitBoxY())
+            return false;
         return true;
     }
 
-    public double getTheCenterX(){
-        return  hitBox.getCenterX() + x;
+    public double getTheCenterX() {
+        return hitBox.getCenterX() + x;
     }
 
-    public double getTheCenterY(){
-        return  hitBox.getCenterY() + y;
+    public double getTheCenterY() {
+        return hitBox.getCenterY() + y;
     }
 
 
-    public void move(){
-        double  vx = Math.cos(angle) * vitesse,
+    public void move() {
+        double vx = Math.cos(angle) * vitesse,
                 vy = Math.sin(angle) * vitesse;
         x += vx;
         y -= vy;
     }
 
-    public void animate(){
+    public void animate() {
         blur.setOpacity(0);
         skin.setOpacity(0);
-        if(hasExploded){
+        if (hasExploded) {
             explosionAnimation();
         }
     }
 
-    public void explosionAnimation(){
-        if(spriteFrame < sprites.length - 1 ){
+    public void explosionAnimation() {
+        if (spriteFrame < sprites.length - 1) {
             spriteFrame++;
             sprite.setImage(sprites[spriteFrame].getImage());
         } else {
@@ -90,17 +92,17 @@ public class Projectile extends Pane {
         }
     }
 
-    public void update(){
+    public void update() {
         setLayoutX(x);
         setLayoutY(y);
     }
 
-    public int getTileCoordX(){
-        return (int)Math.floor((getTheCenterX())/ WorldMap.tileWidth) % WorldMap.tileXNumber;
+    public int getTileCoordX() {
+        return (int) Math.floor((getTheCenterX()) / WorldMap.tileWidth) % WorldMap.tileXNumber;
     }
 
-    public int getTileCoordY(){
-        return (int)Math.floor((getTheCenterY())/WorldMap.tileHeight) % WorldMap.tileYNumber;
+    public int getTileCoordY() {
+        return (int) Math.floor((getTheCenterY()) / WorldMap.tileHeight) % WorldMap.tileYNumber;
     }
 
     public double getA() {
@@ -127,13 +129,13 @@ public class Projectile extends Pane {
         this.hitBox = hitBox;
     }
 
-    protected void initSprite(){
+    protected void initSprite() {
         sprites = new ImageView[11];
-        for (int i = 0; i < sprites.length ; i++) {
-            sprites[i] = new ImageView(RessourcePath.urlSpriteExplo + "/" + i + ".png" );
+        for (int i = 0; i < sprites.length; i++) {
+            sprites[i] = new ImageView(RessourcePath.urlSpriteExplo + "/" + i + ".png");
         }
         sprite = new ImageView();
-        centerAnImage(sprite,100);
+        centerAnImage(sprite, 100);
         sprite.setImage(sprites[spriteFrame].getImage());
         getChildren().add(sprite);
     }
@@ -186,10 +188,10 @@ public class Projectile extends Pane {
         this.y = y;
     }
 
-    public void centerAnImage(ImageView img, double width){
+    public void centerAnImage(ImageView img, double width) {
         img.setFitHeight(width);
         img.setPreserveRatio(true);
-        img.setLayoutX(10/2 - width/2);
-        img.setLayoutY(10/2 - img.getFitHeight()/2);
+        img.setLayoutX(10 / 2 - width / 2);
+        img.setLayoutY(10 / 2 - img.getFitHeight() / 2);
     }
 }

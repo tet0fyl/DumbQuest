@@ -11,9 +11,9 @@ import utils.RessourcePath;
 public class Player extends Moveable {
     protected byte pv;
     protected byte pvMax;
-    private PlayerHud playerHud;
     protected boolean isInvincible, isMoving, isAttacking, isStandingBy, isAttacked, isAlive, isBlocking;
-    private double mainImageWidth,mainImageHeight;
+    private PlayerHud playerHud;
+    private double mainImageWidth, mainImageHeight;
     private int animationFrameDamageBuffer = 10;
     private int animationAttackFrameBuffer = 3;
     private int animationAttackFrame = 0;
@@ -24,165 +24,161 @@ public class Player extends Moveable {
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
     private ImageView[] currentSpriteAttack;
-    private ImageView[] moveLeft, moveRight,moveUp,moveDown, attackUp, attackDown, attackLeft, attackRight;
+    private ImageView[] moveLeft, moveRight, moveUp, moveDown, attackUp, attackDown, attackLeft, attackRight;
 
     public Player(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,3,3,3,3,(int)(WorldMap.tileWidth/4));
-        mainImageWidth = WorldMap.tileWidth*2;
+        super(areaX, areaY, tileX, tileY, 3, 3, 3, 3, (int) (WorldMap.tileWidth / 4));
+        mainImageWidth = WorldMap.tileWidth * 2;
         pvMax = 20;
         pv = pvMax;
         playerHud = new PlayerHud(this);
         initSprite();
     }
 
-    public void move(Direction mouvement){
+    public void move(Direction mouvement) {
         isMoving = true;
-        if(mouvement.equals(Direction.GO_UP)){
+        if (mouvement.equals(Direction.GO_UP)) {
             y -= vitesse;
             currentSpriteMove = moveUp;
             currentSpriteAttack = attackUp;
-            attackBox.setX(skinWidth/2 - attackWidth/2);
+            attackBox.setX(skinWidth / 2 - attackWidth / 2);
             attackBox.setY(-skinHeight);
-        }
-        else if(mouvement.equals(Direction.GO_DOWN)){
+        } else if (mouvement.equals(Direction.GO_DOWN)) {
             y += vitesse;
             currentSpriteMove = moveDown;
             currentSpriteAttack = attackDown;
-            attackBox.setX(skinWidth/2 - attackWidth/2);
+            attackBox.setX(skinWidth / 2 - attackWidth / 2);
             attackBox.setY(skinHeight);
-        }
-        else if(mouvement.equals(Direction.GO_RIGHT) ){
+        } else if (mouvement.equals(Direction.GO_RIGHT)) {
             x += vitesse;
             currentSpriteMove = moveRight;
             currentSpriteAttack = attackRight;
             attackBox.setX(skinWidth);
-            attackBox.setY(skinHeight/2 - attackHeight/2);
-        }
-        else if(mouvement.equals(Direction.GO_LEFT) ){
+            attackBox.setY(skinHeight / 2 - attackHeight / 2);
+        } else if (mouvement.equals(Direction.GO_LEFT)) {
             x -= vitesse;
             currentSpriteMove = moveLeft;
             currentSpriteAttack = attackLeft;
             attackBox.setX(-skinWidth);
-            attackBox.setY(skinHeight/2 - attackHeight/2);
+            attackBox.setY(skinHeight / 2 - attackHeight / 2);
         }
     }
 
-    public void attack(Ennemi ennemi){
+    public void attack(Ennemi ennemi) {
         isAttacking = true;
-        if(ennemi instanceof Soldier){
+        if (ennemi instanceof Soldier) {
             ((Soldier) ennemi).setAttacked(true);
             ennemi.subitDegat();
-        } else if (ennemi instanceof Plant){
+        } else if (ennemi instanceof Plant) {
             ((Plant) ennemi).setAttacked(true);
             ennemi.subitDegat();
-        } else if (ennemi instanceof Worm){
+        } else if (ennemi instanceof Worm) {
             ((Worm) ennemi).setAttacked(true);
             ennemi.subitDegat();
-        } else if (ennemi instanceof Boss){
+        } else if (ennemi instanceof Boss) {
             ((Boss) ennemi).setAttacked(true);
         }
     }
 
     @Override
     public void animate() {
-        if(isAttacking){
+        if (isAttacking) {
             attackAnimation();
-        }
-        else if(isMoving){
+        } else if (isMoving) {
             moveAnimation();
         }
-        if(isAttacked){
+        if (isAttacked) {
             damageAnimation();
         }
     }
 
     public void damageAnimation() {
-        if(animationDamageFrame != 0){
+        if (animationDamageFrame != 0) {
             isInvincible = true;
             animationDamageFrame--;
-            if(mainImage.getOpacity() == 0){
+            if (mainImage.getOpacity() == 0) {
                 mainImage.setOpacity(1);
             } else {
                 mainImage.setOpacity(0);
             }
-        } else{
+        } else {
             isAttacked = false;
             isInvincible = false;
             animationDamageFrame = animationFrameDamageBuffer;
         }
     }
 
-    public void attackAnimation(){
-        if(animationAttackFrame != animationAttackFrameBuffer){
+    public void attackAnimation() {
+        if (animationAttackFrame != animationAttackFrameBuffer) {
             animationAttackFrame++;
             mainImage.setImage(currentSpriteAttack[animationAttackFrame].getImage());
-        } else{
+        } else {
             isAttacking = false;
             animationAttackFrame = 0;
         }
     }
 
-    public void moveAnimation(){
-        if(animationMoveFrame != animationMoveFrameBuffer){
+    public void moveAnimation() {
+        if (animationMoveFrame != animationMoveFrameBuffer) {
             animationMoveFrame++;
             mainImage.setImage(currentSpriteMove[animationMoveFrame].getImage());
         } else {
             animationMoveFrame = 0;
         }
-        isMoving=false;
+        isMoving = false;
     }
 
-    protected void initSprite(){
+    protected void initSprite() {
         moveLeft = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/0.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/1.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/2.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/move/3.png"),
         };
 
         moveRight = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/0.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/1.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/2.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/move/3.png"),
         };
         moveUp = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/0.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/1.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/2.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/move/3.png"),
         };
 
         moveDown = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/0.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/1.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/2.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/move/3.png"),
         };
 
         attackDown = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/0.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/1.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/2.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/down/attack/3.png"),
         };
         attackUp = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/0.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/1.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/2.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/up/attack/3.png"),
         };
         attackRight = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/0.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/1.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/2.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/right/attack/3.png"),
         };
         attackLeft = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/0.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/1.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/2.png"),
+                new ImageView(RessourcePath.urlSpritePlayer + "/left/attack/3.png"),
         };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
@@ -192,8 +188,8 @@ public class Player extends Moveable {
         getChildren().add(mainImage);
     }
 
-    public void subitDegat(){
-        pv -=1;
+    public void subitDegat() {
+        pv -= 1;
         playerHud.update();
     }
 

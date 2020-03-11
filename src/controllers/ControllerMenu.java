@@ -1,7 +1,6 @@
 package controllers;
 
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -13,7 +12,7 @@ public class ControllerMenu implements EventHandler<InputEvent> {
     private ViewHandler viewHandler;
     private MenuTL menuTL;
 
-    public ControllerMenu(ViewHandler viewHandler){
+    public ControllerMenu(ViewHandler viewHandler) {
         this.viewHandler = viewHandler;
         this.menuTL = new MenuTL(this);
         viewHandler.getViewMenu().setEvent(this);
@@ -21,7 +20,7 @@ public class ControllerMenu implements EventHandler<InputEvent> {
 
     @Override
     public void handle(InputEvent inputEvent) {
-        if(inputEvent.getEventType().equals(KeyEvent.KEY_PRESSED) && ((KeyEvent)inputEvent).getCode().equals(KeyCode.ESCAPE)){
+        if (inputEvent.getEventType().equals(KeyEvent.KEY_PRESSED) && ((KeyEvent) inputEvent).getCode().equals(KeyCode.ESCAPE)) {
             viewHandler.exit();
         } else {
             viewHandler.setViewGame();

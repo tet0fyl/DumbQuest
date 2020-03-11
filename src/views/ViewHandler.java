@@ -5,9 +5,7 @@ import controllers.ControllerKeyBoard;
 import controllers.ControllerMenu;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Camera;
 import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utils.Config;
@@ -27,7 +25,7 @@ public class ViewHandler extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         root = new Group();
-        scene = new Scene(root, Config.gameWindowWidth,Config.gameWindowHeight);
+        scene = new Scene(root, Config.gameWindowWidth, Config.gameWindowHeight);
         root.getStylesheets().add(RessourcePath.urlStylesheet);
 
         setViewMenu();
@@ -37,8 +35,8 @@ public class ViewHandler extends Application {
         primaryStage.show();
     }
 
-    public void setViewGame(){
-        if(controllerMenu != null){
+    public void setViewGame() {
+        if (controllerMenu != null) {
             controllerMenu.getMenuTL().stop();
             controllerMenu = null;
         }
@@ -49,11 +47,11 @@ public class ViewHandler extends Application {
         controllerGame.getGameTL().start();
     }
 
-    public void setViewMenu(){
-        if(controllerGame != null){
+    public void setViewMenu() {
+        if (controllerGame != null) {
             controllerGame.getGameTL().stop();
             controllerGame = null;
-            controllerKeyBoard=null;
+            controllerKeyBoard = null;
         }
         viewMenu = new ViewMenu(root);
         viewMenu.clearAndInitRoot();

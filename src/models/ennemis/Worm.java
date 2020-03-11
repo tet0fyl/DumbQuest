@@ -7,7 +7,8 @@ import models.worldMap.WorldMap;
 import utils.RessourcePath;
 
 public class Worm extends Ennemi {
-    public boolean isInTheGround, isTargeting, isTargetDone , isOutSide;
+    public boolean isInTheGround, isTargeting, isTargetDone, isOutSide;
+    protected boolean isMoving, isAttacking, isStandingBy, isAttacked;
     private int inTheGroundBuffer = 15;
     private int trackingBuffer = 7;
     private int outSideBuffer = 20;
@@ -15,9 +16,7 @@ public class Worm extends Ennemi {
     private int tracking = trackingBuffer;
     private int outSide = outSideBuffer;
     private Tile targetTile;
-
-    protected boolean isMoving, isAttacking, isStandingBy, isAttacked;
-    private double mainImageWidth,mainImageHeight;
+    private double mainImageWidth, mainImageHeight;
     private int animationFrameDamageBuffer = 4;
     private int animationAttackFrameBuffer = 3;
     private int animationAttackFrame = 0;
@@ -28,15 +27,15 @@ public class Worm extends Ennemi {
     private int animationMoveFrame = 0;
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
-    private int deathAnimationFrame= 0;
+    private int deathAnimationFrame = 0;
     private ImageView[] deathSprite;
 
 
     public Worm(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,4,4,4,4,1);
-        mainImageWidth = WorldMap.tileWidth*3;
-        pvMax=2;
-        pv=pvMax;
+        super(areaX, areaY, tileX, tileY, 4, 4, 4, 4, 1);
+        mainImageWidth = WorldMap.tileWidth * 3;
+        pvMax = 2;
+        pv = pvMax;
         initSprite();
         isTargeting = false;
         isInTheGround = true;
@@ -46,32 +45,32 @@ public class Worm extends Ennemi {
 
     @Override
     public void animate() {
-        if(isDying){
+        if (isDying) {
             deathAnimation();
         } else {
-            if(isAttacking){
+            if (isAttacking) {
                 attackAnimation();
             }
-            if(isAttacked){
+            if (isAttacked) {
                 damageAnimation();
             }
-            if(isInTheGround && !isTargeting){
+            if (isInTheGround && !isTargeting) {
                 intheGroundAnimation();
             }
-            if(isTargeting && !isOutSide){
+            if (isTargeting && !isOutSide) {
                 trackingAnimation();
             }
-            if(isOutSide){
+            if (isOutSide) {
                 outsideAnimation();
             }
-            if(pv<=0){
-                isDying=true;
+            if (pv <= 0) {
+                isDying = true;
             }
         }
     }
 
-    public void deathAnimation(){
-        if(deathAnimationFrame != deathSprite.length-1){
+    public void deathAnimation() {
+        if (deathAnimationFrame != deathSprite.length - 1) {
             deathAnimationFrame++;
             mainImage.setImage(deathSprite[deathAnimationFrame].getImage());
         } else {
@@ -81,61 +80,61 @@ public class Worm extends Ennemi {
     }
 
 
-    public void attackAnimation(){
-        if(animationAttackFrame != animationAttackFrameBuffer){
+    public void attackAnimation() {
+        if (animationAttackFrame != animationAttackFrameBuffer) {
             animationAttackFrame++;
-        } else{
+        } else {
             isAttacking = false;
             animationAttackFrame = 0;
         }
     }
 
     public void damageAnimation() {
-        if(animationDamageFrame != 0){
+        if (animationDamageFrame != 0) {
             animationDamageFrame--;
-            if(mainImage.getOpacity() == 0){
+            if (mainImage.getOpacity() == 0) {
                 mainImage.setOpacity(1);
             } else {
                 mainImage.setOpacity(0);
             }
-        } else{
+        } else {
             isAttacked = false;
             animationDamageFrame = animationFrameDamageBuffer;
         }
     }
 
-    public void attack(Player player){
+    public void attack(Player player) {
         isAttacking = true;
         player.setAttacked(true);
         player.subitDegat();
     }
 
-    public void intheGroundAnimation(){
+    public void intheGroundAnimation() {
         isTargetDone = false;
-        if(inTheGround != 0){
+        if (inTheGround != 0) {
             inTheGround--;
-        } else{
+        } else {
             mainImage.setOpacity(1);
             isTargeting = true;
             inTheGround = inTheGroundBuffer;
         }
     }
 
-    protected void initSprite(){
+    protected void initSprite() {
         currentSpriteMove = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteWorm + "/0.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/1.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/2.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/3.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/4.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/5.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/6.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/0.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/1.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/2.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/3.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/4.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/5.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/6.png"),
         };
         deathSprite = new ImageView[]{
-                new ImageView(RessourcePath.urlSpriteWorm + "/death/0.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/death/1.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/death/2.png" ),
-                new ImageView(RessourcePath.urlSpriteWorm + "/death/3.png" ),
+                new ImageView(RessourcePath.urlSpriteWorm + "/death/0.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/death/1.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/death/2.png"),
+                new ImageView(RessourcePath.urlSpriteWorm + "/death/3.png"),
         };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
@@ -143,32 +142,32 @@ public class Worm extends Ennemi {
         getChildren().add(mainImage);
     }
 
-    public void trackingAnimation(){
-        if(tracking != 0){
+    public void trackingAnimation() {
+        if (tracking != 0) {
             tracking--;
-            if(tracking > trackingBuffer - 3){
+            if (tracking > trackingBuffer - 3) {
                 animationMain++;
                 mainImage.setImage(currentSpriteMove[animationMain].getImage());
             }
-        } else{
+        } else {
             isOutSide = true;
             isInTheGround = false;
             tracking = trackingBuffer;
         }
     }
 
-    public void outsideAnimation(){
-        if(outSide != 0){
+    public void outsideAnimation() {
+        if (outSide != 0) {
             outSide--;
-            if(animationMain < currentSpriteMove.length - 1 && outSide > 5){
+            if (animationMain < currentSpriteMove.length - 1 && outSide > 5) {
                 animationMain++;
                 mainImage.setImage(currentSpriteMove[animationMain].getImage());
             }
-            if(animationMain != 0 && outSide <= 5){
+            if (animationMain != 0 && outSide <= 5) {
                 animationMain--;
                 mainImage.setImage(currentSpriteMove[animationMain].getImage());
             }
-        } else{
+        } else {
             mainImage.setOpacity(0);
             isOutSide = false;
             isTargeting = false;
@@ -177,7 +176,7 @@ public class Worm extends Ennemi {
         }
     }
 
-    public void teleport(Tile targetTile){
+    public void teleport(Tile targetTile) {
         this.targetTile = targetTile;
         x = targetTile.getLayoutX();
         y = targetTile.getLayoutY();
@@ -187,10 +186,6 @@ public class Worm extends Ennemi {
 
     public boolean isInTheGround() {
         return isInTheGround;
-    }
-
-    public void setInTheGround(boolean inTheGround) {
-        isInTheGround = inTheGround;
     }
 
     public boolean isTargeting() {
@@ -203,10 +198,6 @@ public class Worm extends Ennemi {
 
     public boolean isOutSide() {
         return isOutSide;
-    }
-
-    public void setOutSide(boolean outSide) {
-        isOutSide = outSide;
     }
 
     public int getInTheGroundBuffer() {
@@ -237,6 +228,10 @@ public class Worm extends Ennemi {
         return inTheGround;
     }
 
+    public void setInTheGround(boolean inTheGround) {
+        isInTheGround = inTheGround;
+    }
+
     public void setInTheGround(int inTheGround) {
         this.inTheGround = inTheGround;
     }
@@ -251,6 +246,10 @@ public class Worm extends Ennemi {
 
     public int getOutSide() {
         return outSide;
+    }
+
+    public void setOutSide(boolean outSide) {
+        isOutSide = outSide;
     }
 
     public void setOutSide(int outSide) {

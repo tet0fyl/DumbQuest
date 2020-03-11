@@ -9,10 +9,9 @@ import javafx.util.Duration;
 import utils.Config;
 
 
-
-public class MenuTL  extends AnimationTimer {
+public class MenuTL extends AnimationTimer {
     private ControllerMenu controllerMenu;
-    private Timeline backgroundTimeLineAxisX, backgroundTimeLineAxisY, clignotementTimeline, logoJiggling ;
+    private Timeline backgroundTimeLineAxisX, backgroundTimeLineAxisY, clignotementTimeline, logoJiggling;
     private long lu150ms;
     private ImageView backgroundMenu, imgLogo;
     private VBox vBoxTop, vBoxBottom;
@@ -34,12 +33,12 @@ public class MenuTL  extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-        if( now - lu150ms >= 150_000_000 ) {
+        if (now - lu150ms >= 150_000_000) {
             lu150ms = now;
         }
     }
 
-    public void initBackgroundTimelineAxisX(){
+    public void initBackgroundTimelineAxisX() {
         backgroundTimeLineAxisX = new Timeline();
         backgroundTimeLineAxisX.getKeyFrames().addAll(
                 new KeyFrame(new Duration(50000), new KeyValue(backgroundMenu.layoutXProperty(), -Config.gameWindowWidth)));
@@ -48,16 +47,16 @@ public class MenuTL  extends AnimationTimer {
         backgroundTimeLineAxisX.play();
     }
 
-    public void initBackgroundTimelineAxisY(){
+    public void initBackgroundTimelineAxisY() {
         backgroundTimeLineAxisY = new Timeline();
         backgroundTimeLineAxisY.getKeyFrames().addAll(
-                new KeyFrame(new Duration(20000), new KeyValue(backgroundMenu.layoutYProperty(), backgroundMenu.getFitHeight()-vBoxTop.getPrefHeight()*2)));
+                new KeyFrame(new Duration(20000), new KeyValue(backgroundMenu.layoutYProperty(), backgroundMenu.getFitHeight() - vBoxTop.getPrefHeight() * 2)));
         backgroundTimeLineAxisY.setCycleCount(Animation.INDEFINITE);
         backgroundTimeLineAxisY.setAutoReverse(true);
         backgroundTimeLineAxisY.play();
     }
 
-    public void initClignotementTimeline(){
+    public void initClignotementTimeline() {
         clignotementTimeline = new Timeline();
         clignotementTimeline.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, new KeyValue(lblStart.opacityProperty(), 0)),
@@ -67,7 +66,7 @@ public class MenuTL  extends AnimationTimer {
         clignotementTimeline.play();
     }
 
-    public void initLogoJigglingTimeline(){
+    public void initLogoJigglingTimeline() {
         logoJiggling = new Timeline();
         logoJiggling.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, new KeyValue(imgLogo.rotateProperty(), -3)),
@@ -77,7 +76,7 @@ public class MenuTL  extends AnimationTimer {
         logoJiggling.play();
     }
 
-    public void stopAll(){
+    public void stopAll() {
         backgroundTimeLineAxisX.stop();
         backgroundTimeLineAxisY.stop();
         clignotementTimeline.stop();

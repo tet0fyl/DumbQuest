@@ -9,9 +9,9 @@ import utils.RessourcePath;
 import java.util.ArrayList;
 
 public class Plant extends Ennemi {
-    private ArrayList<Projectile> projectiles;
     protected boolean isAttacked, isAttacking;
     boolean isReloading;
+    private ArrayList<Projectile> projectiles;
     private int shootRate = 10;
     private int shootRateBuffer = shootRate;
     private double mainImageWidth;
@@ -25,31 +25,31 @@ public class Plant extends Ennemi {
     private int animationMoveFrame = 0;
     private ImageView mainImage;
     private ImageView[] currentSpriteMove;
-    private int deathAnimationFrame= 0;
+    private int deathAnimationFrame = 0;
     private ImageView[] deathSprite;
 
     public Plant(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY,4,4,1,1,1);
+        super(areaX, areaY, tileX, tileY, 4, 4, 1, 1, 1);
         isReloading = false;
-        pvMax=2;
-        pv=pvMax;
+        pvMax = 2;
+        pv = pvMax;
         projectiles = new ArrayList<Projectile>();
         mainImageWidth = WorldMap.tileWidth;
         initSprite();
         vitesse = 2;
     }
 
-    protected void initSprite(){
+    protected void initSprite() {
         currentSpriteMove = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlant + "/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlant + "/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlant + "/2.png" ),
-                new ImageView(RessourcePath.urlSpritePlant + "/3.png" ),
+                new ImageView(RessourcePath.urlSpritePlant + "/0.png"),
+                new ImageView(RessourcePath.urlSpritePlant + "/1.png"),
+                new ImageView(RessourcePath.urlSpritePlant + "/2.png"),
+                new ImageView(RessourcePath.urlSpritePlant + "/3.png"),
         };
         deathSprite = new ImageView[]{
-                new ImageView(RessourcePath.urlSpritePlant + "/death/0.png" ),
-                new ImageView(RessourcePath.urlSpritePlant + "/death/1.png" ),
-                new ImageView(RessourcePath.urlSpritePlant + "/death/2.png" ),
+                new ImageView(RessourcePath.urlSpritePlant + "/death/0.png"),
+                new ImageView(RessourcePath.urlSpritePlant + "/death/1.png"),
+                new ImageView(RessourcePath.urlSpritePlant + "/death/2.png"),
         };
         mainImage = new ImageView();
         centerAnImage(mainImage, mainImageWidth);
@@ -59,34 +59,34 @@ public class Plant extends Ennemi {
 
 
     public Projectile shoot(Tile tileTarget) {
-            Projectile projectile = new Projectile(this, tileTarget);
-            projectiles.add(projectile);
-            isReloading = true;
+        Projectile projectile = new Projectile(this, tileTarget);
+        projectiles.add(projectile);
+        isReloading = true;
         return projectile;
     }
 
     @Override
     public void animate() {
         jiggling();
-        if(isDying){
+        if (isDying) {
             deathAnimation();
         } else {
-            if(isAttacked){
+            if (isAttacked) {
                 damageAnimation();
             }
-            if(isReloading){
+            if (isReloading) {
                 waitingReload();
             }
-            if(pv<=0){
-                isDying=true;
+            if (pv <= 0) {
+                isDying = true;
             }
 
 
         }
     }
 
-    public void deathAnimation(){
-        if(deathAnimationFrame != deathSprite.length-1){
+    public void deathAnimation() {
+        if (deathAnimationFrame != deathSprite.length - 1) {
             deathAnimationFrame++;
             System.out.println(deathAnimationFrame);
             mainImage.setImage(deathSprite[deathAnimationFrame].getImage());
@@ -96,39 +96,39 @@ public class Plant extends Ennemi {
         }
     }
 
-    public void jiggling(){
-        if(animationJiggleFrame <= currentSpriteMove.length-1){
+    public void jiggling() {
+        if (animationJiggleFrame <= currentSpriteMove.length - 1) {
             mainImage.setImage(currentSpriteMove[animationJiggleFrame].getImage());
             animationJiggleFrame++;
-        }else {
+        } else {
             animationJiggleFrame = 0;
         }
     }
 
-    public void attack(Player player){
+    public void attack(Player player) {
         isAttacking = true;
         player.setAttacked(true);
         player.subitDegat();
     }
 
     public void damageAnimation() {
-        if(animationDamageFrame != 0){
+        if (animationDamageFrame != 0) {
             animationDamageFrame--;
-            if(mainImage.getOpacity() == 0){
+            if (mainImage.getOpacity() == 0) {
                 mainImage.setOpacity(1);
             } else {
                 mainImage.setOpacity(0);
             }
-        } else{
+        } else {
             isAttacked = false;
             animationDamageFrame = animationFrameDamageBuffer;
         }
     }
 
-    public void waitingReload(){
-        if(shootRateBuffer != 0){
+    public void waitingReload() {
+        if (shootRateBuffer != 0) {
             shootRateBuffer--;
-        } else{
+        } else {
             isReloading = false;
             shootRateBuffer = shootRate;
         }
