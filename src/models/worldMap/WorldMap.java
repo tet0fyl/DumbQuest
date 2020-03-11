@@ -196,7 +196,7 @@ public class WorldMap extends Pane {
 
     public void makeEarthQuake() {
         earthQuake = new Timeline();
-        double posZero = getCurrentArea().getIndiceX() * WorldMap.areaWidth;
+        double posZero = -getCurrentArea().getIndiceX() * WorldMap.areaWidth;
         System.out.println("POS Z");
         System.out.println(posZero);
         System.out.println(layoutXProperty());

@@ -36,20 +36,22 @@ public class Moveable extends Pane {
         hitBoxHeight = skinHeight -10;
 
         attackBox = new Rectangle();
-        attackBox.setFill(Color.GREY);
-        attackBox.setOpacity(0.4);
+        // attackBox.setFill(Color.GREY);
+        attackBox.setOpacity(0);
         attackBox.setWidth(attackWidth);
         attackBox.setHeight(attackHeight);
 
         skin = new Rectangle();
-        skin.setFill(Color.YELLOW);
+        // skin.setFill(Color.YELLOW);
+        skin.setOpacity(0);
         skin.setWidth(skinWidth);
         skin.setHeight(skinHeight);
 
         update();
 
         hitBox = new Rectangle();
-        hitBox.setFill(Color.RED);
+        // hitBox.setFill(Color.RED);
+        hitBox.setOpacity(0);
         centerARectangle(hitBox, hitBoxWidth, hitBoxHeight);
         getChildren().addAll( skin, hitBox, attackBox);
     }

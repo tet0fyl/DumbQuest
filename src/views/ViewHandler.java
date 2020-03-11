@@ -4,6 +4,7 @@ import controllers.ControllerGame;
 import controllers.ControllerKeyBoard;
 import controllers.ControllerMenu;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
@@ -29,8 +30,8 @@ public class ViewHandler extends Application {
         scene = new Scene(root, Config.gameWindowWidth,Config.gameWindowHeight);
         root.getStylesheets().add(RessourcePath.urlStylesheet);
 
-        //setViewMenu();
-        setViewGame();
+        setViewMenu();
+        //setViewGame();
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -58,6 +59,10 @@ public class ViewHandler extends Application {
         viewMenu.clearAndInitRoot();
         controllerMenu = new ControllerMenu(this);
         controllerMenu.getMenuTL().start();
+    }
+
+    public void exit() {
+        Platform.exit();
     }
 
     public ViewGame getViewGame() {
@@ -91,4 +96,5 @@ public class ViewHandler extends Application {
     public ControllerMenu getControllerMenu() {
         return controllerMenu;
     }
+
 }
