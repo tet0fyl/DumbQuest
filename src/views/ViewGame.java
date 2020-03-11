@@ -27,10 +27,12 @@ public class ViewGame {
     ;
     public ViewGame(Group root) {
         this.root = root;
-        btnRecommencer = initBtn(10, "RECOMMENCER", "btn-secondary");
-        btnQuitter = initBtn(10, "QUITTER", "btn-secondary");
-        btnReprendre = initBtn(10, "REPRENDRE", "btn-secondary");
-
+        btnRecommencer = initBtn(15, "RECOMMENCER", "btn-secondary");
+        btnQuitter = initBtn(15, "QUITTER", "btn-secondary");
+        btnReprendre = initBtn(15, "REPRENDRE", "btn-secondary");
+        VBox.setMargin(btnRecommencer, new Insets(10,0,10,0));
+        VBox.setMargin(btnQuitter, new Insets(10,0,10,0));
+        VBox.setMargin(btnReprendre, new Insets(10,0,10,0));
         screen = new VBox();
         screen.setPrefHeight(Config.gameWindowHeight);
         screen.setPrefWidth(Config.gameWindowWidth);
@@ -77,18 +79,19 @@ public class ViewGame {
         popUp.getStyleClass().add("popUp");
         popUp.setAlignment(Pos.CENTER);
         popUp.setPrefHeight(Config.gameWindowHeight / 2);
-        Label title = null;
         VBox choiceVBox = new VBox();
         choiceVBox.setAlignment(Pos.CENTER);
+        Label title = initTitle(30, "");
+        VBox.setMargin(title, new Insets(0,0,20,0));
         choiceVBox.setPadding(new Insets(20));
         if (popUpType.equals(PopUpType.PAUSE)) {
-            title = initTitle(20, "PAUSE");
+            title.setText("PAUSE");
             choiceVBox.getChildren().addAll(btnReprendre, btnRecommencer, btnQuitter);
         } else if (popUpType.equals(PopUpType.LOSE)) {
-            title = initTitle(20, "YOU DIED");
+            title.setText("YOU DIED");
             choiceVBox.getChildren().addAll(btnRecommencer, btnQuitter);
         } else if (popUpType.equals(PopUpType.WIN)) {
-            title = initTitle(20, "YOU WIN");
+            title.setText("YOU WIN");
             choiceVBox.getChildren().addAll(btnRecommencer, btnQuitter);
         }
         popUp.getChildren().addAll(title, choiceVBox);

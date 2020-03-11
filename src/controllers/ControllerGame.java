@@ -94,9 +94,7 @@ public class ControllerGame implements EventHandler<MouseEvent> {
 
     public void handerPlayerAttack() {
         player.setAttacking(true);
-        System.out.println(player.getX());
         for (Ennemi ennemi : worldMap.getEnnemisOfTheCurrentArea()) {
-            System.out.println(ennemi.getX());
             if (ennemi instanceof Worm) {
                 if (player.attackTouch(ennemi) && ((Worm) ennemi).isOutSide) player.attack(ennemi);
             } else if (ennemi instanceof Boss) {
@@ -302,9 +300,6 @@ public class ControllerGame implements EventHandler<MouseEvent> {
             for (int j = player.getYMin(); j <= player.getYMax(); j++) {
                 Tile tile = worldMap.getAreaMap(i, j).getTileByPixel(i, j);
                 if (!tile.isTraversable()) {
-                    System.out.println(worldMap.getAreaMap(i, j).getTileByPixel(i, j).getIndiceX());
-                    System.out.println(worldMap.getAreaMap(i, j).getTileByPixel(i, j).getIndiceY());
-                    System.out.println(worldMap.getAreaMap(i, j).getIndiceX());
                     return false;
                 }
             }
