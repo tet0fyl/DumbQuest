@@ -224,9 +224,6 @@ public class WorldMap extends Pane {
     public void makeEarthQuake() {
         earthQuake = new Timeline();
         double posZero = -getCurrentArea().getIndiceX() * WorldMap.areaWidth;
-        System.out.println("POS Z");
-        System.out.println(posZero);
-        System.out.println(layoutXProperty());
         earthQuake.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, new KeyValue(layoutXProperty(), posZero - 10)),
                 new KeyFrame(new Duration(5), new KeyValue(layoutXProperty(), posZero + 10)),

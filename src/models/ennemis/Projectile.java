@@ -44,7 +44,7 @@ public class Projectile extends Pane {
         getChildren().addAll(hitBox, skin, blur);
         targetX = target.getTheCenterX();
         targetY = target.getTheCenterY();
-        vitesse = 5;
+        vitesse = WorldMap.tileWidth/10;
         angle = -Math.atan2(targetY - getTheCenterY(),
                 targetX - getTheCenterX());
         initSprite();

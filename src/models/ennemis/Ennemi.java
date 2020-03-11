@@ -9,7 +9,7 @@ public abstract class Ennemi extends Moveable {
     private double respawnX;
     private double respawnY;
 
-    public Ennemi(int areaX, int areaY, int tileX, int tileY, double boxWidth, double boxHeight, double attackBoxX, double attackBoxY, int vitesse) {
+    public Ennemi(int areaX, int areaY, int tileX, int tileY, double boxWidth, double boxHeight, double attackBoxX, double attackBoxY, double vitesse) {
         super(areaX, areaY, tileX, tileY, boxWidth, boxHeight, attackBoxX, attackBoxY, vitesse);
         respawnX = getX();
         respawnY = getY();

@@ -34,7 +34,7 @@ public class Soldier extends Ennemi {
     private ImageView[] moveLeft, moveRight, moveUp, moveDown, attackUp, attackDown, attackLeft, attackRight;
 
     public Soldier(int areaX, int areaY, int tileX, int tileY) {
-        super(areaX, areaY, tileX, tileY, 4, 4, 4, 4, 2);
+        super(areaX, areaY, tileX, tileY, 4, 4, 4, 4, WorldMap.tileWidth/20);
         mainImageWidth = WorldMap.tileWidth * 2;
         pvMax = 3;
         pv = pvMax;

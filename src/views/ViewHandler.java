@@ -7,7 +7,9 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import utils.Config;
 import utils.RessourcePath;
 
@@ -30,6 +32,14 @@ public class ViewHandler extends Application {
 
         setViewMenu();
         //setViewGame();
+        primaryStage.setTitle("DumbQuest");
+        primaryStage.setFullScreenExitHint("");
+        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
 
         primaryStage.setScene(scene);
         primaryStage.show();

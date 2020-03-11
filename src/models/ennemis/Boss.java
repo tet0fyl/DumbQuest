@@ -18,7 +18,8 @@ public class Boss extends Ennemi {
     private int phase = 1;
     private int numberAtckPerPhaseThreshold = 3;
     private int numberAtckPerPhase = 0;
-    private int maxVitesse = 10;
+    private double maxVitesse = 10;
+    private double minVitesse = 1;
     private boolean isTired, isReloading;
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private int shootRate = 10;
@@ -54,6 +55,7 @@ public class Boss extends Ennemi {
 
     public Boss(int areaX, int areaY, int tileX, int tileY) {
         super(areaX, areaY, tileX, tileY, 8, 8, 4, 4, 10);
+
         mainImageWidth = WorldMap.tileWidth * 3;
         isTargeting = true;
         isInvicible = true;
@@ -114,7 +116,7 @@ public class Boss extends Ennemi {
     }
 
     public void pivotToTarget(Tile target, Tile ownTile) {
-        vitesse = 1;
+        vitesse = minVitesse;
         if (ownTile.getIndiceX() > target.getIndiceX()) move(Direction.GO_LEFT);
         if (ownTile.getIndiceX() < target.getIndiceX()) move(Direction.GO_RIGHT);
         if (ownTile.getIndiceY() > target.getIndiceY()) move(Direction.GO_UP);
@@ -761,7 +763,7 @@ public class Boss extends Ennemi {
         this.numberAtckPerPhase = numberAtckPerPhase;
     }
 
-    public int getMaxVitesse() {
+    public double getMaxVitesse() {
         return maxVitesse;
     }
 

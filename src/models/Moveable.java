@@ -8,7 +8,7 @@ import models.worldMap.WorldMap;
 
 public class Moveable extends Pane {
 
-    protected int vitesse;
+    protected double vitesse;
     protected Rectangle hitBox;
     protected double hitBoxWidth;
     protected double hitBoxHeight;
@@ -23,7 +23,7 @@ public class Moveable extends Pane {
     protected double prevX;
     protected double prevY;
 
-    public Moveable(int areaX, int areaY, int tileX, int tileY, double boxWidth, double boxHeight, double attackBoxX, double attackBoxY, int vitesse) {
+    public Moveable(int areaX, int areaY, int tileX, int tileY, double boxWidth, double boxHeight, double attackBoxX, double attackBoxY, double vitesse) {
         this.x = areaX * WorldMap.areaWidth + tileX * WorldMap.tileWidth;
         this.y = areaY * WorldMap.areaHeight + tileY * WorldMap.tileHeight;
         this.vitesse = vitesse;
