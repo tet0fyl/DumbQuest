@@ -2,9 +2,9 @@
 
 Dumbquest is a little ZeldakLike project.
 
-Contains :
+Contain :
 ------------
 - One level
 - Five area
 - Three diffentes types of ennemies
-- One Boss (to win the party)
+- One Boss (beat him to win the party)
