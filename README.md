@@ -4,7 +4,7 @@
 
 ## Description
 
-Dumbquest is a little ZeldakLike project. made with **JavaFx**.
+Dumbquest is a little ZeldakLike project made with **JavaFx**.
 
 *All the students have chosen their own game concept*
 
